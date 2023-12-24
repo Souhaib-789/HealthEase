@@ -28,7 +28,7 @@ const Home = () => {
             rating: 5,
             hearted: false,
             category: 'Medicine Specialist',
-            hospitalName: 'City Hospital',
+            hospital_name: 'City Hospital',
             experience: 5,
         },
         {
@@ -39,7 +39,7 @@ const Home = () => {
             rating: 3,
             hearted: true,
             category: 'Dentist ',
-            hospitalName: 'City Hospital',
+            hospital_name: 'City Hospital',
             experience: 3,
         },
         {
@@ -50,7 +50,7 @@ const Home = () => {
             rating: 2,
             hearted: false,
             category: 'Physio Therapy Specialist',
-            hospitalName: 'City Hospital',
+            hospital_name: 'City Hospital',
             experience: 5,
         }
     ]
@@ -66,7 +66,7 @@ const Home = () => {
 
     return (
         <View style={styles.mainContainer}>
-            <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollView}>
+            <ScrollView showsVerticalScrollIndicator={false} >
 
                 <View style={styles.home_header}>
                     <TouchableOpacity onPress={() => navigation.openDrawer()}>

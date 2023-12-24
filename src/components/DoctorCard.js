@@ -5,32 +5,39 @@ import TextComponent from "./TextComponent";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Colors } from "../Config/Colors";
 import Icon, { IconTypes } from "./Icon";
-import { Rating } from 'react-native-ratings';
+import { Fonts } from "../Config/Fonts";
 
 const DoctorCard = ({ item }) => {
     const navigation = useNavigation();
+    let rating = item?.rating == 5 ? [1, 2, 3, 4, 5]
+        : item?.rating == 4 ? [1, 2, 3, 4]
+            : item?.rating == 3 ? [1, 2, 3]
+                : item?.rating == 2 ? [1, 2]
+                    : item?.rating == 1 ? [1]
+                        : []
+
+    const ratingItem = (x, index) => {
+        return (
+            <Image key={index} source={require('../assets/images/star.png')} style={{ width: 15, height: 15 }} />
+        )
+    }
+
     return (
         <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('DoctorDetails', { item: item })}>
-            <Image source={item?.image} style={styles.image} />
+            <Image source={item?.image} style={styles.image} resizeMode={'cover'} />
             <View style={styles.subview}>
                 <View style={styles.subview2}>
                     <TextComponent style={styles.text} text={item?.name} numberOfLines={1} />
 
-                    <View style={{ flexDirection: "row", alignItems: 'center', }}>
-                        {
-                            Array(item?.rating).map((x, index) => {
-                                return (
-                                    <Image key={index} t source={require('../assets/images/star.png')} style={{ width: 15, height: 15 }} />
-                                )
-                            })
-                        }
+                    <View style={styles.flex}>
+                        {rating.map(ratingItem)}
                     </View>
 
                 </View>
                 <TextComponent style={styles.span} text={item?.category} />
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+                <View style={[styles.flex, { gap: 5 }]}>
                     <Icon name={'location'} type={IconTypes?.EvilIcons} size={18} color={Colors?.DDGREY} />
-                    <TextComponent style={styles.span} text={item?.hospitalName} />
+                    <TextComponent style={styles.span} text={item?.hospital_name} />
                 </View>
 
             </View>
@@ -46,20 +53,22 @@ const styles = StyleSheet.create({
         backgroundColor: Colors?.WHITE,
         borderRadius: 12,
         width: '99%',
-        elevation: 2,
+        elevation: 3,
         paddingHorizontal: 10,
-        paddingVertical: 13,
+        paddingVertical: 15,
         flexDirection: 'row',
-        gap: 10,
+        gap: 15,
         alignItems: 'center',
         alignSelf: 'center',
-        marginVertical: 10,
+        marginVertical: 13,
     },
     text: {
-        width: '60%',
+        width: '55%',
+        fontFamily: Fonts?.SEMIBOLD
     },
     subview: {
-        gap: 1
+        gap: 1,
+        width: '80%'
     },
     span: {
         color: Colors?.DDGREY,
@@ -74,6 +83,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        width: '83%',
-    }
+        width: '95%',
+    },
+    flex: { flexDirection: "row", alignItems: 'center' }
 });

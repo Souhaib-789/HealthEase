@@ -10,6 +10,7 @@ import docE from "../../assets/images/doc5.png";
 import { AirbnbRating } from 'react-native-ratings';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { useNavigation } from "@react-navigation/native";
+import DoctorCard from "../../components/DoctorCard";
 
 const FavDoctors = () => {
 
@@ -21,9 +22,10 @@ const FavDoctors = () => {
             image: docC,
             name: 'Dr. Crick',
             fees: '2500',
-            rating: 3.7,
+            rating: 3,
             hearted: false,
             category: 'Medicine Specialist',
+            hospital_name: 'City Hospital',
             experience: 5,
         },
         {
@@ -31,75 +33,40 @@ const FavDoctors = () => {
             image: docD,
             name: 'Dr. Strain',
             fees: '2200',
-            rating: 3.0,
+            rating: 3,
             hearted: true,
             category: 'Dentist ',
             experience: 3,
+            hospital_name: 'City Hospital',
         },
         {
             id: 3,
             image: docE,
             name: 'Dr. Lachinet',
             fees: '2900',
-            rating: 2.9,
+            rating: 2,
             hearted: false,
             category: 'Physio Therapy Specialist',
             experience: 5,
+            hospital_name: 'City Hospital',
         },
         {
             id: 4,
             image: docC,
             name: 'Dr. Crick',
             fees: '2500',
-            rating: 3.7,
+            rating: 3,
             hearted: true,
             category: 'Cardiologist',
             experience: 9,
+            hospital_name: 'City Hospital',
+
         },
     ]
 
-    console.log(FavoriteDoctors);
-    const renderDoctorItem = ({ item }) => {
-        return (
-            <View style={styles.popular_card}>
-                <View>
-                    <Image source={item?.image} style={styles.popular_image} />
-                    <View style={styles.next_available}>
-                        <Text style={[styles.textx, { color: Colors.PRIMARY, fontWeight: "bold" }]}>Next Available</Text>
-                        <Text style={styles.textx}><Text style={styles.span}>10:00 AM</Text> tomorrow</Text>
-                    </View>
-                </View>
-
-                <View style={styles.popular_card_subview}>
-                    <TouchableOpacity style={styles.heart}>
-                        <Ionicons name={item?.hearted ? 'heart' : 'ios-heart-outline'} size={23} color={item?.hearted ? Colors?.RED : Colors.DGREY} />
-                    </TouchableOpacity>
-
-                    <Text style={styles.text}>{item?.name}</Text>
-                    <Text style={styles.textx}>{item?.category}</Text>
-                    <View style={{ alignSelf: "flex-start", marginTop: 3 }}>
-                        <AirbnbRating
-                            isDisabled={true}
-                            count={5}
-                            defaultRating={item?.rating}
-                            size={15}
-                            selectedColor={Colors.ORANGE}
-                            unSelectedColor={Colors.GREY}
-                            showRating={false}
-                        />
-                    </View>
-
-                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('DoctorDetails', { item: item })}>
-                        <Text style={styles.button_text}>Book Now</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        )
-    }
-
+ 
     return (
         <View style={styles.mainContainer}>
-            <BgImage />
             <Header title={'Favorite Doctors'} />
             <ScrollView>
                 <View style={styles.sub_container}>
@@ -108,7 +75,8 @@ const FavDoctors = () => {
                     <FlatList
                         showsVerticalScrollIndicator={false}
                         data={FavoriteDoctors}
-                        renderItem={renderDoctorItem}
+                        renderItem={({ item }) =>
+                        (<DoctorCard item={item}/>)}
                         keyExtractor={item => item?.id}
                         ListEmptyComponent={
                             <Text style={styles.no_data} >No doctors available</Text>
