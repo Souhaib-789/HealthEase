@@ -7,6 +7,10 @@ import { AirbnbRating } from 'react-native-ratings';
 import Header from "../../components/Header";
 import moment from "moment";
 import { Colors } from "../../Config/Colors";
+import TextComponent from "../../components/TextComponent";
+import { Fonts } from "../../Config/Fonts";
+import Icon, { IconTypes } from "../../components/Icon";
+import Button from "../../components/Button";
 
 const DoctorDetails = (props) => {
 
@@ -98,36 +102,28 @@ const DoctorDetails = (props) => {
             ]
         },
     ]
-console.log(routeData);
-    const [date, setDate] = useState(Slots[0])
-    const DetailsCard = () => {
-        return (
-            <View style={styles.popular_card}>
-                <Image source={routeData?.image} style={styles.popular_image} />
-                <View style={styles.popular_card_subview}>
-                    <TouchableOpacity style={styles.heart}>
-                        <Ionicons name={'ios-heart-outline'} size={23} color={Colors.DGREY} />
-                    </TouchableOpacity>
 
-                    <Text style={styles.text}>{routeData?.name}</Text>
-                    <Text style={styles.textx}>{routeData?.category}</Text>
-                    <Text style={[styles.textx, { color: Colors.PRIMARY }]}>{routeData?.experience} Years experience</Text>
-                    <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 3 }}>
-                        <AirbnbRating
-                            isDisabled={true}
-                            count={5}
-                            defaultRating={routeData?.rating}
-                            size={15}
-                            selectedColor={Colors.ORANGE}
-                            unSelectedColor={Colors.GREY}
-                            showRating={false}
-                        />
-                        <Text style={[styles.textx, { fontWeight: "bold", color: Colors.PRIMARY }]}>Rs. {routeData?.fees} /slot  </Text>
-                    </View>
-                </View>
-            </View>
-        )
-    }
+    const details = [
+        {
+            name: 'Reviews',
+            no: '50 +',
+            icon_name: 'star'
+        },
+        {
+            name: 'Experience',
+            no: '2+ Years',
+            icon_name: 'tips-and-updates'
+        },
+        {
+            name: 'per slot',
+            no: '1000/-',
+            icon_name: 'price-change'
+        },
+    ]
+
+    console.log(routeData);
+    const [date, setDate] = useState(Slots[0])
+
 
     const renderDatesItem = ({ item }) => {
         return (
@@ -143,54 +139,84 @@ console.log(routeData);
         )
     }
 
+    const renderDetailsItem = (item, index) => {
+        return (
+            <View style={styles.flex}>
+                <View style={{ backgroundColor: Colors?.LIGHT, padding: 8, borderRadius: 50, marginRight: 6 }}>
+                    <Icon type={IconTypes?.MaterialIcons} name={item?.icon_name} size={16} color={Colors?.PRIMARY} />
+                </View>
+                <View>
+                    <TextComponent style={[styles.textx, { fontFamily: Fonts?.SEMIBOLD, fontSize: 12, color: Colors?.BLACK }]} text={item?.no} />
+                    <TextComponent style={[styles.textx, { color: Colors?.DGREY, fontSize: 10 }]} text={item?.name} />
+                </View>
+            </View>
+        )
+    }
+
     return (
         <View style={styles.mainContainer}>
-            <BgImage />
-            <Header title={'Details'} />
+            <Header title={'Details'} backIcon style={{ margin: 10 }} titleColor={Colors?.WHITE} />
             <ScrollView>
-                <View style={styles.sub_container}>
+                <Image source={routeData?.image} style={styles.card_image} />
 
-                    <DetailsCard />
+                <View style={styles.details_card}>
+                    <TouchableOpacity style={styles.heart}>
+                        <Icon type={IconTypes.Ionicons} name={'heart-sharp'} color={Colors?.GREY} size={22} />
+                    </TouchableOpacity>
 
-                    <Text style={styles.text}>Availability</Text>
-
-                    <FlatList
-                        showsHorizontalScrollIndicator={false}
-                        data={Slots}
-                        horizontal
-                        renderItem={renderDatesItem}
-                        keyExtractor={item => item?.id}
-                    />
-
-                    <Text style={[styles.text, { alignSelf: 'center', marginVertical: 10 }]}>{`Today , ${moment(currentDate).format('LL')}`} </Text>
-                    <Text style={[styles.text, { marginTop: 20 }]}>Available Slots</Text>
-
-                    <View style={styles.slots_view}>
-                        {
-                            date?.slots?.length == 0 ?
-                                <Text style={[styles.textx, { marginLeft: '35%', marginTop: 10 }]}>No Slots Available</Text>
-                                :
-                                date?.slots?.map((item, index) => {
-                                    return (
-                                        <Pressable key={index} style={[styles.slot_box, { backgroundColor: item?.time == confirmedSlot?.time ? Colors.PRIMARY : 'rgba(14,	190,	127, 0.1)' }]}
-                                            onPress={() => setconfirmedSlot(item)}>
-                                            <Text style={{ fontWeight: "bold", color: item?.time == confirmedSlot?.time ? Colors.WHITE : Colors.PRIMARY }}>{item?.time}</Text>
-                                        </Pressable>
-                                    )
-                                })
-                        }
+                    <View style={{ alignItems: 'center' }}>
+                        <TextComponent style={styles.text} text={routeData?.name} />
+                        <TextComponent style={styles.textx} text={routeData?.category} />
                     </View>
 
+
+                    <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: 'space-around', marginVertical: 10 }}>
+                        {details.map(renderDetailsItem)}
+                    </View>
+
+                    <TextComponent style={styles.heading} text={'Description'} />
+                    <TextComponent style={styles.textx} text={"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."} />
+
+                    <TextComponent style={styles.heading} text={'Avaialibity'} />
+                <FlatList
+                    showsHorizontalScrollIndicator={false}
+                    data={Slots}
+                    horizontal
+                    renderItem={renderDatesItem}
+                    keyExtractor={item => item?.id}
+                />
+
+                <Text style={[styles.heading , {alignSelf: 'center' , marginVertical: 8 , color: Colors?.PRIMARY}]}>{`Today , ${moment(currentDate).format('LL')}`} </Text>
+                <TextComponent style={styles.heading} text={'Available Slots'} />
+
+                <View style={styles.slots_view}>
                     {
-                        date?.slots?.length > 0 ?
-                            <TouchableOpacity disabled={confirmedSlot ? false : true}
-                                onPress={() => navigation.navigate('Appointment', { item: routeData, timeSlot: confirmedSlot, date: date })}
-                                style={[styles.button, { opacity: confirmedSlot ? 'none' : 0.5 }]}>
-                                <Text style={styles.button_text}>Fix an appointment</Text>
-                            </TouchableOpacity>
-                            : null
+                        date?.slots?.length == 0 ?
+                            <Text style={[styles.textx, { marginLeft: '35%', marginTop: 10 }]}>No Slots Available</Text>
+                            :
+                            date?.slots?.map((item, index) => {
+                                return (
+                                    <TouchableOpacity key={index} 
+                                    style={[styles.slot_box,
+                                         { backgroundColor: item?.time == confirmedSlot?.time
+                                             ? Colors.PRIMARY : Colors?.LIGHT }]}
+                                        onPress={() => setconfirmedSlot(item)}>
+                                        <TextComponent style={{ color: item?.time == confirmedSlot?.time ? Colors.WHITE : Colors.PRIMARY , fontSize: 10 }} text={item?.time} />
+                                    </TouchableOpacity>
+                                )
+                            })
                     }
                 </View>
+
+                {
+                    date?.slots?.length > 0 &&
+                    <Button 
+                    title={'Fix an appointment'}
+                     disabled={confirmedSlot ? false : true}
+                     style={{marginVertical: 15}}
+                    onPress={() => navigation.navigate('Appointment', { item: routeData, timeSlot: confirmedSlot, date: date })} />
+                }
+                   </View>
             </ScrollView>
         </View>
     )
@@ -201,17 +227,12 @@ export default DoctorDetails;
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        backgroundColor: Colors.WHITE,
+        backgroundColor: Colors.PRIMARY,
     },
     sub_container: {
         width: '90%',
         alignSelf: "center",
         paddingVertical: 10
-    },
-    heading: {
-        fontSize: 20,
-        color: Colors.WHITE,
-        fontWeight: "bold"
     },
     headingx: {
         fontSize: 18,
@@ -221,14 +242,21 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 18,
         color: Colors.BLACK,
-        marginVertical: 2,
-        fontWeight: "bold"
+        fontFamily: Fonts?.SEMIBOLD
+    },
+    heading: {
+        fontSize: 16,
+        color: Colors.BLACK,
+        fontFamily: Fonts?.SEMIBOLD,
+        marginTop: 10
     },
     span: {
         fontWeight: "bold"
     },
     textx: {
-        fontSize: 12
+        fontSize: 12,
+        color: Colors?.DGREY,
+        lineHeight: 20
     },
     sub_heading: {
         fontSize: 18,
@@ -252,35 +280,37 @@ const styles = StyleSheet.create({
         marginVertical: 10
     },
     flex: {
-        backgroundColor: 'blue',
         flexDirection: "row",
         alignItems: "center",
-        justifyContent: "space-between"
+        marginVertical: 15
     },
     heart: {
         position: "absolute",
-        right: 18,
-        top: 5
+        right: 20,
+        top: 20
     },
-    popular_card: {
+    details_card: {
         width: '100%',
-        flexDirection: "row",
-        borderRadius: 10,
+        borderTopEndRadius: 30,
+        borderTopLeftRadius: 30,
         backgroundColor: Colors.WHITE,
-        elevation: 2,
-        marginHorizontal: 2,
-        marginVertical: 8,
-        padding: 15
+        marginTop: 50,
+        padding: 15,
+        paddingTop: 60
     },
     popular_card_subview: {
         width: '70%',
         marginLeft: 15
     },
-    popular_image: {
-        width: 85,
-        height: 85,
-        borderRadius: 8,
-        resizeMode: "cover"
+    card_image: {
+        width: 100,
+        borderColor: Colors?.WHITE,
+        borderWidth: 5,
+        height: 100,
+        borderRadius: 100,
+        zIndex: 99,
+        position: "absolute",
+        alignSelf: 'center'
     },
 
     option: {
@@ -289,7 +319,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: Colors.GREY,
         alignItems: "center",
-        // width: '50%',
         marginHorizontal: 8,
         marginVertical: 15,
         paddingHorizontal: 20,
@@ -311,10 +340,9 @@ const styles = StyleSheet.create({
         fontWeight: 500
     },
     slot_box: {
-        width: 95,
-        paddingVertical: 15,
-        borderRadius: 7,
-        backgroundColor: 'rgba(14,	190,	127, 0.1)',
+        width: 70,
+        paddingVertical: 8,
+        borderRadius: 15,
         alignItems: "center",
         justifyContent: "center",
         margin: 5

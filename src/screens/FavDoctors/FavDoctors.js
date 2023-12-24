@@ -1,21 +1,18 @@
-import React from "react";
-import { Text, View, StyleSheet, ScrollView, FlatList, Image, TouchableOpacity } from "react-native";
-import BgImage from "../../components/BgImage";
+import React, { useState } from "react";
+import {View, StyleSheet, ScrollView, FlatList} from "react-native";
 import Header from "../../components/Header";
 import Input from "../../components/Input";
 import { Colors } from "../../Config/Colors";
 import docC from "../../assets/images/doc3.png";
 import docD from "../../assets/images/doc4.png";
 import docE from "../../assets/images/doc5.png";
-import { AirbnbRating } from 'react-native-ratings';
-import Ionicons from 'react-native-vector-icons/Ionicons'
-import { useNavigation } from "@react-navigation/native";
 import DoctorCard from "../../components/DoctorCard";
+import ListEmptyComponent from "../../components/ListEmptyComponent";
+import Icon, { IconTypes } from "../../components/Icon";
 
 const FavDoctors = () => {
 
-    const navigation = useNavigation();
-
+    const [search, setsearch] = useState(null)
     const FavoriteDoctors = [
         {
             id: 1,
@@ -64,25 +61,27 @@ const FavDoctors = () => {
         },
     ]
 
- 
     return (
         <View style={styles.mainContainer}>
             <Header title={'Favorite Doctors'} />
             <ScrollView>
-                <View style={styles.sub_container}>
-                    <Input leftIcon={true} rightIcon={true} placeholder={'Search'} mainStyle={{ marginVertical: 20 }} />
+                    <Input
+                        search
+                        value={search}
+                        onChangeText={(e) => setsearch(e)}
+                        placeholder={'Search'}
+                        rightIcon={search && <Icon type={IconTypes.Entypo} name={'cross'} size={18} />}
+                        onPressRightIcon={() => setsearch(null)}
+                        mainStyle={{ marginBottom: 13 }} />
 
                     <FlatList
                         showsVerticalScrollIndicator={false}
                         data={FavoriteDoctors}
                         renderItem={({ item }) =>
-                        (<DoctorCard item={item}/>)}
-                        keyExtractor={item => item?.id}
-                        ListEmptyComponent={
-                            <Text style={styles.no_data} >No doctors available</Text>
-                        }
+                            (<DoctorCard item={item} book={true} heart={true} />)}
+                        keyExtractor={(_ , index) => index.toString()}
+                        ListEmptyComponent={<ListEmptyComponent text={'no doctors found'} />}
                     />
-                </View>
             </ScrollView>
         </View>
     )
@@ -94,9 +93,9 @@ const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         backgroundColor: Colors.WHITE,
+        paddingHorizontal: 15
     },
     sub_container: {
-        width: '90%',
         alignSelf: "center",
     },
     heading: {

@@ -6,21 +6,11 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Colors } from "../Config/Colors";
 import Icon, { IconTypes } from "./Icon";
 import { Fonts } from "../Config/Fonts";
+import Button from "./Button";
 
-const DoctorCard = ({ item }) => {
+const DoctorCard = ({ item, book, heart }) => {
     const navigation = useNavigation();
-    let rating = item?.rating == 5 ? [1, 2, 3, 4, 5]
-        : item?.rating == 4 ? [1, 2, 3, 4]
-            : item?.rating == 3 ? [1, 2, 3]
-                : item?.rating == 2 ? [1, 2]
-                    : item?.rating == 1 ? [1]
-                        : []
 
-    const ratingItem = (x, index) => {
-        return (
-            <Image key={index} source={require('../assets/images/star.png')} style={{ width: 15, height: 15 }} />
-        )
-    }
 
     return (
         <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('DoctorDetails', { item: item })}>
@@ -28,18 +18,27 @@ const DoctorCard = ({ item }) => {
             <View style={styles.subview}>
                 <View style={styles.subview2}>
                     <TextComponent style={styles.text} text={item?.name} numberOfLines={1} />
-
-                    <View style={styles.flex}>
-                        {rating.map(ratingItem)}
-                    </View>
-
+                    {heart &&
+                        <Icon type={IconTypes.Ionicons} name={'heart-sharp'} color={Colors?.RED} size={20} />
+                    }
                 </View>
                 <TextComponent style={styles.span} text={item?.category} />
+
                 <View style={[styles.flex, { gap: 5 }]}>
                     <Icon name={'location'} type={IconTypes?.EvilIcons} size={18} color={Colors?.DDGREY} />
                     <TextComponent style={styles.span} text={item?.hospital_name} />
                 </View>
 
+                <View style={styles.subview2}>
+                    <View style={styles.flex}>
+                        <Image source={require('../assets/images/star.png')} style={{ width: 18, height: 18, marginRight: 3 }} />
+                        <TextComponent style={styles.spanx} text={item?.rating + ' ( 50+ Reviews )'} />
+                    </View>
+                    {
+                        book &&
+                        <Button title={'Book Now'} onPress={() => navigation.navigate('DoctorDetails', { item: item })} style={styles.button} light text_style={{ fontSize: 10 }} />
+                    }
+                </View>
             </View>
         </TouchableOpacity>
     )
@@ -64,15 +63,19 @@ const styles = StyleSheet.create({
     },
     text: {
         width: '55%',
-        fontFamily: Fonts?.SEMIBOLD
+        fontFamily: Fonts?.SEMIBOLD,
+        fontSize: 15
     },
     subview: {
-        gap: 1,
         width: '80%'
     },
     span: {
         color: Colors?.DDGREY,
         fontSize: 12,
+    },
+    spanx: {
+        color: Colors?.DDGREY,
+        fontSize: 11,
     },
     image: {
         width: 60,
@@ -85,5 +88,14 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         width: '95%',
     },
-    flex: { flexDirection: "row", alignItems: 'center' }
+    flex: {
+        flexDirection: "row",
+        alignItems: 'center'
+    },
+    button: {
+        width: '35%',
+        paddingVertical: 5,
+        alignSelf: 'flex-end',
+        right: 5
+    }
 });
