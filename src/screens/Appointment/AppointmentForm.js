@@ -12,6 +12,8 @@ import Input from "../../components/Input";
 import ImagePicker from 'react-native-image-crop-picker';
 import SuccessModal from "../../components/SuccessModal";
 import { useNavigation } from "@react-navigation/native";
+import TextComponent from "../../components/TextComponent";
+import Button from "../../components/Button";
 
 const AppointmentForm = (props) => {
 
@@ -77,47 +79,40 @@ const AppointmentForm = (props) => {
 
     return (
         <View style={styles.Container}>
-            <BgImage />
-            <Header title={'Appointment'} />
+            <Header title={'Appointment'} backIcon />
             <ScrollView>
-                <View style={styles.sub_container}>
-                    <DetailsCard />
 
-                    <Text style={[styles.text, { marginTop: 20, fontWeight: 500 }]}>Appointment For</Text>
+                <Input
+                    label={'Patient Name'}
+                    value={patient}
+                    onChangeText={(e) => setpatient(e)}
+                    mainStyle={styles.mainInput} parentStyle={styles.input_parent_style} />
 
-                    <Input
-                        placeholder={'Patient Name'}
-                        value={patient}
-                        onChangeText={(e) => setpatient(e)}
-                        mainStyle={styles.mainInput} style={styles.subInput} />
+                <Input
+                    label={'Contact Number'}
+                    value={contactNo}
+                    onChangeText={(e) => setcontactNo(e)}
+                    mainStyle={styles.mainInput} parentStyle={styles.input_parent_style} />
 
-                    <Input
-                        placeholder={'Contact Number'}
-                        value={contactNo}
-                        onChangeText={(e) => setcontactNo(e)}
-                        mainStyle={styles.mainInputx} style={styles.subInput} />
 
-                    <Text style={[styles.text, { marginTop: 20, fontWeight: 500 }]}>Who is this patient ?</Text>
+                <Input
+                    label={'Relationship with Patient'}
+                    placeholder={'e.g: My Self , my Child , my Mother'}
+                    value={detail}
+                    onChangeText={(e) => setdetail(e)}
+                    mainStyle={styles.mainInput} parentStyle={styles.input_parent_style} />
 
-                    <Input
-                        placeholder={'My Self , my Child , my Mother'}
-                        value={detail}
-                        onChangeText={(e) => setdetail(e)}
-                        mainStyle={styles.mainInput} style={styles.subInput} />
+                    {
+                        image ?
+                            <Image source={{ uri: image?.uri }} style={styles.uploaded_image} />
+                            :
+                             <TouchableOpacity style={styles.upload_image} onPress={UploadImage}>
+                                <Feather name={'plus'} size={30} color={Colors.PRIMARY} />
+                                <TextComponent style={{ color: Colors.PRIMARY, fontSize: 12 }} text={'Add Image'} />
+                            </TouchableOpacity>
+                    }
 
-                    <View style={styles.image_upload_view}>
-                        <TouchableOpacity style={styles.upload_image} onPress={UploadImage}>
-                            <Feather name={'plus'} size={50} color={Colors.PRIMARY} />
-                            <Text style={{ color: Colors.PRIMARY }}>Add Image</Text>
-                        </TouchableOpacity>
-
-                        <Image source={image ? { uri: image?.uri } : AlternateImage} style={styles.uploaded_image} />
-                    </View>
-
-                    <TouchableOpacity onPress={() => setopenModal(true)} style={styles.button}>
-                        <Text style={styles.button_text}>Confirm</Text>
-                    </TouchableOpacity>
-                </View>
+                <Button title={'Next'} onPress={() => setopenModal(true)}  style={styles.button} />
                 <SuccessModal
                     children={
                         <View style={{ alignItems: "center" }}>
@@ -143,6 +138,10 @@ const styles = StyleSheet.create({
     Container: {
         flex: 1,
         backgroundColor: Colors.WHITE,
+        paddingHorizontal: 15
+    },
+    input_parent_style: {
+        marginVertical: 10
     },
     heading: {
         fontSize: 20,
@@ -188,52 +187,44 @@ const styles = StyleSheet.create({
         fontSize: 12
     },
     mainInput: {
-        width: '100%',
-        alignSelf: 'center',
-        marginVertical: 15,
-        backgroundColor: 'transparent',
-        elevation: 0, borderWidth: 1,
-        borderColor: Colors.GREY
+        paddingVertical: 0,
+        width: '95%',
+        borderRadius: 10,
     },
-    mainInputx: {
-        width: '100%',
-        alignSelf: 'center',
-        marginBottom: 15,
-        backgroundColor: 'transparent',
-        elevation: 0, borderWidth: 1,
-        borderColor: Colors.GREY
-    },
-    subInput: {
-        backgroundColor: 'transparent',
-        fontSize: 14
-    },
+    // mainInputx: {
+    //     width: '100%',
+    //     alignSelf: 'center',
+    //     marginBottom: 15,
+    //     backgroundColor: 'transparent',
+    //     elevation: 0, borderWidth: 1,
+    //     borderColor: Colors.GREY
+    // },
+
     upload_image: {
-        backgroundColor: 'rgba(14,	190,	127,0.2)',
-        paddingVertical: 30,
-        width: '45%',
-        borderRadius: 5,
-        alignItems: "center"
+        backgroundColor: Colors?.LIGHT,
+        height: 100,
+        width: 100,
+        gap: 3,
+        borderRadius: 15,
+        justifyContent: "center",
+        alignItems: "center",
+        marginLeft: 5
     },
     image_upload_view: {
         flexDirection: "row",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
+        marginVertical: 20
     },
     uploaded_image: {
-        width: '45%',
-        height: 130,
+        width: 100,
+        height: 100,
         borderRadius: 5,
-        resizeMode: 'cover'
+        resizeMode: 'cover',
+        marginLeft: 5
     },
     button: {
-        borderRadius: 5,
-        width: '90%',
-        backgroundColor: Colors.PRIMARY,
-        alignItems: "center",
-        justifyContent: "center",
-        paddingVertical: 15,
-        alignSelf: "center",
-        marginTop: 40,
-        marginVertical: 10
+    
+        marginTop: 20
     },
     button_text: {
         color: Colors.WHITE,

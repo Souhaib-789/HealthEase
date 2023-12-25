@@ -1,107 +1,76 @@
 import React, { useState } from "react";
-import { Text, View, StyleSheet, TouchableOpacity, ScrollView, Image, FlatList, Pressable } from "react-native";
-import BgImage from "../../components/BgImage";
-import Ionicons from 'react-native-vector-icons/Ionicons'
+import { View, StyleSheet, TouchableOpacity, ScrollView, Image, FlatList, Pressable, LayoutAnimation } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { AirbnbRating } from 'react-native-ratings';
 import Header from "../../components/Header";
-import moment from "moment";
+import moment, { duration } from "moment";
 import { Colors } from "../../Config/Colors";
 import TextComponent from "../../components/TextComponent";
 import { Fonts } from "../../Config/Fonts";
 import Icon, { IconTypes } from "../../components/Icon";
 import Button from "../../components/Button";
+import { Calendar, LocaleConfig } from 'react-native-calendars';
 
 const DoctorDetails = (props) => {
 
     const navigation = useNavigation();
     const routeData = props?.route?.params?.item;
     const [confirmedSlot, setconfirmedSlot] = useState();
-    const [currentDate, setcurrentDate] = useState(new Date());
-
+    const [selectedDate, setSelectedDate] = useState();
+    const [showCalendar, setshowCalendar] = useState(false);
+    const AvaiableDays = ['Mon', 'Wed', 'Fri']
     const Slots = [
         {
             id: 1,
-            day: 'Today',
-            slots: [
-                {
-                    id: 1,
-                    time: '4:00 PM'
-                },
-                {
-                    id: 2,
-                    time: '4:30 PM'
-                },
-                {
-                    id: 3,
-                    time: '5:00 PM'
-                },
-                {
-                    id: 4,
-                    time: '5:30 PM'
-                },
-
-                {
-                    id: 5,
-                    time: '6:00 PM'
-                },
-
-                {
-                    id: 6,
-                    time: '6:30 PM'
-                },
-
-                {
-                    id: 7,
-                    time: '7:00 PM'
-                },
-                {
-                    id: 8,
-                    time: '7:30 PM'
-                }]
+            time: '4:00 PM'
         },
         {
             id: 2,
-            day: 'Tomorrow',
-            slots: []
+            time: '4:30 PM'
         },
         {
             id: 3,
-            day: 'Thursday',
-            slots: [
-                {
-                    id: 1,
-                    time: '4:00 PM'
-                },
-                {
-                    id: 1,
-                    time: '4:30 PM'
-                },
-                {
-                    id: 1,
-                    time: '5:00 PM'
-                },
-                {
-                    id: 1,
-                    time: '5:30 PM'
-                },
-            ]
+            time: '5:00 PM'
         },
         {
             id: 4,
-            day: 'Saturday',
-            slots: [
-                {
-                    id: 1,
-                    time: '4:00 PM'
-                },
-                {
-                    id: 1,
-                    time: '4:30 PM'
-                },
-            ]
+            time: '5:30 PM'
         },
-    ]
+
+        {
+            id: 5,
+            time: '6:00 PM'
+        },
+
+        {
+            id: 6,
+            time: '6:30 PM'
+        },
+
+        {
+            id: 7,
+            time: '7:00 PM'
+        },
+        {
+            id: 8,
+            time: '7:30 PM'
+        }]
+
+    const calendarTheme = {
+        selectedDayBackgroundColor: Colors?.PRIMARY,
+        selectedDayTextColor: Colors?.WHITE,
+        backgroundColor: Colors?.WHITE,
+        calendarBackground: Colors?.WHITE,
+        textSectionTitleColor: Colors?.BLACK,
+        textSectionTitleDisabledColor: Colors?.GREY,
+        dayTextColor: Colors?.BLACK,
+        textDisabledColor: Colors?.GREY,
+        arrowColor: Colors?.BLACK,
+        disabledArrowColor: Colors?.GREY,
+        todayBackgroundColor: Colors?.LIGHT,
+        todayTextColor: Colors?.BLACK,
+        textDayFontSize: 12,
+        textMonthFontSize: 14,
+    }
 
     const details = [
         {
@@ -111,33 +80,18 @@ const DoctorDetails = (props) => {
         },
         {
             name: 'Experience',
-            no: '2+ Years',
+            no: `${routeData?.experience} Years`,
             icon_name: 'tips-and-updates'
         },
         {
             name: 'per slot',
-            no: '1000/-',
+            no: routeData?.fees ? routeData?.fees : 1000 + ' Rs',
             icon_name: 'price-change'
         },
     ]
 
     console.log(routeData);
-    const [date, setDate] = useState(Slots[0])
 
-
-    const renderDatesItem = ({ item }) => {
-        return (
-            <Pressable style={[styles.option, { backgroundColor: item?.id == date?.id ? Colors.PRIMARY : 'transparent', borderWidth: item?.id == date?.id ? 0 : 1 }]}
-                onPress={() => setDate(item)}>
-
-                <Text style={[styles.text, { textAlign: "center", color: item?.id == date?.id ? Colors.WHITE : Colors.BLACK }]}
-                >{item?.day}</Text>
-
-                <Text style={[styles.textx, { color: item?.id == date?.id ? Colors.LGREY : Colors.DDGREY, fontSize: 10 }]}
-                >{item?.slots?.length == 0 ? 'No' : item?.slots?.length} slots available</Text>
-            </Pressable>
-        )
-    }
 
     const renderDetailsItem = (item, index) => {
         return (
@@ -151,6 +105,27 @@ const DoctorDetails = (props) => {
                 </View>
             </View>
         )
+    }
+
+    const renderSlotCard = (item, index) => {
+        return (
+            <TouchableOpacity key={index}
+                style={[styles.slot_box,
+                {
+                    backgroundColor: item?.time == confirmedSlot?.time
+                        ? Colors.PRIMARY : Colors?.LIGHT
+                }]}
+                onPress={() => setconfirmedSlot(item)}>
+                <TextComponent
+                    style={{ color: item?.time == confirmedSlot?.time ? Colors.WHITE : Colors.PRIMARY, fontSize: 10 }}
+                    text={item?.time} />
+            </TouchableOpacity>
+        )
+    }
+
+    const onDateChange = (date) => {
+        setSelectedDate({ date });
+        console.log(date.toString().substr(0, 15));
     }
 
     return (
@@ -167,56 +142,74 @@ const DoctorDetails = (props) => {
                     <View style={{ alignItems: 'center' }}>
                         <TextComponent style={styles.text} text={routeData?.name} />
                         <TextComponent style={styles.textx} text={routeData?.category} />
+                        <TextComponent style={styles.textx} text={routeData?.hospital_name} />
                     </View>
 
 
-                    <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: 'space-around', marginVertical: 10 }}>
+                    <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: 'space-around', marginVertical: 25 }}>
                         {details.map(renderDetailsItem)}
                     </View>
 
-                    <TextComponent style={styles.heading} text={'Description'} />
+                    <TextComponent style={styles.heading} text={'About'} />
                     <TextComponent style={styles.textx} text={"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."} />
 
-                    <TextComponent style={styles.heading} text={'Avaialibity'} />
-                <FlatList
-                    showsHorizontalScrollIndicator={false}
-                    data={Slots}
-                    horizontal
-                    renderItem={renderDatesItem}
-                    keyExtractor={item => item?.id}
-                />
+                    <TextComponent style={styles.heading} text={'Availability'} />
+                    <View style={styles.flexA}>
+                        <View style={{ width: '60%' }}>
+                            <View style={styles.flex}>
+                                <TextComponent text={'Days :  '} style={styles.short_heading} />
+                                <FlatList
+                                    data={AvaiableDays}
+                                    horizontal
+                                    renderItem={({ item }) => <TextComponent text={item} style={styles.texty} />}
+                                    keyExtractor={item => item?.id}
+                                />
+                            </View>
 
-                <Text style={[styles.heading , {alignSelf: 'center' , marginVertical: 8 , color: Colors?.PRIMARY}]}>{`Today , ${moment(currentDate).format('LL')}`} </Text>
-                <TextComponent style={styles.heading} text={'Available Slots'} />
+                            <View style={styles.flex}>
+                                <TextComponent text={'Duration : '} style={styles.short_heading} />
+                                <TextComponent text={'30 Minutes'} style={styles.texty} />
+                            </View>
+                        </View>
 
-                <View style={styles.slots_view}>
+                        <TouchableOpacity style={styles.select_button} onPress={() => { setshowCalendar(!showCalendar), LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut); }}>
+                            <Icon type={IconTypes?.AntDesign} name={'calendar'} size={18} color={Colors?.PRIMARY} />
+                            <TextComponent style={styles.select_text} text={selectedDate ? moment(selectedDate).format('ddd D MMM') : 'Select Day'} />
+                        </TouchableOpacity>
+                    </View>
+
                     {
-                        date?.slots?.length == 0 ?
-                            <Text style={[styles.textx, { marginLeft: '35%', marginTop: 10 }]}>No Slots Available</Text>
-                            :
-                            date?.slots?.map((item, index) => {
-                                return (
-                                    <TouchableOpacity key={index} 
-                                    style={[styles.slot_box,
-                                         { backgroundColor: item?.time == confirmedSlot?.time
-                                             ? Colors.PRIMARY : Colors?.LIGHT }]}
-                                        onPress={() => setconfirmedSlot(item)}>
-                                        <TextComponent style={{ color: item?.time == confirmedSlot?.time ? Colors.WHITE : Colors.PRIMARY , fontSize: 10 }} text={item?.time} />
-                                    </TouchableOpacity>
-                                )
-                            })
+                        showCalendar &&
+                        <Calendar
+                            onDayPress={e => {
+                                let day = moment(e.dateString).format('ddd')
+                                if (AvaiableDays.includes(day)) {
+                                    setshowCalendar(false)
+                                    setSelectedDate(e.dateString)
+                                } else {
+                                    alert('Doctor is not available on this day')
+                                }
+                                LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
+                            }}
+                            markedDates={{ [selectedDate]: { selected: true, disableTouchEvent: true } }}
+                            disabledDaysIndexes={[0, 2, 4, 6]}
+                            style={styles.calendar}
+                            minDate={moment().format('YYYY-MM-DD')}
+                            theme={calendarTheme}
+                        />
                     }
-                </View>
 
-                {
-                    date?.slots?.length > 0 &&
-                    <Button 
-                    title={'Fix an appointment'}
-                     disabled={confirmedSlot ? false : true}
-                     style={{marginVertical: 15}}
-                    onPress={() => navigation.navigate('Appointment', { item: routeData, timeSlot: confirmedSlot, date: date })} />
-                }
-                   </View>
+                    <TextComponent style={styles.heading} text={'Available Slots'} />
+                    <View style={styles.slots_view}>
+                        {Slots?.map(renderSlotCard)}
+                    </View>
+
+                    <Button title={'Fix an appointment'}
+                        disabled={confirmedSlot ? false : true}
+                        style={{ marginVertical: 15 }}
+                        onPress={() => navigation.navigate('Appointment', { item: routeData, timeSlot: confirmedSlot, date: selectedDate })} />
+
+                </View>
             </ScrollView>
         </View>
     )
@@ -248,7 +241,12 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: Colors.BLACK,
         fontFamily: Fonts?.SEMIBOLD,
-        marginTop: 10
+        marginTop: 15
+    },
+    short_heading: {
+        fontSize: 14,
+        color: Colors.BLACK,
+        fontFamily: Fonts?.REGULAR,
     },
     span: {
         fontWeight: "bold"
@@ -257,6 +255,12 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: Colors?.DGREY,
         lineHeight: 20
+    },
+    texty: {
+        fontSize: 12,
+        marginRight: 5,
+        color: Colors?.PRIMARY,
+        fontFamily: Fonts?.SEMIBOLD
     },
     sub_heading: {
         fontSize: 18,
@@ -282,7 +286,12 @@ const styles = StyleSheet.create({
     flex: {
         flexDirection: "row",
         alignItems: "center",
-        marginVertical: 15
+    },
+    flexA: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        marginVertical: 10,
     },
     heart: {
         position: "absolute",
@@ -351,5 +360,12 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         flexWrap: "wrap",
         marginVertical: 10
+    },
+    select_button: { backgroundColor: Colors?.LIGHT, borderRadius: 10, padding: 10, flexDirection: 'row', alignItems: 'center', gap: 5 },
+    select_text: { color: Colors?.PRIMARY, fontSize: 10 },
+    calendar: {
+        elevation: 3,
+        borderRadius: 10,
+        marginVertical: 15
     }
 })

@@ -19,7 +19,7 @@ const DoctorCard = ({ item, book, heart }) => {
                 <View style={styles.subview2}>
                     <TextComponent style={styles.text} text={item?.name} numberOfLines={1} />
                     {heart &&
-                        <Icon type={IconTypes.Ionicons} name={'heart-sharp'} color={Colors?.RED} size={20} />
+                        <Icon type={IconTypes.Ionicons} name={'heart-sharp'} color={Colors?.PRIMARY} size={20} />
                     }
                 </View>
                 <TextComponent style={styles.span} text={item?.category} />
@@ -31,7 +31,7 @@ const DoctorCard = ({ item, book, heart }) => {
 
                 <View style={styles.subview2}>
                     <View style={styles.flex}>
-                        <Image source={require('../assets/images/star.png')} style={{ width: 18, height: 18, marginRight: 3 }} />
+                        <Image source={require('../assets/images/star.png')}  style={{ width: 18, height: 18, marginRight: 3 }} />
                         <TextComponent style={styles.spanx} text={item?.rating + ' ( 50+ Reviews )'} />
                     </View>
                     {

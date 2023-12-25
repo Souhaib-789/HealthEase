@@ -19,12 +19,12 @@ const Button = (props) => {
 
 const styles = StyleSheet.create({
     button: {
-        borderRadius: 13,
+        borderRadius: 8,
         justifyContent: 'center',
         alignItems: "center",
         alignSelf: 'center',
         width: '90%',
-        paddingVertical: 12,
+        paddingVertical: 13,
     },
 })
 

@@ -169,6 +169,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.WHITE,
         width: '100%',
         alignSelf: 'center',
+        borderWidth: 0,
     },
     sub_container: {
         marginVertical: 10,

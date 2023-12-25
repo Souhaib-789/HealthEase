@@ -19,6 +19,8 @@
     "react": "18.2.0",
     "react-native": "0.71.4",
     "react-native-app-intro-slider": "^4.0.4",
+    "react-native-calendar-picker": "^7.1.4",
+    "react-native-calendars": "^1.1303.0",
     "react-native-date-picker": "^4.2.10",
     "react-native-document-picker": "^8.2.0",
     "react-native-fast-image": "^8.6.3",
