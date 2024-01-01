@@ -1,16 +1,17 @@
 import React from "react";
 import { Text , View, StyleSheet} from "react-native";
-import { Colors } from "./Config/Colors";
+import { Colors } from "../../Config/Colors";
+import TextComponent from "../../components/TextComponent";
 
-const Main = ( ) => {
+const Healthbot = ( ) => {
     return(
         <View style={styles.Container}>
-            <Text style={styles.heading}>Main</Text>
+            <TextComponent style={styles.heading} text={'Healthbot'} />
         </View>
     )
 }
 
-export default Main;
+export default Healthbot;
 
 const styles = StyleSheet.create({
     Container:{
@@ -20,7 +21,6 @@ const styles = StyleSheet.create({
         justifyContent: "center"
     },
     heading:{
-        fontSize: 20,
-        fontWeight: "bold"
+        fontSize: 30,
     }
 })

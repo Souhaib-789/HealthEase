@@ -8,7 +8,10 @@ import TextComponent from './TextComponent';
 const Input = props => {
     return (
         <View style={props?.parentStyle}>
-            <TextComponent style={styles.text} text={props?.label} />
+            {
+                props?.label &&
+                <TextComponent style={styles.text} text={props?.label} />
+            }
             <View style={[styles.inputContainer, { ...props?.mainStyle }]}>
 
                 {

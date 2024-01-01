@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import { Colors } from '../Config/Colors';
+import TextComponent from './TextComponent';
 
 
 const SuccessModal = props => {
@@ -30,10 +31,9 @@ const SuccessModal = props => {
                         <TouchableOpacity
                             style={[styles.ViewFooter, { ...props.styles }]}
                             onPress={props.OnClose}>
-                            <Text style={[styles.lang, { ...props.textStyle }]}>
-
-                                {props.text ? props.text : 'Close'}
-                            </Text>
+                            <TextComponent style={[styles.lang, { ...props.textStyle }]}
+                                text={props.text ? props.text : 'Close'}
+                            />
                         </TouchableOpacity>
                     ) : null}
                 </View>
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     lang: {
-        fontSize: 16,
+        fontSize: 14,
         color: Colors.WHITE,
         textAlign: 'center',
     },

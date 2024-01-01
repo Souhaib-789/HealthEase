@@ -2,13 +2,10 @@ import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../screens/Home/Home';
 import { Colors } from '../Config/Colors';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-
-import Ionicons from 'react-native-vector-icons/Ionicons'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import FavDoctors from '../screens/FavDoctors/FavDoctors';
 import Profile from '../screens/Profile/Profile';
-import Pharmacy from '../screens/Pharmacy/Pharmacy';
+import Healthbot from '../screens/Healthbot/Healthbot';
+import Icon, { IconTypes } from '../components/Icon';
 
 const Tab = createBottomTabNavigator();
 
@@ -20,13 +17,13 @@ export default function BottomTabs() {
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color}) => {
           if (route?.name == 'Home') {
-            ICON = <Ionicons name={'home-sharp'} size={23} color={color} />
+            ICON = <Icon type={IconTypes?.AntDesign} name={'home'} size={23} color={color} /> 
           } else if (route?.name == 'FavDoctors') {
-            ICON = <Ionicons name={'heart'} size={23} color={color} />
-          } else if (route?.name == 'Pharmacy') {
-            ICON = <MaterialCommunityIcons name={'shopping'} size={23} color={color} />
+            ICON = <Icon type={IconTypes?.Ionicons} name={'heart-outline'} size={23} color={color} />
+          } else if (route?.name == 'Healthbot') {
+            ICON = <Icon type={IconTypes?.Octicons} name={'dependabot'} size={23} color={color} />
           } else if (route?.name == 'Profile') {
-            ICON = <MaterialIcons name={'person-outline'} size={23} color={color} />
+            ICON = <Icon type={IconTypes?.AntDesign} name={'profile'} size={23} color={color} />
           }
           return ICON;
         },
@@ -42,7 +39,7 @@ export default function BottomTabs() {
     >
       <Tab.Screen name="Home" component={Home} options={{ headerShown: false }} />
       <Tab.Screen name="FavDoctors" component={FavDoctors} options={{ headerShown: false }} />
-      <Tab.Screen name="Pharmacy" component={Pharmacy} options={{ headerShown: false }} />
+      <Tab.Screen name="Healthbot" component={Healthbot} options={{ headerShown: false }} />
       <Tab.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
     </Tab.Navigator>
 

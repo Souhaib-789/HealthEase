@@ -1,49 +1,58 @@
 import { TouchableOpacity, Text, View, StyleSheet, Modal as RNModal, Image, } from 'react-native';
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { useNavigation } from '@react-navigation/native';
-import Entypo from 'react-native-vector-icons/Entypo'
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { useState } from 'react';
 import { Colors } from "../../Config/Colors";
-
 import profile from '../../assets/images/profile.png'
+import TextComponent from '../../components/TextComponent';
+import { FlatList } from 'react-native-gesture-handler';
+import { Fonts } from '../../Config/Fonts';
+import Icon, { IconTypes } from '../../components/Icon';
 
 function CustomDrawerContent(props) {
     const navigation = useNavigation();
     const [modalVisible, setModalVisible] = useState(false);
+
     const screens = [
         {
             id: 1,
-            screenName: 'Medical Records',
-            goto: 'MedicalRecords',
-            icon: <MaterialIcons name={'file-copy'} color={'black'} size={20} />
+            screenName: 'Profile',
+            goto: 'Profile',
+            icon: <Icon type={IconTypes.Feather} name={'user'} size={18} />
         },
         {
             id: 2,
-            screenName: 'Pharmacy',
-            goto: 'PharmacyDashboard',
-            icon: <FontAwesome5 name={'cart-plus'} color={'black'} size={20} />
+            screenName: 'Medical Records',
+            goto: 'MedicalRecords',
+            icon: <Icon type={IconTypes.AntDesign} name={'filetext1'} size={18} />
         },
+
         {
             id: 3,
             screenName: 'Diagnostics Tests',
             goto: 'DiagnosticsTests',
-            icon: <Entypo name={'lab-flask'} color={'black'} size={20} />
+            icon: <Icon type={IconTypes.Entypo} name={'lab-flask'} size={18} />
+
         },
         {
             id: 4,
+            screenName: 'Settings',
+            goto: 'Settings',
+            icon: <Icon type={IconTypes.AntDesign} name={'setting'} size={18} />
+        },
+        {
+            id: 5,
+            screenName: 'About Us',
+            goto: 'AboutUs',
+            icon: <Icon type={IconTypes.AntDesign} name={'infocirlceo'} size={18} />
+        }, {
+            id: 6,
             screenName: 'Privacy Policy',
             goto: 'PrivacyPolicy',
-            icon: <MaterialIcons name={'privacy-tip'} color={'black'} size={20} />
+            icon: <Icon type={IconTypes.MaterialCommunityIcons} name={'shield-lock-outline'} size={18} />
+
         },
-        // {
-        //     id: 5,
-        //     screenName: 'Settings',
-        //     goto: 'Settings',
-        //     icon: <Ionicons name={'settings-sharp'} color={'black'} size={20} />
-        // }
     ]
 
     const openModal = () => {
@@ -66,47 +75,42 @@ function CustomDrawerContent(props) {
         }
     }
 
+    const renderOptionItem = ({ item, index }) => {
+        return (
+            <TouchableOpacity
+                onPress={() => navigation.navigate(item?.goto)}
+                key={index}
+                style={{
+                    flexDirection: 'row',
+                    margin: 10,
+                    paddingVertical: 6,
+                    paddingHorizontal: 10,
+                    alignItems: 'center',
+                }}>
+                <View>{item?.icon}</View>
+                <TextComponent style={{ marginLeft: 10, fontSize: 13, color: Colors.BLACK, }} text={item?.screenName} />
+            </TouchableOpacity>
+        )
+    }
+
     return (
         <>
-            <View style={{ backgroundColor: Colors.PRIMARY, height: 150, marginBottom: 30, flexDirection: 'row', paddingTop: 80, alignItems: 'center', padding: 15 }}>
+            <View style={styles.profile_view}>
                 <Image source={profile} style={styles.image} />
-                <Text style={styles.heading}>Marrvie Jhon</Text>
+                <TextComponent style={styles.heading} text={'Andrew Ainsley'} />
             </View>
-            <DrawerContentScrollView {...props} showsVerticalScrollIndicator={false}>
-                {/* <DrawerItemList {...props} /> */}
-                {
-                    screens.map((item, index) => {
-                        return (
-                            <TouchableOpacity
-                                onPress={() => navigation.navigate(item?.goto)}
-                                key={index}
-                                style={{
-                                    flexDirection: 'row',
-                                    margin: 10,
-                                    paddingVertical: 15,
-                                    paddingHorizontal: 20,
-                                    alignItems: 'center',
-                                    shadowColor: '#000',
-                                    shadowOffset: {
-                                        width: 0,
-                                        height: 1,
-                                    },
-                                    backgroundColor: 'white',
-                                    borderBottomColor: Colors?.GREY,
-                                    borderBottomWidth: 1
-                                }}>
-                                <View>{item?.icon}</View>
-                                <Text style={{ marginLeft: 20, fontSize: 15, color: Colors.BLACK, }}>{item?.screenName}</Text>
-                            </TouchableOpacity>
-                        )
-                    })
-                }
+            <DrawerContentScrollView  {...props} showsVerticalScrollIndicator={false}>
+
+                <FlatList
+                    data={screens}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={renderOptionItem}
+                />
 
                 <TouchableOpacity style={styles.btn} onPress={openModal}  >
-                    <MaterialIcons name='logout' color={Colors.WHITE} size={20} />
-                    <Text style={styles.btntxt}>  Logout</Text>
+                    <Icon type={IconTypes.MaterialIcons} name={'logout'} color={Colors.RED} size={20} />
+                    <TextComponent style={styles.btntxt} text={'Logout'} />
                 </TouchableOpacity>
-
             </DrawerContentScrollView>
 
 
@@ -141,19 +145,23 @@ export default CustomDrawerContent;
 
 const styles = StyleSheet.create({
     btntxt: {
-        fontSize: 15,
-        color: Colors.WHITE
+        fontSize: 13,
+        color: Colors.RED,
+        fontFamily: Fonts?.SEMIBOLD
+    },
+    profile_view: {
+        marginBottom: 30,
+        flexDirection: 'row',
+        paddingTop: 80,
+        alignItems: 'center',
+        padding: 15
     },
     btn: {
-        backgroundColor: Colors.PRIMARY,
-        width: 100,
-        borderRadius: 10,
+        marginTop: 160,
         alignItems: 'center',
-        justifyContent: 'center',
         flexDirection: 'row',
-        padding: 10,
-        marginTop: 170,
-        marginLeft: 15
+        gap: 5,
+        marginLeft: 30
     },
     text: {
         color: Colors.WHITE
@@ -179,19 +187,16 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.PRIMARY, borderRadius: 5,
         width: 75, alignItems: 'center', justifyContent: 'center', paddingVertical: 8
     },
-    image:{
+    image: {
         width: 50,
         height: 50,
         borderRadius: 50,
         resizeMode: 'contain'
     },
-    heading:{
-        fontSize: 18,
-        color: Colors.WHITE,
-        marginLeft: 10,
-        textShadowColor: Colors.BLACK,
-        textShadowOffset: { width: 1, height: 1 },
-        textShadowRadius: 1,
-        fontWeight: 'bold'
+    heading: {
+        fontSize: 16,
+        color: Colors.BLACK,
+        marginLeft: 13,
+        fontFamily: Fonts?.SEMIBOLD
     }
 })

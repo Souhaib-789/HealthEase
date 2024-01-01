@@ -18,14 +18,15 @@ const DoctorCard = ({ item, book, heart }) => {
             <View style={styles.subview}>
                 <View style={styles.subview2}>
                     <TextComponent style={styles.text} text={item?.name} numberOfLines={1} />
-                    {heart &&
+                    {
+                    heart &&
                         <Icon type={IconTypes.Ionicons} name={'heart-sharp'} color={Colors?.PRIMARY} size={20} />
                     }
                 </View>
                 <TextComponent style={styles.span} text={item?.category} />
 
                 <View style={[styles.flex, { gap: 5 }]}>
-                    <Icon name={'location'} type={IconTypes?.EvilIcons} size={18} color={Colors?.DDGREY} />
+                    <Icon name={'location'} type={IconTypes?.EvilIcons} size={18} color={Colors?.BLACK} />
                     <TextComponent style={styles.span} text={item?.hospital_name} />
                 </View>
 
@@ -70,7 +71,7 @@ const styles = StyleSheet.create({
         width: '80%'
     },
     span: {
-        color: Colors?.DDGREY,
+        color: Colors?.BLACK,
         fontSize: 12,
     },
     spanx: {

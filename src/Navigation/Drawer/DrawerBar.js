@@ -5,7 +5,6 @@ import MedicalRecords from '../../screens/MedicalRecords/MedicalRecords';
 import PrivacyPolicy from '../../screens/InfoPages/PrivacyPolicy';
 import Settings from '../../screens/Settings/Settings';
 import BottomTabs from '../BottomTabs';
-import PharmacyDashboard from '../../screens/Pharmacy/PharmacyDashboard';
 import DiagnosticsTests from '../../screens/DiagnosticsTests/DiagnosticsTests';
 
 
@@ -20,7 +19,6 @@ const DrawerBar = () => {
              >
             <Drawer.Screen name="BottomTabs" component={BottomTabs} options={{ drawerItemStyle: { display: 'none' } }} />
             <Drawer.Screen name="MedicalRecords" component={MedicalRecords} options={{ drawerItemStyle: { display: 'none' } }} />
-            <Drawer.Screen name="PharmacyDashboard" component={PharmacyDashboard} options={{ drawerItemStyle: { display: 'none' } }} />
             <Drawer.Screen name="DiagnosticsTests" component={DiagnosticsTests} options={{ drawerItemStyle: { display: 'none' }  }} />
             <Drawer.Screen name="PrivacyPolicy" component={PrivacyPolicy} options={{ drawerItemStyle: { display: 'none' } }} />
             <Drawer.Screen name="Settings" component={Settings} options={{ drawerItemStyle: { display: 'none' } }} />
