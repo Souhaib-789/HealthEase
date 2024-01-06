@@ -55,15 +55,6 @@ const Home = () => {
         }
     ]
 
-    // const renderCategoryItem = ({ item }) => {
-    //     return (
-    //         <TouchableOpacity style={[styles.category_box, { backgroundColor: Colors.RGBA }]}>
-    //             {/* <Image source={item?.image} style={styles.category_image} /> */}
-    //             <Icon category={item?.name} />
-    //         </TouchableOpacity>
-    //     )
-    // }
-
     return (
         <View style={styles.mainContainer}>
             <ScrollView showsVerticalScrollIndicator={false} >
@@ -72,7 +63,9 @@ const Home = () => {
                     <TouchableOpacity onPress={() => navigation.openDrawer()}>
                         <Feather name='menu' size={23} color={Colors.BLACK} />
                     </TouchableOpacity>
-                    <Icon type={IconTypes.MaterialCommunityIcons} name={'bell-outline'} />
+                    <TouchableOpacity style={styles.bell_icon}>
+                    <Icon type={IconTypes.MaterialCommunityIcons} name={'bell-outline'} size={20} />
+                    </TouchableOpacity>
                 </View>
 
                 <View style={styles.mV}>
@@ -320,5 +313,12 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
+    },
+    bell_icon:{
+        backgroundColor: Colors?.WHITE,
+        elevation: 5,
+        borderRadius: 50,
+        padding: 5,
+        margin: 2
     }
 })
