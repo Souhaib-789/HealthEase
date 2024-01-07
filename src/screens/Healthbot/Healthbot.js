@@ -1,12 +1,27 @@
 import React from "react";
-import { Text , View, StyleSheet} from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
 import { Colors } from "../../Config/Colors";
 import TextComponent from "../../components/TextComponent";
+import { Fonts } from "../../Config/Fonts";
+import Button from "../../components/Button";
+import { useNavigation } from "@react-navigation/native";
 
-const Healthbot = ( ) => {
-    return(
+const Healthbot = () => {
+    const navigation = useNavigation();
+
+    return (
         <View style={styles.Container}>
-            <TextComponent style={styles.heading} text={'Healthbot'} />
+            <ScrollView>
+                <View style={styles.heading_container}>
+                    <TextComponent style={styles.heading} text={"Hello ! I'm "} />
+                    <TextComponent style={styles.headingx} text={"Healthbot"} />
+                </View>
+
+
+                <TextComponent style={styles.headingy} text={"Do you want any health advice ?"} />
+                <Button onPress={()=> navigation.navigate('HealthbotChat')} title={"Ask"} style={styles.button}  />
+            </ScrollView>
+
         </View>
     )
 }
@@ -14,13 +29,35 @@ const Healthbot = ( ) => {
 export default Healthbot;
 
 const styles = StyleSheet.create({
-    Container:{
+    Container: {
         flex: 1,
         backgroundColor: Colors.WHITE,
-        alignItems: "center",
-        justifyContent: "center"
     },
-    heading:{
-        fontSize: 30,
+    heading: {
+        fontSize: 20,
+    },
+    headingx: {
+        fontSize: 20,
+        color: Colors.PRIMARY,
+        fontFamily: Fonts?.SEMIBOLD
+    },
+    headingy: {
+        fontSize: 18,
+        width: '70%',
+        alignSelf: "center",
+        textAlign: "center",
+        marginTop: 400,
+    },
+    heading_container: {
+        flexDirection: "row",
+        alignItems: "center",
+        alignSelf: "center",
+        marginTop: 70,
+    },
+    button: {
+        marginTop: 20,
+        alignSelf: "center",
+        width: '40%',
+        borderRadius: 60,
     }
 })

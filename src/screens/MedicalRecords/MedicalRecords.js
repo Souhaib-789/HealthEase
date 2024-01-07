@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import { Text, View, StyleSheet, ScrollView, Image, TouchableOpacity, FlatList, TextInput, Modal as RNModal } from "react-native";
+import { Text, View, StyleSheet, ScrollView, TouchableOpacity, FlatList, TextInput, Modal as RNModal } from "react-native";
 import { Colors } from "../../Config/Colors";
-import BgImage from "../../components/BgImage";
 import Header from "../../components/Header";
-import noRecordImage from '../../assets/images/illustration.png'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Input from "../../components/Input";
 import DatePicker from 'react-native-date-picker'
@@ -11,6 +9,15 @@ import moment from "moment";
 import Entypo from 'react-native-vector-icons/Entypo'
 import DocumentPicker from 'react-native-document-picker';
 import { useNavigation } from "@react-navigation/native";
+import Image from "../../components/Image";
+import PDF from '../../assets/images/pdf.png'
+import TextComponent from "../../components/TextComponent";
+import Icon, { IconTypes } from "../../components/Icon";
+import ListEmptyComponent from "../../components/ListEmptyComponent";
+import TopTabs from "../../components/TopTabs";
+import MyRecords from "./MyRecords";
+import DoctorRecords from "./DoctorRecords";
+
 
 const MedicalRecords = () => {
     const navigation = useNavigation()
@@ -22,32 +29,26 @@ const MedicalRecords = () => {
     const [date, setdate] = useState(null)
     const [doc, setdoc] = useState()
 
-    let dataSend = {
-        doc_name: name,
-        type: type?.name,
-        date: date,
-        doc: doc
-    }
 
     const SampleDocs = [
-        // {
-        //     id: 1,
-        //     date: '24',
-        //     doc_name: 'Abdullah Maman',
-        //     type: 'Prescription'
-        // },
-        // {
-        //     id: 2,
-        //     date: '01',
-        //     doc_name: 'Sarah Gill',
-        //     type: 'Image'
-        // },
-        // {
-        //     id: 3,
-        //     date: '22',
-        //     doc_name: 'Will Harry',
-        //     type: 'Pdf'
-        // },
+        {
+            id: 1,
+            date: '24',
+            doc_name: 'Abdullah Maman',
+            type: 'Prescription'
+        },
+        {
+            id: 2,
+            date: '01',
+            doc_name: 'Sarah Gill',
+            type: 'Image'
+        },
+        {
+            id: 3,
+            date: '22',
+            doc_name: 'Will Harry',
+            type: 'Pdf'
+        },
     ]
 
     const Doctypes = [
@@ -71,27 +72,18 @@ const MedicalRecords = () => {
     const renderDocsItem = ({ item }) => {
         return (
             <TouchableOpacity style={styles.doc_card}>
-                <View style={styles.date_box}>
-                    <Text style={styles.text}>{item?.date}</Text>
-                    <Text style={styles.text}>FEB</Text>
-                </View>
+                <Image source={PDF} style={{ width: 30, height: 30 }} />
 
                 <View style={styles.sub_doc_card}>
-                    <Text style={styles.text_x}>Records added by you</Text>
-                    <Text style={styles.text_y}>Record for {item?.doc_name}</Text>
-                    <Text style={styles.text_z}>1 {item?.type}</Text>
+                    <TextComponent style={styles.text_x} text={'diabetes_precription.pdf'} />
+                    <TextComponent style={styles.text_y} text={`Record for ${item?.doc_name}`} />
+                    <TextComponent style={styles.text_y} text={'28 Mar 2023'} />
                 </View>
-            </TouchableOpacity>
-        )
-    }
 
-    const ListEmptyComponent = () => {
-        return (
-            <View style={styles.list_empty_view}>
-                <Image source={noRecordImage} style={styles.no_record_image} />
-                <Text style={styles.heading}>Add a medical record</Text>
-                <Text style={styles.bio}>A detailed health history helps a doctor diagnose you btter.</Text>
-            </View>
+                <TouchableOpacity style={{ position: 'absolute', right: 10, top: 10 }}>
+                    <Icon type={IconTypes.FontAwesome5} name={'trash'} size={15} color={Colors?.PRIMARY} />
+                </TouchableOpacity>
+            </TouchableOpacity>
         )
     }
 
@@ -119,28 +111,26 @@ const MedicalRecords = () => {
 
     return (
         <View style={styles.Container}>
-            <BgImage />
+            <Header title={'Medical Records'} backIcon />
             <ScrollView>
-                <Header title={'Medical Records'} />
-
-                <FlatList
-                    showsVerticalScrollIndicator={false}
-                    data={SampleDocs}
-                    renderItem={renderDocsItem}
-                    keyExtractor={item => item?.id}
-                    ListEmptyComponent={ListEmptyComponent}
+                <TopTabs
+                    components={[
+                        {
+                            component: () => <MyRecords />,
+                            name: "My records",
+                            label: "My records"
+                        },
+                        {
+                            component: () => <DoctorRecords />,
+                            name: "By Doctors",
+                            label: "By Doctors"
+                        },
+                    ]}
                 />
-
-                <TouchableOpacity style={styles.button}
-                    onPress={() => setopenModal(true)}>
-                    <Text style={styles.button_text}>Add a record</Text>
-                </TouchableOpacity>
-
-
 
                 {/* ---------------------------- MODAL --------------------------------------------------------- */}
                 <RNModal
-                    animationType={'fade'}
+                    animationType={'slide'}
                     transparent={true}
                     visible={openModal}>
 
@@ -212,7 +202,6 @@ const MedicalRecords = () => {
                     </View>
                 </RNModal>
                 {/* ---------------------------- MODAL END --------------------------------------------------------- */}
-
             </ScrollView>
         </View>
     )
@@ -224,6 +213,7 @@ const styles = StyleSheet.create({
     Container: {
         flex: 1,
         backgroundColor: Colors.WHITE,
+        padding: 10
     },
     heading: {
         fontSize: 20,
@@ -264,15 +254,13 @@ const styles = StyleSheet.create({
     },
     doc_card: {
         backgroundColor: Colors.WHITE,
-        borderRadius: 7,
+        borderRadius: 8,
         elevation: 3,
         padding: 10,
-        paddingVertical: 15,
-        alignItems: "center",
         marginVertical: 10,
+        marginHorizontal: 3,
         flexDirection: "row",
-        width: '90%',
-        alignSelf: "center"
+        alignItems: "center",
     },
     date_box: {
         backgroundColor: Colors.PRIMARY,
@@ -292,13 +280,13 @@ const styles = StyleSheet.create({
         marginTop: 15
     },
     text_x: {
-        fontSize: 15,
+        fontSize: 14,
         color: Colors.BLACK,
         fontWeight: 500
     },
     text_y: {
-        fontSize: 13,
-        color: Colors.PRIMARY,
+        fontSize: 11,
+        color: Colors.DDGREY,
     },
     text_z: {
         fontSize: 13,

@@ -1,68 +1,70 @@
 import React from "react";
-import { Text, View, StyleSheet, ScrollView, FlatList, TouchableOpacity, Image } from "react-native";
+import {  View, StyleSheet, ScrollView, FlatList, TouchableOpacity } from "react-native";
 import { Colors } from "../../Config/Colors";
-import BgImage from "../../components/BgImage";
 import Header from "../../components/Header";
-import perfil from '../../assets/images/profile.png'
+import perfil from '../../assets/images/profile.jpg'
 import { useNavigation } from "@react-navigation/native";
+import Image from "../../components/Image";
+import TextComponent from "../../components/TextComponent";
+import Icon, { IconTypes } from "../../components/Icon";
+import { Fonts } from "../../Config/Fonts";
+import Button from "../../components/Button";
+import Avatar from '../../assets/images/avatar.png'
 
 const Profile = () => {
 
     const navigation = useNavigation()
     const personalInfo = [
         {
-            id: 1,
-            label: 'Name',
-            info: 'Marvie Jhon'
-        },
-        {
             id: 2,
-            label: 'Email',
-            info: 'marvie@gmail.com'
+            info: 'marvie@gmail.com',
+            icon: <Icon name={'envelope-o'} type={IconTypes.FontAwesome} size={20} color={Colors.PRIMARY} />
         },
         {
             id: 3,
-            label: 'Contact Number',
+            icon: <Icon name={'phone'} type={IconTypes.AntDesign} size={20} color={Colors.PRIMARY} />,
             info: '0300 000 000'
         },
         {
             id: 4,
-            label: 'Location',
+            icon: <Icon name={'location-pin'} type={IconTypes.SimpleLineIcons} size={20} color={Colors.PRIMARY} />,
             info: 'Los angeles , California'
         }
     ]
 
-    const renderItem = ({ item }) => {
+    const renderItem = ({ item, index }) => {
         return (
-            <View style={styles.info_box}>
-                <Text style={styles.label}>{item?.label}</Text>
-                <Text style={styles.text}>{item?.info}</Text>
-            </View>
+            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', gap: 15, marginVertical: 15, }}>
+                <View style={{ borderRadius: 100, width: 42, height: 42, justifyContent: "center", alignItems: 'center', backgroundColor: Colors?.LIGHT_GREY }}>
+                    {item?.icon}
+                </View>
+                    <TextComponent text={item?.info} style={{ fontSize: 12, color: Colors.DGREY }} />
+            </TouchableOpacity>
         )
     }
 
     return (
         <View style={styles.Container}>
-            <BgImage />
             <ScrollView showsVerticalScrollIndicator={false}>
-                <View style={styles.upper_view}>
-                    <Header title={'Profile'} titleColor={Colors.WHITE} />
-                    <Image source={perfil} style={styles.profile_image} />
-                </View>
-                <View style={styles.lower_view}>
-                    <Text style={styles.heading}>Personal Information</Text>
+                <Header title={'Profile'} backIcon />
 
-                    <FlatList
-                        data={personalInfo}
-                        renderItem={renderItem}
-                        keyExtractor={item => item?.id}
-                    />
-
-                    <TouchableOpacity style={[styles.button, { marginTop: 20 }]} onPress={()=> navigation.navigate('EditProfile') } >
-                        <Text style={styles.button_text}>Edit Profile</Text>
-                    </TouchableOpacity>
+                <View style={styles.flex}>
+                    <Image source={perfil ? perfil : Avatar} style={styles.profile_image} resizeMode={'cover'} />
+                    <TextComponent text={'Andrew Ainsley'} style={styles.text} />
                 </View>
+
+                <TextComponent style={styles.heading} text={'Personal Information'} />
+
+                <FlatList
+                    data={personalInfo}
+                    renderItem={renderItem}
+                    keyExtractor={(item, index) => index.toString()}
+                    showsVerticalScrollIndicator={false}
+                />
+
             </ScrollView>
+            <Button title={'Edit Profile'} onPress={() => navigation.navigate('EditProfile')} />
+
         </View>
     )
 }
@@ -73,65 +75,28 @@ const styles = StyleSheet.create({
     Container: {
         flex: 1,
         backgroundColor: Colors.WHITE,
-    },
-    heading: {
-        fontSize: 16,
-        fontWeight: "bold",
-        marginTop: 25,
-        marginBottom: 10,
-        color: Colors.BLACK
-    },
-    profile_image:{
-        width: 125,
-        borderRadius: 100,
-        height: 125,
-        resizeMode: "contain",
-        alignSelf: "center",
-        marginTop: 10,
-        marginBottom: 30
-    },
-    upper_view: {
-        backgroundColor: Colors.PRIMARY,
-        borderBottomEndRadius: 40,
-        borderBottomLeftRadius: 40
-    },
-    lower_view: {
-        width: '90%',
-        alignSelf: "center"
-    },
-    info_box: {
-        backgroundColor: Colors.WHITE,
-        borderRadius: 10,
-        padding: 5,
-        elevation: 1,
-        margin: 5,
-        marginVertical: 8,
-        padding: 10
-    },
-    label: {
-        color: Colors.PRIMARY,
-        fontSize: 12,
-        fontWeight: 700
+        padding: 15
     },
     text: {
-        fontSize: 16,
-        color: Colors.DDGREY,
-        marginVertical: 3
+         fontSize: 18, 
+         width: '60%'
+         },
+    heading: {
+        fontSize: 14,
+        marginTop: 20,
+        marginBottom: 10,
+        fontFamily: Fonts.SEMIBOLD,
+        color: Colors.BLACK
     },
-    button: {
-        borderRadius: 5,
-        width: '80%',
-        backgroundColor: Colors.PRIMARY,
+    profile_image: {
+        width: 110,
+        borderRadius: 100,
+        height: 110,
+    },
+    flex: {
+        flexDirection: "row",
         alignItems: "center",
-        justifyContent: "center",
-        paddingVertical: 15,
-        alignSelf: "center",
-        marginTop: 40,
-        marginVertical: 10
-    },
-    button_text: {
-        color: Colors.WHITE,
-        fontSize: 15,
-        fontWeight: 500
-    },
+        gap: 25,
+        marginVertical: 20
+    }
 })

@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { useState } from 'react';
 import { Colors } from "../../Config/Colors";
-import profile from '../../assets/images/profile.png'
+import profile from '../../assets/images/profile.jpg'
 import TextComponent from '../../components/TextComponent';
 import { FlatList } from 'react-native-gesture-handler';
 import { Fonts } from '../../Config/Fonts';

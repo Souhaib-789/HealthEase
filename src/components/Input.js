@@ -20,7 +20,7 @@ const Input = props => {
                 }
 
                 <TextInput
-                    style={[styles.input, { width: props?.search ? '80%' : '100%' }, { ...props?.style }]}
+                    style={[styles.input, { width: props?.search ? '80%' : props?.rightIcon ?  '90%' : '100%' }, { ...props?.style }]}
                     placeholder={props?.placeholder}
                     placeholderTextColor={Colors.DGREY}
                     value={props?.value}
@@ -52,9 +52,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         gap: 10,
         width: '100%',
-        borderRadius: 15,
+        borderRadius: 10,
         paddingHorizontal: 15,
-        paddingVertical: 3,
         alignSelf: 'center',
         borderWidth: 1,
         borderColor: Colors.GREY

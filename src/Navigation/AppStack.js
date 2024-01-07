@@ -10,6 +10,7 @@ import MyTestsDetails from '../screens/DiagnosticsTests/MyTestsDetails';
 import EditProfile from '../screens/Profile/EditProfile';
 import AppointmentForm from '../screens/Appointment/AppointmentForm';
 import IntroSlider from '../screens/IntroSlider/IntroSlider';
+import HealthbotChat from '../screens/Healthbot/HealthbotChat';
 
 
 const Stack = createNativeStackNavigator();
@@ -22,7 +23,8 @@ const AppStack = () =>{
         <Stack.Screen name="Doctors" component={Doctors} options={{ headerShown: false }} />
         <Stack.Screen name="DoctorDetails" component={DoctorDetails} options={{ headerShown: false }} />
         <Stack.Screen name="Appointment" component={AppointmentForm} options={{ headerShown: false }} />
-       
+        <Stack.Screen name="HealthbotChat" component={HealthbotChat} options={{ headerShown: false }} />
+
         <Stack.Screen name="MyTests" component={MyTests} options={{ headerShown: false }} />
         <Stack.Screen name="EReports" component={EReports} options={{ headerShown: false }} />
         <Stack.Screen name="BookTest" component={BookTest} options={{ headerShown: false }} />
