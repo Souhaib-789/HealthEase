@@ -3,15 +3,20 @@ import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawe
 import { useNavigation } from '@react-navigation/native';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { useState } from 'react';
-import { Colors } from "../../Config/Colors";
+import { Colors } from "../../utilities/Colors";
 import profile from '../../assets/images/profile.jpg'
+import bg from '../../assets/images/logo.png'
 import TextComponent from '../../components/TextComponent';
 import { FlatList } from 'react-native-gesture-handler';
-import { Fonts } from '../../Config/Fonts';
+import { Fonts } from '../../utilities/Fonts';
 import Icon, { IconTypes } from '../../components/Icon';
+import { Storage } from '../../utilities/AsyncStorage';
+import { useDispatch } from 'react-redux';
+import { Logout } from '../../redux/actions/AuthAction';
 
 function CustomDrawerContent(props) {
     const navigation = useNavigation();
+    const dispatch = useDispatch();
     const [modalVisible, setModalVisible] = useState(false);
 
     const screens = [
@@ -63,17 +68,14 @@ function CustomDrawerContent(props) {
         setModalVisible(false)
     }
 
-    const Logout = async () => {
-        try {
-            navigation.goBack()
+    const onPressLogout = async () => {
             setModalVisible(false)
-
-            // dispatch(AuthActions.Logout())
-            // await AsyncStorage.clear();
-        } catch (e) {
-            console.log(e);
-        }
+            Storage.clearStorage();
+            dispatch(Logout());
+            navigation.goBack()
     }
+
+
 
     const renderOptionItem = ({ item, index }) => {
         return (
@@ -95,6 +97,8 @@ function CustomDrawerContent(props) {
 
     return (
         <>
+            <Image source={bg} style={styles.bg_icon} tintColor={Colors.PRIMARY} />
+
             <View style={styles.profile_view}>
                 <Image source={profile} style={styles.image} />
                 <TextComponent style={styles.heading} text={'Andrew Ainsley'} />
@@ -123,7 +127,7 @@ function CustomDrawerContent(props) {
                 <View style={styles.modal_view}>
                     <View style={styles.modal_sub_view}>
                         <SimpleLineIcons name={'logout'} color={Colors.PRIMARY} size={50} />
-                        <Text style={styles.modal_heading}>Logout</Text>
+                        <Text style={styles.modal_heading}>Hold on !</Text>
                         <Text style={{ marginVertical: 5 }}>are you sure to want to logout ?</Text>
 
                         <View style={styles.modal_bottom_view}>
@@ -131,7 +135,7 @@ function CustomDrawerContent(props) {
                                 <Text style={styles.text}>Cancel</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={styles.modal_button} onPress={Logout}>
+                            <TouchableOpacity style={styles.modal_button} onPress={onPressLogout}>
                                 <Text style={styles.text}>Ok</Text>
                             </TouchableOpacity>
                         </View>
@@ -148,6 +152,15 @@ const styles = StyleSheet.create({
         fontSize: 13,
         color: Colors.RED,
         fontFamily: Fonts?.SEMIBOLD
+    },
+    bg_icon: {
+        width: 120,
+        height: 120,
+        opacity: 0.1,
+        alignSelf: 'flex-end',
+        top: 50,
+        right: 5,
+        position: 'absolute'
     },
     profile_view: {
         marginBottom: 30,
@@ -188,8 +201,8 @@ const styles = StyleSheet.create({
         width: 75, alignItems: 'center', justifyContent: 'center', paddingVertical: 8
     },
     image: {
-        width: 50,
-        height: 50,
+        width: 60,
+        height: 60,
         borderRadius: 50,
         resizeMode: 'contain'
     },

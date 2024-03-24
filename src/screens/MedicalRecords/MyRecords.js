@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet, FlatList, TouchableOpacity} from "react-native";
-import { Colors } from "../../Config/Colors";
+import { Colors } from "../../utilities/Colors";
 import ListEmptyComponent from "../../components/ListEmptyComponent";
 import Image from "../../components/Image";
 import PDF from '../../assets/images/pdf.png'

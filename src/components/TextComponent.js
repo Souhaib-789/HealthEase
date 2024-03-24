@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { Colors } from '../Config/Colors';
-import { Fonts } from '../Config/Fonts';
+import { Colors } from '../utilities/Colors';
+import { Fonts } from '../utilities/Fonts';
 // import { useSelector } from 'react-redux';
-// import { Fonts } from '../config/Fonts';
+// import { Fonts } from '../utilities/Fonts';
 
 const TextComponent = (props) => {
   //   const theme = useSelector(state => state.AppReducer.theme)
@@ -20,5 +20,5 @@ export default TextComponent;
 
 const styles = StyleSheet.create({
   text:
-    { color: Colors.BLACK, fontSize: 14, fontFamily: Fonts.REGULAR }
+    { color: Colors.BLACK, fontSize: 14, fontFamily: Fonts.REGULAR , top: 2 }
 });

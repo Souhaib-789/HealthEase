@@ -1,15 +1,18 @@
 import React from "react";
-import { NavigationContainer } from '@react-navigation/native';
-import AppStack from "./src/Navigation/AppStack";
-import AuthStack from "./src/Navigation/AuthStack";
+import AppNavigation from "./src/Navigation";
+import Store from "./src/redux/store";
+import { Provider } from "react-redux";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
-const App = () => {
+function App() {
   return (
-    <NavigationContainer>
-      <AppStack />
-    </NavigationContainer>
+    <Provider store={Store}>
+      <SafeAreaProvider>
+        <AppNavigation />
+        </SafeAreaProvider>
+    </Provider>
 
-  )
+  );
 }
 
 export default App;

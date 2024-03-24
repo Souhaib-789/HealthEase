@@ -1,30 +1,20 @@
-import {
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-    Modal as RNModal,
-} from 'react-native';
+import { StyleSheet, View, Modal as RNModal, TouchableOpacity } from 'react-native';
 import React from 'react';
-import { Colors } from '../Config/Colors';
-
+import { Colors } from '../utilities/Colors';
+import Icon, { IconTypes } from './Icon';
 
 const FormModal = props => {
-
     return (
         <RNModal
             animationType={'fade'}
             transparent={true}
             visible={props?.visible}
-            onRequestClose={() => { }}>
-            <View
-                style={{
-                    flex: 1,
-                    backgroundColor: 'rgba(0,0,0,0.5)',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                }}>
+            onRequestClose={props?.onClose}>
+            <View style={styles.modal_parent}>
                 <View style={styles.ModalContainer}>
+                    <TouchableOpacity onPress={props?.onClose} style={styles.icon}>
+                        <Icon name="close" type={IconTypes.AntDesign} color={Colors.DGREY} size={15} />
+                    </TouchableOpacity>
                     {props?.children}
                 </View>
             </View>
@@ -35,27 +25,21 @@ const FormModal = props => {
 export default FormModal;
 
 const styles = StyleSheet.create({
+    modal_parent: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0,0,0,0.5)',
+    },
     ModalContainer: {
         backgroundColor: Colors.WHITE,
-        marginTop: '80%',
-        borderTopLeftRadius: 25,
-        borderTopRightRadius: 25,
-        width: '100%',
-        // minHeight: 300,
-        // justifyContent: 'flex-end',
-        // alignItems: 'center',
+        paddingBottom: 20,
+        borderRadius: 20,
+        width: '90%',
     },
-    lang: {
-        fontSize: 16,
-        color: Colors.WHITE,
-        textAlign: 'center',
-    },
-    ViewFooter: {
-        width: '80%',
-        height: 50,
-        marginBottom: 20,
-        borderRadius: 10,
-        backgroundColor: Colors.PRIMARY,
-        justifyContent: 'center',
-    },
+    icon: {
+        alignSelf: 'flex-end',
+        position: 'relative',
+        right: 15, top: 10
+    }
 });

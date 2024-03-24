@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../screens/Home/Home';
-import { Colors } from '../Config/Colors';
+import { Colors } from '../utilities/Colors';
 import FavDoctors from '../screens/FavDoctors/FavDoctors';
 import Profile from '../screens/Profile/Profile';
 import Healthbot from '../screens/Healthbot/Healthbot';

@@ -1,12 +1,12 @@
 import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 import React from 'react';
-import { Colors } from '../Config/Colors';
+import { Colors } from '../utilities/Colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 
 import { useNavigation } from '@react-navigation/native';
 import TextComponent from './TextComponent';
-import { Fonts } from '../Config/Fonts';
+import { Fonts } from '../utilities/Fonts';
 
 const Header = props => {
   const navigation = useNavigation();
@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
   back_view: {
     backgroundColor: Colors.WHITE,
     padding: 5,
+    marginLeft: 5,
     borderRadius: 10,
     elevation: 3
   },

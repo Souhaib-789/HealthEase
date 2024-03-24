@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Text, View, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
-import { Colors } from "../../Config/Colors";
+import { Colors } from "../../utilities/Colors";
 import BgImage from "../../components/BgImage";
 import Header from "../../components/Header";
 import Input from "../../components/Input";

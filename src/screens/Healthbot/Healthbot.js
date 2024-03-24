@@ -1,8 +1,8 @@
 import React from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
-import { Colors } from "../../Config/Colors";
+import { Colors } from "../../utilities/Colors";
 import TextComponent from "../../components/TextComponent";
-import { Fonts } from "../../Config/Fonts";
+import { Fonts } from "../../utilities/Fonts";
 import Button from "../../components/Button";
 import { useNavigation } from "@react-navigation/native";
 

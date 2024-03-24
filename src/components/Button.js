@@ -1,8 +1,8 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { Colors } from "../Config/Colors";
+import { Colors } from "../utilities/Colors";
 import TextComponent from "./TextComponent";
-import { Fonts } from "../Config/Fonts";
+import { Fonts } from "../utilities/Fonts";
 
 
 const Button = (props) => {
@@ -26,6 +26,9 @@ const styles = StyleSheet.create({
         width: '90%',
         paddingVertical: 13,
     },
+    text: {
+        fontSize: 12,
+    }
 })
 
 export default Button;

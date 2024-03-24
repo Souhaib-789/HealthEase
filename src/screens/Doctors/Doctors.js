@@ -6,7 +6,7 @@ import docE from "../../assets/images/doc5.png";
 import { useNavigation } from "@react-navigation/native";
 import Input from "../../components/Input";
 import Header from "../../components/Header";
-import { Colors } from "../../Config/Colors";
+import { Colors } from "../../utilities/Colors";
 import DoctorCard from "../../components/DoctorCard";
 import ListEmptyComponent from "../../components/ListEmptyComponent";
 import TextComponent from "../../components/TextComponent";
@@ -99,7 +99,7 @@ const Doctors = () => {
         <View style={styles.mainContainer}>
             <Header backIcon title={'Doctors'} />
             <ScrollView>
-                <Input leftIcon={true} rightIcon={true} placeholder={'Search'} mainStyle={{ marginVertical: 15 }} />
+                <Input search placeholder={'Search'} mainStyle={{ marginVertical: 15 }} />
 
                 <FlatList
                     key={"CategoriesList"}

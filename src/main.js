@@ -1,6 +1,6 @@
 import React from "react";
 import { Text , View, StyleSheet} from "react-native";
-import { Colors } from "./Config/Colors";
+import { Colors } from "./utilities/Colors";
 
 const Main = ( ) => {
     return(

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Text, View, StyleSheet, ScrollView, TouchableOpacity, FlatList, TextInput, Modal as RNModal } from "react-native";
-import { Colors } from "../../Config/Colors";
+import { Colors } from "../../utilities/Colors";
 import Header from "../../components/Header";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Input from "../../components/Input";

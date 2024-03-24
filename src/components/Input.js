@@ -1,11 +1,15 @@
 import { StyleSheet, View, TextInput, TouchableOpacity } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { Colors } from '../Config/Colors';
-import { Fonts } from '../Config/Fonts';
+import { Colors } from '../utilities/Colors';
+import { Fonts } from '../utilities/Fonts';
 import TextComponent from './TextComponent';
+import Icon, { IconTypes } from './Icon';
 
 const Input = props => {
+
+    const [isPassword, setIsPassword] = useState(props.isPassword);
+
     return (
         <View style={props?.parentStyle}>
             {
@@ -20,13 +24,13 @@ const Input = props => {
                 }
 
                 <TextInput
-                    style={[styles.input, { width: props?.search ? '80%' : props?.rightIcon ?  '90%' : '100%' }, { ...props?.style }]}
+                    style={[styles.input, { width: props?.search ? '80%' : props?.rightIcon || props?.isPassword ? '90%' : '100%' }, { ...props?.style }]}
                     placeholder={props?.placeholder}
                     placeholderTextColor={Colors.DGREY}
                     value={props?.value}
                     onChangeText={props?.onChangeText}
                     editable={props?.editable}
-                    secureTextEntry={props?.secureTextEntry}
+                    secureTextEntry={props?.isPassword ? props?.isPassword : props?.secureTextEntry}
                     keyboardType={props?.keyboardType}
                 />
 
@@ -37,6 +41,17 @@ const Input = props => {
                         {props?.rightIcon}
                     </TouchableOpacity>
                 }
+
+                {props?.isPassword && (
+                    <TouchableOpacity onPress={() => setIsPassword(!isPassword)}>
+                        {
+                            isPassword ?
+                                <Icon name={'eye-off'} type={IconTypes.Feather} size={18} color={Colors?.GREY} />
+                                :
+                                <Icon name={'eye'} type={IconTypes.Feather} size={18} color={Colors?.GREY} />
+                        }
+                    </TouchableOpacity>
+                )}
 
             </View>
         </View>
@@ -59,13 +74,13 @@ const styles = StyleSheet.create({
         borderColor: Colors.GREY
     },
     text: {
-        fontSize: 14,
+        fontSize: 12,
         fontFamily: Fonts?.MEDIUM,
-        marginBottom: 8
+        marginBottom: 5
     },
     input: {
         color: '#000',
-        fontSize: 14,
+        fontSize: 12,
         fontFamily: Fonts?.REGULAR,
     },
 });

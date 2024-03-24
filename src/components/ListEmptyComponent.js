@@ -2,8 +2,8 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import TextComponent from './TextComponent';
 import Icon, { IconTypes } from './Icon';
-import { Colors } from '../Config/Colors';
-import { Fonts } from '../Config/Fonts';
+import { Colors } from '../utilities/Colors';
+import { Fonts } from '../utilities/Fonts';
 
 
 const ListEmptyComponent = (props) => {

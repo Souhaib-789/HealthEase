@@ -1,77 +1,66 @@
 import React, { useState } from "react";
-import { Text, View, StyleSheet, ScrollView, Image, TouchableOpacity } from "react-native";
-import { Colors } from "../../Config/Colors";
-import BgImage from "../../components/BgImage";
+import { View, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+import { Colors } from "../../utilities/Colors";
 import logo from '../../assets/images/logo.png'
 import Input from "../../components/Input";
 import { useNavigation } from "@react-navigation/native";
-import Feather from 'react-native-vector-icons/Feather'
+import TextComponent from "../../components/TextComponent";
+import Image from "../../components/Image";
+import Button from "../../components/Button";
+import { Fonts } from "../../utilities/Fonts";
 
 const Signup = () => {
 
     const navigation = useNavigation();
     const [name, setname] = useState()
     const [email, setemail] = useState()
-    const [phone, setphone] = useState()
     const [password, setpassword] = useState()
-    const [confirmedPassword, setconfirmedPassword] = useState()
-    const [visible, setvisible] = useState(true)
-    const [visiblex, setvisiblex] = useState(true)
+    const [confirmPassword, setconfirmPassword] = useState()
 
+
+    const onPressSignup = () => {
+        navigation.navigate('Signup')
+    }
 
     return (
         <View style={styles.Container}>
-            <BgImage />
             <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollview}>
 
-                <Image source={logo} style={styles.logo} />
-                <Text style={styles.heading}>Hello there !</Text>
-                <Text style={styles.span}>create your account</Text>
+                <Image source={logo} style={styles.logo} tintColor={Colors.PRIMARY} />
+                <TextComponent style={styles.heading} text={'Create your account'} />
+
 
                 <Input
-                    placeholder={'Enter your name'}
+                    placeholder={'Enter name'}
                     value={name}
                     onChangeText={(e) => setname(e)}
-                    mainStyle={styles.mainInput} style={styles.subInput} />
+                    mainStyle={styles.mainInput} />
+
                 <Input
                     placeholder={'Enter email address'}
                     value={email}
                     onChangeText={(e) => setemail(e)}
-                    mainStyle={styles.mainInput} style={styles.subInput} />
-
-                <Input
-                    placeholder={'Enter contact number'}
-                    value={phone}
-                    keyboardType={'numeric'}
-                    onChangeText={(e) => setphone(e)}
-                    mainStyle={styles.mainInput} style={styles.subInput} />
+                    mainStyle={styles.mainInput} />
 
                 <Input
                     placeholder={'Enter password'}
+                    isPassword
                     value={password}
                     onChangeText={(e) => setpassword(e)}
-                    icon={<Feather name={visible ? 'eye-off' : 'eye'} size={20} color={Colors.PRIMARY} />}
-                    onIconPress={() => setvisible(!visible)}
-                    secureTextEntry={visible}
-                    mainStyle={styles.mainInput} style={styles.subInput} />
+                    mainStyle={styles.mainInput} />
 
                 <Input
-                    placeholder={'Confirm pasword'}
-                    value={confirmedPassword}
-                    onChangeText={(e) => setconfirmedPassword(e)}
-                    icon={<Feather name={visiblex ? 'eye-off' : 'eye'} size={20} color={Colors.PRIMARY} />}
-                    onIconPress={() => setvisiblex(!visiblex)}
-                    secureTextEntry={visible}
-                    mainStyle={styles.mainInput} style={styles.subInput} />
+                    placeholder={'Confirm password'}
+                    isPassword
+                    value={confirmPassword}
+                    onChangeText={(e) => setconfirmPassword(e)}
+                    mainStyle={styles.mainInput} />
 
-                <TouchableOpacity style={styles.button} >
-                    <Text style={styles.button_text}>Signup</Text>
-                </TouchableOpacity>
+                <Button title={'Signup'} onPress={onPressSignup} style={styles.button} />
 
                 <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                    <Text style={styles.link_text}>Have an account ? Login</Text>
+                    <TextComponent style={styles.link_textx} text={'Already have an account? Login'} />
                 </TouchableOpacity>
-
             </ScrollView>
         </View>
     )
@@ -85,23 +74,23 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.WHITE,
     },
     heading: {
-        fontSize: 20,
+        fontSize: 18,
         color: Colors.BLACK,
-        marginTop: 10,
-        fontWeight: "bold",
+        fontFamily: Fonts.SEMIBOLD,
+        marginVertical: 10,
     },
-    span: {
-        marginBottom: 20
-    },
-    link_text: {
-        color: Colors.PRIMARY,
+    link_textx: {
+        fontSize: 11,
+        marginTop: 30,
+        color: Colors.DGREY,
         alignSelf: "center"
     },
     logo: {
-        width: 50,
-        height: 50,
-        resizeMode: "contain",
-        marginTop: '10%'
+        width: 70,
+        height: 70,
+        alignSelf: "center",
+        marginTop: '25%',
+        marginBottom: 25
     },
     flex: {
         flexDirection: "row",
@@ -112,33 +101,11 @@ const styles = StyleSheet.create({
         alignSelf: "center"
     },
     mainInput: {
-        width: '100%',
-        alignSelf: 'center',
-        marginBottom: 15,
-        marginTop: 8,
-        backgroundColor: 'transparent',
-        elevation: 0, borderWidth: 1,
-        borderColor: Colors.GREY,
-        borderRadius: 13
-    },
-    subInput: {
-        backgroundColor: 'transparent',
-        fontSize: 14
+        marginVertical: 10,
     },
     button: {
-        borderRadius: 5,
-        width: '90%',
-        backgroundColor: Colors.PRIMARY,
-        alignItems: "center",
-        justifyContent: "center",
-        paddingVertical: 15,
-        alignSelf: "center",
         marginTop: 40,
         marginVertical: 10
     },
-    button_text: {
-        color: Colors.WHITE,
-        fontSize: 15,
-        fontWeight: 500
-    },
+    
 })

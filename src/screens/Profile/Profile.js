@@ -1,13 +1,13 @@
 import React from "react";
 import {  View, StyleSheet, ScrollView, FlatList, TouchableOpacity } from "react-native";
-import { Colors } from "../../Config/Colors";
+import { Colors } from "../../utilities/Colors";
 import Header from "../../components/Header";
 import perfil from '../../assets/images/profile.jpg'
 import { useNavigation } from "@react-navigation/native";
 import Image from "../../components/Image";
 import TextComponent from "../../components/TextComponent";
 import Icon, { IconTypes } from "../../components/Icon";
-import { Fonts } from "../../Config/Fonts";
+import { Fonts } from "../../utilities/Fonts";
 import Button from "../../components/Button";
 import Avatar from '../../assets/images/avatar.png'
 
@@ -18,23 +18,23 @@ const Profile = () => {
         {
             id: 2,
             info: 'marvie@gmail.com',
-            icon: <Icon name={'envelope-o'} type={IconTypes.FontAwesome} size={20} color={Colors.PRIMARY} />
+            icon: <Icon name={'envelope-o'} type={IconTypes.FontAwesome} size={18} color={Colors.PRIMARY} />
         },
         {
             id: 3,
-            icon: <Icon name={'phone'} type={IconTypes.AntDesign} size={20} color={Colors.PRIMARY} />,
+            icon: <Icon name={'phone'} type={IconTypes.AntDesign} size={18} color={Colors.PRIMARY} />,
             info: '0300 000 000'
         },
         {
             id: 4,
-            icon: <Icon name={'location-pin'} type={IconTypes.SimpleLineIcons} size={20} color={Colors.PRIMARY} />,
+            icon: <Icon name={'location-pin'} type={IconTypes.SimpleLineIcons} size={18} color={Colors.PRIMARY} />,
             info: 'Los angeles , California'
         }
     ]
 
     const renderItem = ({ item, index }) => {
         return (
-            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', gap: 15, marginVertical: 15, }}>
+            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', gap: 15, marginVertical: 10, }}>
                 <View style={{ borderRadius: 100, width: 42, height: 42, justifyContent: "center", alignItems: 'center', backgroundColor: Colors?.LIGHT_GREY }}>
                     {item?.icon}
                 </View>
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
         padding: 15
     },
     text: {
-         fontSize: 18, 
+         fontSize: 16, 
          width: '60%'
          },
     heading: {
@@ -89,9 +89,9 @@ const styles = StyleSheet.create({
         color: Colors.BLACK
     },
     profile_image: {
-        width: 110,
+        width: 90,
         borderRadius: 100,
-        height: 110,
+        height: 90,
     },
     flex: {
         flexDirection: "row",

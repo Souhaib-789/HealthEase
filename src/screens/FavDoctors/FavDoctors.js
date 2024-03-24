@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import {View, StyleSheet, ScrollView, FlatList} from "react-native";
 import Header from "../../components/Header";
 import Input from "../../components/Input";
-import { Colors } from "../../Config/Colors";
+import { Colors } from "../../utilities/Colors";
 import docC from "../../assets/images/doc3.png";
 import docD from "../../assets/images/doc4.png";
 import docE from "../../assets/images/doc5.png";

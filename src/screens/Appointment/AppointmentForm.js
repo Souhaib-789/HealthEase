@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, StyleSheet, ScrollView, Image, TouchableOpacity, Platform } from "react-native";
 import Header from "../../components/Header";
-import { Colors } from "../../Config/Colors";
+import { Colors } from "../../utilities/Colors";
 import Input from "../../components/Input";
 import ImagePicker from 'react-native-image-crop-picker';
 import SuccessModal from "../../components/SuccessModal";
@@ -9,7 +9,7 @@ import { useNavigation } from "@react-navigation/native";
 import TextComponent from "../../components/TextComponent";
 import Button from "../../components/Button";
 import Icon, { IconTypes } from "../../components/Icon";
-import { Fonts } from "../../Config/Fonts";
+import { Fonts } from "../../utilities/Fonts";
 import DoctorCard from "../../components/DoctorCard";
 import { Text } from "react-native-reanimated/lib/typescript/Animated";
 import moment from "moment";

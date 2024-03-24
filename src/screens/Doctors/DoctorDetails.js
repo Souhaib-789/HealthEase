@@ -3,12 +3,13 @@ import { View, StyleSheet, TouchableOpacity, ScrollView, Image, FlatList, Pressa
 import { useNavigation } from "@react-navigation/native";
 import Header from "../../components/Header";
 import moment, { duration } from "moment";
-import { Colors } from "../../Config/Colors";
+import { Colors } from "../../utilities/Colors";
 import TextComponent from "../../components/TextComponent";
-import { Fonts } from "../../Config/Fonts";
+import { Fonts } from "../../utilities/Fonts";
 import Icon, { IconTypes } from "../../components/Icon";
 import Button from "../../components/Button";
 import { Calendar, LocaleConfig } from 'react-native-calendars';
+import FormModal from "../../components/FormModal";
 
 const DoctorDetails = (props) => {
 
@@ -130,8 +131,8 @@ const DoctorDetails = (props) => {
 
     return (
         <View style={styles.mainContainer}>
-            <Header title={'Details'} backIcon style={{ margin: 10 }} titleColor={Colors?.WHITE} />
             <ScrollView>
+                <Header title={'Details'} backIcon style={{ margin: 10 }} titleColor={Colors?.WHITE} />
                 <Image source={routeData?.image} style={styles.card_image} />
 
                 <View style={styles.details_card}>
@@ -172,44 +173,45 @@ const DoctorDetails = (props) => {
                             </View>
                         </View>
 
-                        <TouchableOpacity style={styles.select_button} onPress={() => { setshowCalendar(!showCalendar), LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut); }}>
+                        <TouchableOpacity style={styles.select_button} onPress={() => { setshowCalendar(true) }}>
                             <Icon type={IconTypes?.AntDesign} name={'calendar'} size={18} color={Colors?.PRIMARY} />
                             <TextComponent style={styles.select_text} text={selectedDate ? moment(selectedDate).format('ddd D MMM') : 'Select Day'} />
                         </TouchableOpacity>
                     </View>
 
-                    {
-                        showCalendar &&
-                        <Calendar
-                            onDayPress={e => {
-                                let day = moment(e.dateString).format('ddd')
-                                if (AvaiableDays.includes(day)) {
-                                    setshowCalendar(false)
-                                    setSelectedDate(e.dateString)
-                                } else {
-                                    alert('Doctor is not available on this day')
-                                }
-                                LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
-                            }}
-                            markedDates={{ [selectedDate]: { selected: true, disableTouchEvent: true } }}
-                            disabledDaysIndexes={[0, 2, 4, 6]}
-                            style={styles.calendar}
-                            minDate={moment().format('YYYY-MM-DD')}
-                            theme={calendarTheme}
-                        />
-                    }
 
                     <TextComponent style={styles.heading} text={'Available Slots'} />
                     <View style={styles.slots_view}>
                         {Slots?.map(renderSlotCard)}
                     </View>
 
-                    <Button title={'Fix an appointment'}
+                    <Button title={'Schedule appointment'}
                         disabled={confirmedSlot ? false : true}
                         style={{ marginVertical: 15 }}
                         onPress={() => navigation.navigate('Appointment', { item: routeData, timeSlot: confirmedSlot, date: selectedDate })} />
 
                 </View>
+                <FormModal
+                    visible={showCalendar}
+                    onClose={() => setshowCalendar(false)}
+                >
+                    <Calendar
+                        onDayPress={e => {
+                            let day = moment(e.dateString).format('ddd')
+                            if (AvaiableDays.includes(day)) {
+                                setshowCalendar(false)
+                                setSelectedDate(e.dateString)
+                            } else {
+                                alert('Doctor is not available on this day')
+                            }
+                        }}
+                        markedDates={{ [selectedDate]: { selected: true, disableTouchEvent: true } }}
+                        disabledDaysIndexes={[0, 2, 4, 6]}
+                        style={styles.calendar}
+                        minDate={moment().format('YYYY-MM-DD')}
+                        theme={calendarTheme}
+                    />
+                </FormModal>
             </ScrollView>
         </View>
     )
@@ -233,7 +235,7 @@ const styles = StyleSheet.create({
         color: Colors.BLACK
     },
     text: {
-        fontSize: 18,
+        fontSize: 20,
         color: Colors.BLACK,
         fontFamily: Fonts?.SEMIBOLD
     },
@@ -312,13 +314,14 @@ const styles = StyleSheet.create({
         marginLeft: 15
     },
     card_image: {
-        width: 100,
+        width: 130,
         borderColor: Colors?.WHITE,
         borderWidth: 5,
-        height: 100,
+        height: 130,
         borderRadius: 100,
         zIndex: 99,
         position: "absolute",
+        top: 60,
         alignSelf: 'center'
     },
 
@@ -364,8 +367,7 @@ const styles = StyleSheet.create({
     select_button: { backgroundColor: Colors?.LIGHT, borderRadius: 10, padding: 10, flexDirection: 'row', alignItems: 'center', gap: 5 },
     select_text: { color: Colors?.PRIMARY, fontSize: 10 },
     calendar: {
-        elevation: 3,
         borderRadius: 10,
-        marginVertical: 15
+        margin: 15
     }
 })

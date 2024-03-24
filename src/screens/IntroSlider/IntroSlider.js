@@ -6,10 +6,10 @@ import One from '../../assets/images/splash1.jpg'
 import Two from '../../assets/images/splash7.png'
 import Three from '../../assets/images/splash5.png'
 import { View,StyleSheet, TouchableOpacity } from 'react-native';
-import { Colors } from "../../Config/Colors";
+import { Colors } from "../../utilities/Colors";
 import Image from '../../components/Image';
 import TextComponent from '../../components/TextComponent';
-import { Fonts } from '../../Config/Fonts';
+import { Fonts } from '../../utilities/Fonts';
 
 const IntroSlider = () => {
 

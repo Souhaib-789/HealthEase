@@ -4,7 +4,7 @@ import docC from "../../assets/images/doc3.png";
 import docF from "../../assets/images/doc9.jpg";
 import docD from "../../assets/images/doc4.png";
 import docE from "../../assets/images/doc5.png";
-import { Colors } from "../../Config/Colors";
+import { Colors } from "../../utilities/Colors";
 import Feather from 'react-native-vector-icons/Feather'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { useNavigation } from "@react-navigation/native";
@@ -12,7 +12,7 @@ import Input from "../../components/Input";
 import TextComponent from "../../components/TextComponent";
 import Icon, { IconTypes } from "../../components/Icon";
 import Image from "../../components/Image";
-import { Fonts } from "../../Config/Fonts";
+import { Fonts } from "../../utilities/Fonts";
 import ListEmptyComponent from "../../components/ListEmptyComponent";
 import DoctorCard from "../../components/DoctorCard";
 

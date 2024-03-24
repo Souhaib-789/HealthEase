@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet, ScrollView, FlatList, TouchableOpacity, Image } from "react-native";
-import { Colors } from "../../Config/Colors";
+import { Colors } from "../../utilities/Colors";
 import BgImage from "../../components/BgImage";
 import Header from "../../components/Header";
 import category from "../../assets/images/d1.png";

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { View, StyleSheet, FlatList, } from "react-native";
-import { Colors } from "../../Config/Colors";
+import { Colors } from "../../utilities/Colors";
 import TextComponent from "../../components/TextComponent";
-import { Fonts } from "../../Config/Fonts";
+import { Fonts } from "../../utilities/Fonts";
 import Header from "../../components/Header";
 import BotIcon from "../../assets/images/bot.png";
 import Image from "../../components/Image";

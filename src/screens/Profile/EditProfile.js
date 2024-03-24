@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, StyleSheet, ScrollView,  TouchableOpacity } from "react-native";
-import { Colors } from "../../Config/Colors";
+import { Colors } from "../../utilities/Colors";
 import Header from "../../components/Header";
 import perfil from '../../assets/images/profile.jpg'
 import { useNavigation } from "@react-navigation/native";
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
         padding: 15
     },
     input: {
-        marginVertical: 10
+        marginVertical: 8,
     },
     picker:{
         backgroundColor: Colors?.WHITE,

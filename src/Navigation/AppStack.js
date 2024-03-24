@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import DrawerBar from './Drawer/DrawerBar';
-import Doctors from '../screens/Home/Doctors';
-import DoctorDetails from '../screens/Home/DoctorDetails';
+import Doctors from '../screens/Doctors/Doctors';
+import DoctorDetails from '../screens/Doctors/DoctorDetails';
 import MyTests from '../screens/DiagnosticsTests/MyTests';
 import EReports from '../screens/DiagnosticsTests/EReports';
 import BookTest from '../screens/DiagnosticsTests/BookTest';

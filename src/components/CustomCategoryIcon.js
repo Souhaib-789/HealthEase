@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, } from 'react-native';
-import { Colors } from '../Config/Colors';
+import { Colors } from '../utilities/Colors';
 import Image from './Image';
 import Icon, { IconTypes } from './Icon';
 

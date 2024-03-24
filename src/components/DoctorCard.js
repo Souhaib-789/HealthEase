@@ -3,9 +3,9 @@ import React from "react";
 import Image from "./Image";
 import TextComponent from "./TextComponent";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { Colors } from "../Config/Colors";
+import { Colors } from "../utilities/Colors";
 import Icon, { IconTypes } from "./Icon";
-import { Fonts } from "../Config/Fonts";
+import { Fonts } from "../utilities/Fonts";
 import Button from "./Button";
 
 const DoctorCard = ({ item, book, heart }) => {
