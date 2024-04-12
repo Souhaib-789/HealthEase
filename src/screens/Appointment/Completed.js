@@ -9,8 +9,9 @@ import docE from "../../assets/images/doc5.png";
 import DoctorCard from "../../components/DoctorCard";
 import ListEmptyComponent from "../../components/ListEmptyComponent";
 import Icon, { IconTypes } from "../../components/Icon";
+import AppointCard from "../../components/AppointCard";
 
-const FavDoctors = () => {
+const Completed = () => {
 
     const [search, setsearch] = useState(null)
     const FavoriteDoctors = [
@@ -63,7 +64,6 @@ const FavDoctors = () => {
 
     return (
         <View style={styles.mainContainer}>
-            <Header title={'Favorite Doctors'} back bell/>
             <ScrollView>
                     <Input
                         search
@@ -72,13 +72,13 @@ const FavDoctors = () => {
                         placeholder={'Search'}
                         rightIcon={search && <Icon type={IconTypes.Entypo} name={'cross'} size={18} />}
                         onPressRightIcon={() => setsearch(null)}
-                        mainStyle={{ marginBottom: 13 }} />
+                        mainStyle={{ marginVertical: 15 }} />
 
                     <FlatList
                         showsVerticalScrollIndicator={false}
                         data={FavoriteDoctors}
                         renderItem={({ item }) =>
-                            (<DoctorCard item={item} book={true} heart={true} />)}
+                            (<AppointCard item={item} completed  />)}
                         keyExtractor={(_ , index) => index.toString()}
                         ListEmptyComponent={<ListEmptyComponent text={'no doctors found'} />}
                     />
@@ -87,7 +87,7 @@ const FavDoctors = () => {
     )
 }
 
-export default FavDoctors;
+export default Completed;
 
 const styles = StyleSheet.create({
     mainContainer: {

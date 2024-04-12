@@ -5,6 +5,7 @@ import TextComponent from "../../components/TextComponent";
 import { Fonts } from "../../utilities/Fonts";
 import Button from "../../components/Button";
 import { useNavigation } from "@react-navigation/native";
+import Lottie from 'lottie-react-native';
 
 const Healthbot = () => {
     const navigation = useNavigation();
@@ -17,9 +18,15 @@ const Healthbot = () => {
                     <TextComponent style={styles.headingx} text={"Healthbot"} />
                 </View>
 
+                <Lottie source={require('../../assets/animations/bot.json')}
+                    autoPlay
+                    loop
+                    style={{ width: 170, height: 180, alignSelf: 'center', marginVertical: 100 }}
+
+                />
 
                 <TextComponent style={styles.headingy} text={"Do you want any health advice ?"} />
-                <Button onPress={()=> navigation.navigate('HealthbotChat')} title={"Ask"} style={styles.button}  />
+                <Button onPress={() => navigation.navigate('HealthbotChat')} title={"Ask"} style={styles.button} />
             </ScrollView>
 
         </View>
@@ -46,7 +53,6 @@ const styles = StyleSheet.create({
         width: '70%',
         alignSelf: "center",
         textAlign: "center",
-        marginTop: 400,
     },
     heading_container: {
         flexDirection: "row",

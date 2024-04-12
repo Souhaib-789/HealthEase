@@ -74,7 +74,7 @@ const Home = () => {
                 </View>
 
                 <View style={styles.sub_container}>
-                    <TextComponent style={styles.sub_container_heading} text={'How are you feeling today ?'} />
+                    <TextComponent style={styles.sub_container_heading} text={'Keep Healthy !'} />
 
                     <Input
                         placeholder={'Search'}
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     heading: {
         fontSize: 16,
         color: Colors.BLACK,
-        fontFamily: Fonts?.BOLD
+        fontFamily: Fonts?.SEMIBOLD
     },
     headingx: {
         fontSize: 15,

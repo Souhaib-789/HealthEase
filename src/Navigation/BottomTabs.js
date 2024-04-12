@@ -6,6 +6,7 @@ import FavDoctors from '../screens/FavDoctors/FavDoctors';
 import Profile from '../screens/Profile/Profile';
 import Healthbot from '../screens/Healthbot/Healthbot';
 import Icon, { IconTypes } from '../components/Icon';
+import Appointments from '../screens/Appointment';
 
 const Tab = createBottomTabNavigator();
 
@@ -22,7 +23,7 @@ export default function BottomTabs() {
             ICON = <Icon type={IconTypes?.Ionicons} name={'heart-outline'} size={23} color={color} />
           } else if (route?.name == 'Healthbot') {
             ICON = <Icon type={IconTypes?.Octicons} name={'dependabot'} size={23} color={color} />
-          } else if (route?.name == 'Profile') {
+          } else if (route?.name == 'Appointments') {
             ICON = <Icon type={IconTypes?.AntDesign} name={'profile'} size={23} color={color} />
           }
           return ICON;
@@ -40,7 +41,7 @@ export default function BottomTabs() {
       <Tab.Screen name="Home" component={Home} options={{ headerShown: false }} />
       <Tab.Screen name="FavDoctors" component={FavDoctors} options={{ headerShown: false }} />
       <Tab.Screen name="Healthbot" component={Healthbot} options={{ headerShown: false }} />
-      <Tab.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
+      <Tab.Screen name="Appointments" component={Appointments} options={{ headerShown: false }} />
     </Tab.Navigator>
 
   );

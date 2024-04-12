@@ -1,60 +1,114 @@
-import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 import React from 'react';
-import { Colors } from '../utilities/Colors';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Feather from 'react-native-vector-icons/Feather';
-
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Image from '../components/Image';
+import bellIcon from '../assets/images/bell.png'
 import TextComponent from './TextComponent';
+import Icon, { IconTypes } from './Icon';
+import { Colors } from '../utilities/Colors';
 import { Fonts } from '../utilities/Fonts';
 
 const Header = props => {
   const navigation = useNavigation();
   return (
-    <View style={[styles.header , {...props?.style}]}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+    <View style={[styles.container, { ...props?.style, justifyContent: props?.chat ? 'flex-start' : 'space-between' }]}>
+      <View style={{ width: props?.chat ? '12%' : '20%', }}>
         {
-          props?.backIcon &&
-          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.back_view}>
-            <Ionicons name={'chevron-back'} size={18} color={Colors.BLACK} />
-          </TouchableOpacity>
+          props?.back ?
+            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.back_icon}>
+              <Icon name="chevron-back" size={18} color={Colors.BLACK} type={IconTypes.Ionicons} />
+            </TouchableOpacity>
+            : null
         }
-        <TextComponent style={[styles.heading, { color: props?.titleColor ? props?.titleColor : Colors.BLACK }]} text={props?.title} />
       </View>
 
-      {
-        props?.cartIcon ?
-          <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
-            <Feather name={'shopping-cart'} size={25} color={Colors.PRIMARY} />
-          </TouchableOpacity>
-          : null
-      }
 
+      <TextComponent text={props?.title} numberOfLines={2} style={styles.heading} />
+
+
+
+      <View style={styles.view_b}>
+        {
+          props?.bell &&
+          <TouchableOpacity onPress={() => navigation.navigate('Notifications')} >
+            <Image source={bellIcon} style={styles.icon_image} tintColor={Colors.PRIMARY} />
+          </TouchableOpacity>
+        }
+
+        {
+          props?.search &&
+          <TouchableOpacity onPress={() => navigation.navigate('Searching')}>
+            <Icon name={'search1'} type={IconTypes.AntDesign} size={22} color={Colors?.PRIMARY} />
+          </TouchableOpacity>
+        }
+
+        {
+          props?.edit &&
+          <TouchableOpacity onPress={() => navigation.navigate('EditProfile')} >
+            <Icon name={'pencil'} type={IconTypes.FontAwesome} size={22} color={Colors?.GREY} />
+          </TouchableOpacity>
+        }
+      </View>
     </View>
   );
 };
 
+
 export default Header;
 
-const styles = StyleSheet.create({
-  header: {
-    height: 65,
-    backgroundColor: 'transparent',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  back_view: {
-    backgroundColor: Colors.WHITE,
-    padding: 5,
-    marginLeft: 5,
-    borderRadius: 10,
-    elevation: 3
-  },
 
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 15,
+    width: '100%',
+    height: 60,
+    zIndex: 199,
+  },
+  view_b: {
+    width: '20%',
+    alignItems: 'flex-end',
+
+  },
+  contactContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 15
+  },
+  callImg: {
+    height: 17,
+    width: 17,
+    resizeMode: "contain"
+  },
+  back_icon: {
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 30,
+    height: 30,
+    borderWidth: 1,
+    borderColor: Colors.GREY
+  },
+  videoImg: {
+    height: 20,
+    width: 20,
+    resizeMode: "contain"
+  },
   heading: {
+    fontSize: 15,
     color: Colors.BLACK,
-    fontSize: 16,
-    fontFamily: Fonts?.SEMIBOLD
+    fontFamily: Fonts.SEMIBOLD
+  },
+  icon_image: {
+    width: 20,
+    height: 20,
+    color: Colors.PRIMARY
+  },
+  profile_image: {
+    width: 40,
+    height: 40,
+    borderRadius: 50,
+    marginRight: 10
   },
 });
