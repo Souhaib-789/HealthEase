@@ -1,7 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import React, { useEffect } from 'react';
 import AuthStack from './AuthStack';
-import SplashScreen from 'react-native-splash-screen';
+// import SplashScreen from 'react-native-splash-screen';
 import { Text, View, Modal as RNModal, ActivityIndicator, Platform, SafeAreaView } from 'react-native';
 import AppStack from './AppStack';
 import { useDispatch, useSelector } from 'react-redux';
@@ -95,17 +95,24 @@ const AppNavigation = () => {
     } else {
       dispatch(login(false));
     }
-    SplashScreen.hide();
+    // SplashScreen.hide();
   };
 
 
   return (
     <NavigationContainer>
+
+      {
+        islogin ? (
+          <AppStack />
+        ) : (
+          <AuthStack />)
+      }
       {/* {Platform.OS === 'ios' ? (
         <SafeAreaView style={{ flex: 1 }}>
-          {islogin == undefined ? ( */}
-           { SplashScreen.show()}
-          {/* ) : islogin ? (
+          {islogin == undefined ? (
+            SplashScreen.show()
+          ) : islogin ? (
             <AppStack />
           ) : (
             <AuthStack />
@@ -117,7 +124,7 @@ const AppNavigation = () => {
         <AppStack />
       ) : (
         <AuthStack />
-      )} */}
+      )}  */}
 
       <RNModal visible={loading} transparent>
         <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center' }}>
