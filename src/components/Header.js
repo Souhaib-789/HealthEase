@@ -16,14 +16,14 @@ const Header = props => {
         {
           props?.back ?
             <TouchableOpacity onPress={() => navigation.goBack()} style={styles.back_icon}>
-              <Icon name="chevron-back" size={18} color={Colors.BLACK} type={IconTypes.Ionicons} />
+              <Icon name="chevron-back" size={18} color={props?.iconColor ? props?.iconColor : Colors.BLACK} type={IconTypes.Ionicons} />
             </TouchableOpacity>
             : null
         }
       </View>
 
 
-      <TextComponent text={props?.title} numberOfLines={2} style={styles.heading} />
+      <TextComponent text={props?.title} numberOfLines={2} style={[styles.heading , {...props?.titleStyle}]} />
 
 
 

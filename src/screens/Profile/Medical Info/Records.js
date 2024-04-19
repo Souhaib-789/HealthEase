@@ -1,25 +1,22 @@
 import React, { useState } from "react";
 import { Text, View, StyleSheet, ScrollView, TouchableOpacity, FlatList, TextInput, Modal as RNModal } from "react-native";
-import { Colors } from "../../utilities/Colors";
-import Header from "../../components/Header";
+import { Colors } from "../../../utilities/Colors";
+import Header from "../../../components/Header";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
-import Input from "../../components/Input";
+import Input from "../../../components/Input";
 import DatePicker from 'react-native-date-picker'
 import moment from "moment";
 import Entypo from 'react-native-vector-icons/Entypo'
 import DocumentPicker from 'react-native-document-picker';
 import { useNavigation } from "@react-navigation/native";
-import Image from "../../components/Image";
+import Image from "../../../components/Image";
 import PDF from '../../assets/images/pdf.png'
-import TextComponent from "../../components/TextComponent";
-import Icon, { IconTypes } from "../../components/Icon";
-import ListEmptyComponent from "../../components/ListEmptyComponent";
-import TopTabs from "../../components/TopTabs";
-import MyRecords from "./MyRecords";
-import DoctorRecords from "./DoctorRecords";
+import TextComponent from "../../../components/TextComponent";
+import Icon, { IconTypes } from "../../../components/Icon";
+import ListEmptyComponent from "../../../components/ListEmptyComponent";
 
 
-const MedicalRecords = () => {
+const Records = () => {
     const navigation = useNavigation()
     const [currDate, setcurrDate] = useState(new Date())
     const [dateModalopen, setdateModalOpen] = useState(false)
@@ -111,24 +108,16 @@ const MedicalRecords = () => {
 
     return (
         <View style={styles.Container}>
-            <Header title={'Medical Records'} backIcon />
             <ScrollView>
-                <TopTabs
-                    components={[
-                        {
-                            component: () => <MyRecords />,
-                            name: "My records",
-                            label: "My records"
-                        },
-                        {
-                            component: () => <DoctorRecords />,
-                            name: "By Doctors",
-                            label: "By Doctors"
-                        },
-                    ]}
+
+                <FlatList
+                    showsVerticalScrollIndicator={false}
+                    data={SampleDocs}
+                    renderItem={renderDocsItem}
+                    keyExtractor={item => item?.id}
+                    ListEmptyComponent={<ListEmptyComponent text={'no records found'} />}
                 />
 
-                {/* ---------------------------- MODAL --------------------------------------------------------- */}
                 <RNModal
                     animationType={'slide'}
                     transparent={true}
@@ -207,7 +196,7 @@ const MedicalRecords = () => {
     )
 }
 
-export default MedicalRecords;
+export default Records;
 
 const styles = StyleSheet.create({
     Container: {

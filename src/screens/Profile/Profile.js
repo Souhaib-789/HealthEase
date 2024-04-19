@@ -1,70 +1,48 @@
 import React from "react";
-import {  View, StyleSheet, ScrollView, FlatList, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { Colors } from "../../utilities/Colors";
 import Header from "../../components/Header";
 import perfil from '../../assets/images/profile.jpg'
-import { useNavigation } from "@react-navigation/native";
 import Image from "../../components/Image";
 import TextComponent from "../../components/TextComponent";
-import Icon, { IconTypes } from "../../components/Icon";
 import { Fonts } from "../../utilities/Fonts";
-import Button from "../../components/Button";
 import Avatar from '../../assets/images/avatar.png'
+import PersonalInfo from "./PersonalInfo";
+import MedicalRecords from "./Medical Info/MedicalInfo";
 
 const Profile = () => {
 
-    const navigation = useNavigation()
-    const personalInfo = [
-        {
-            id: 2,
-            info: 'marvie@gmail.com',
-            icon: <Icon name={'envelope-o'} type={IconTypes.FontAwesome} size={18} color={Colors.PRIMARY} />
-        },
-        {
-            id: 3,
-            icon: <Icon name={'phone'} type={IconTypes.AntDesign} size={18} color={Colors.PRIMARY} />,
-            info: '0300 000 000'
-        },
-        {
-            id: 4,
-            icon: <Icon name={'location-pin'} type={IconTypes.SimpleLineIcons} size={18} color={Colors.PRIMARY} />,
-            info: 'Los angeles , California'
-        }
-    ]
+    const [activeComponent, setActiveComponent] = React.useState({ name: 'Personal Info' })
 
-    const renderItem = ({ item, index }) => {
+    const renderTopTab = (item, index) => {
+        let itsActive = item?.name == activeComponent.name
+
         return (
-            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', gap: 15, marginVertical: 10, }}>
-                <View style={{ borderRadius: 100, width: 42, height: 42, justifyContent: "center", alignItems: 'center', backgroundColor: Colors?.LIGHT_GREY }}>
-                    {item?.icon}
-                </View>
-                    <TextComponent text={item?.info} style={{ fontSize: 12, color: Colors.DGREY }} />
+            <TouchableOpacity key={index} onPress={() => setActiveComponent(item)} style={itsActive ? styles.tab : styles.tabx}  >
+                <TextComponent text={item?.name} style={itsActive ? styles.active_tab_text : styles.tab_text} />
             </TouchableOpacity>
-        )
+        );
     }
 
     return (
         <View style={styles.Container}>
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <Header title={'Profile'} backIcon />
+            <Header title={'Profile'} back bell style={{ backgroundColor: Colors.PRIMARY }}
+                titleStyle={{ color: Colors.WHITE }} iconColor={Colors.WHITE} />
 
                 <View style={styles.flex}>
                     <Image source={perfil ? perfil : Avatar} style={styles.profile_image} resizeMode={'cover'} />
                     <TextComponent text={'Andrew Ainsley'} style={styles.text} />
                 </View>
 
-                <TextComponent style={styles.heading} text={'Personal Information'} />
-
-                <FlatList
-                    data={personalInfo}
-                    renderItem={renderItem}
-                    keyExtractor={(item, index) => index.toString()}
-                    showsVerticalScrollIndicator={false}
-                />
-
-            </ScrollView>
-            <Button title={'Edit Profile'} onPress={() => navigation.navigate('EditProfile')} />
-
+                <View style={styles.tab_container}>
+                    {[{ id: 1, name: 'Personal Info' }, { id: 2, name: 'Medical Info' }].map(renderTopTab)}
+                </View>
+                {
+                    activeComponent.name == 'Personal Info' ?
+                    <PersonalInfo />
+                    :
+                    <MedicalRecords />
+                }
         </View>
     )
 }
@@ -75,28 +53,57 @@ const styles = StyleSheet.create({
     Container: {
         flex: 1,
         backgroundColor: Colors.WHITE,
-        padding: 15
     },
     text: {
-         fontSize: 16, 
-         width: '60%'
-         },
-    heading: {
-        fontSize: 14,
-        marginTop: 20,
-        marginBottom: 10,
-        fontFamily: Fonts.SEMIBOLD,
-        color: Colors.BLACK
+        color: Colors.WHITE,
+        fontSize: 16,
+        width: '60%'
     },
+   
     profile_image: {
-        width: 90,
+        width: 80,
         borderRadius: 100,
-        height: 90,
+        height: 80,
     },
     flex: {
         flexDirection: "row",
         alignItems: "center",
         gap: 25,
-        marginVertical: 20
-    }
+        backgroundColor: Colors.PRIMARY,
+        padding: 20
+    },
+    tab: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 10,
+        paddingVertical: 8,
+        borderBottomColor: Colors.WHITE,
+        borderBottomWidth: 2,
+        width: '45%'
+    },
+    tabx: {
+        borderBottomColor: Colors.GREY,
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 10,
+        paddingVertical: 8,
+        width: '45%'
+    },
+    active_tab_text: {
+        color: Colors.WHITE,
+        fontFamily: Fonts.SEMIBOLD,
+        fontSize: 13,
+    },
+    tab_text: {
+        color: Colors.LGREY,
+        fontFamily: Fonts.REGULAR,
+        fontSize: 13,
+    },
+    tab_container: {
+        width: '100%',
+        flexDirection: 'row',
+        alignSelf: 'center',
+        justifyContent: 'space-around',
+        backgroundColor: Colors.PRIMARY,
+    },
 })
