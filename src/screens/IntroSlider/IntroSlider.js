@@ -19,7 +19,7 @@ const IntroSlider = () => {
         {
             key: 1,
             heading: 'Easy Appointments',
-            text: 'Say goodbye to long waits and book doctor appointments with ease using Ease Health.',
+            text: 'Say goodbye to long waits and book doctor appointments with ease using Healthease.',
             image: One,
         },
         {

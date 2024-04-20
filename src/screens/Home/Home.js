@@ -15,6 +15,7 @@ import Image from "../../components/Image";
 import { Fonts } from "../../utilities/Fonts";
 import ListEmptyComponent from "../../components/ListEmptyComponent";
 import DoctorCard from "../../components/DoctorCard";
+import bellIcon from '../../assets/images/bell.png'
 
 const Home = () => {
     const navigation = useNavigation();
@@ -63,9 +64,10 @@ const Home = () => {
                     <TouchableOpacity onPress={() => navigation.openDrawer()}>
                         <Feather name='menu' size={23} color={Colors.BLACK} />
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.bell_icon}>
-                    <Icon type={IconTypes.MaterialCommunityIcons} name={'bell-outline'} size={20} />
-                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => navigation.navigate('Notifications')} >
+            <Image source={bellIcon} style={{width: 20 , height: 20}} tintColor={Colors.PRIMARY}  />
+          </TouchableOpacity>
                 </View>
 
                 <View style={styles.mV}>
@@ -182,7 +184,7 @@ const styles = StyleSheet.create({
     },
     heading: {
         fontSize: 16,
-        color: Colors.BLACK,
+        color: Colors.PRIMARY,
         fontFamily: Fonts?.SEMIBOLD
     },
     headingx: {

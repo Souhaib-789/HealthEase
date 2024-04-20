@@ -26,12 +26,6 @@ function CustomDrawerContent(props) {
             goto: 'Profile',
             icon: <Icon type={IconTypes.Feather} name={'user'} size={18} />
         },
-        {
-            id: 2,
-            screenName: 'Medical Records',
-            goto: 'MedicalRecords',
-            icon: <Icon type={IconTypes.AntDesign} name={'filetext1'} size={18} />
-        },
 
         {
             id: 3,
@@ -51,12 +45,6 @@ function CustomDrawerContent(props) {
             screenName: 'About Us',
             goto: 'AboutUs',
             icon: <Icon type={IconTypes.AntDesign} name={'infocirlceo'} size={18} />
-        }, {
-            id: 6,
-            screenName: 'Privacy Policy',
-            goto: 'PrivacyPolicy',
-            icon: <Icon type={IconTypes.MaterialCommunityIcons} name={'shield-lock-outline'} size={18} />
-
         },
     ]
 

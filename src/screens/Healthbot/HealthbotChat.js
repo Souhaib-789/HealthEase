@@ -104,9 +104,9 @@ const HealthbotChat = () => {
 
     return (
         <View style={styles.Container}>
-            <Header title={"Healthbot"} backIcon />
+            <Header title={"Healthbot"} back />
             <FlatList
-                style={{ flex: 1 }}
+                style={{ flex: 1 , width: '95%' , alignSelf: 'center' }}
                 showsVerticalScrollIndicator={false}
                 data={ChatList}
                 keyExtractor={(item, index) => index?.toString()}
@@ -147,7 +147,6 @@ const styles = StyleSheet.create({
     Container: {
         flex: 1,
         backgroundColor: Colors.WHITE,
-        paddingHorizontal: 15
     },
     bot_image: {
         width: 30,

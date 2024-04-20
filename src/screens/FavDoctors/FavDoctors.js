@@ -72,13 +72,13 @@ const FavDoctors = () => {
                         placeholder={'Search'}
                         rightIcon={search && <Icon type={IconTypes.Entypo} name={'cross'} size={18} />}
                         onPressRightIcon={() => setsearch(null)}
-                        mainStyle={{ marginBottom: 13 }} />
+                        mainStyle={{ marginBottom: 13 , width: '90%', marginTop: 10 }} />
 
                     <FlatList
                         showsVerticalScrollIndicator={false}
                         data={FavoriteDoctors}
                         renderItem={({ item }) =>
-                            (<DoctorCard item={item} book={true} heart={true} />)}
+                            (<DoctorCard item={item} book={true} heart={true} style={{width: '90%'}} />)}
                         keyExtractor={(_ , index) => index.toString()}
                         ListEmptyComponent={<ListEmptyComponent text={'no doctors found'} />}
                     />
@@ -93,7 +93,6 @@ const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         backgroundColor: Colors.WHITE,
-        paddingHorizontal: 15
     },
     sub_container: {
         alignSelf: "center",

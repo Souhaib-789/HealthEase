@@ -8,12 +8,12 @@ import Icon, { IconTypes } from "./Icon";
 import { Fonts } from "../utilities/Fonts";
 import Button from "./Button";
 
-const DoctorCard = ({ item, book, heart }) => {
+const DoctorCard = ({ item, book, heart , style}) => {
     const navigation = useNavigation();
 
 
     return (
-        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('DoctorDetails', { item: item })}>
+        <TouchableOpacity style={[styles.card , {...style}]} onPress={() => navigation.navigate('DoctorDetails', { item: item })}>
             <Image source={item?.image} style={styles.image} resizeMode={'cover'} />
             <View style={styles.subview}>
                 <View style={styles.subview2}>

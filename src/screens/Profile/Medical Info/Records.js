@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { Text, View, StyleSheet, ScrollView, TouchableOpacity, FlatList, TextInput, Modal as RNModal } from "react-native";
+import { View, StyleSheet, ScrollView, TouchableOpacity, FlatList, Modal as RNModal } from "react-native";
 import { Colors } from "../../../utilities/Colors";
-import Header from "../../../components/Header";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Input from "../../../components/Input";
 import DatePicker from 'react-native-date-picker'
@@ -10,10 +9,13 @@ import Entypo from 'react-native-vector-icons/Entypo'
 import DocumentPicker from 'react-native-document-picker';
 import { useNavigation } from "@react-navigation/native";
 import Image from "../../../components/Image";
-import PDF from '../../assets/images/pdf.png'
+import PDF from '../../../assets/images/pdf.png'
 import TextComponent from "../../../components/TextComponent";
 import Icon, { IconTypes } from "../../../components/Icon";
 import ListEmptyComponent from "../../../components/ListEmptyComponent";
+import Header from "../../../components/Header";
+import { Fonts } from "../../../utilities/Fonts";
+import Button from "../../../components/Button";
 
 
 const Records = () => {
@@ -109,7 +111,7 @@ const Records = () => {
     return (
         <View style={styles.Container}>
             <ScrollView>
-
+                <Header title={'Records'} back />
                 <FlatList
                     showsVerticalScrollIndicator={false}
                     data={SampleDocs}
@@ -118,80 +120,94 @@ const Records = () => {
                     ListEmptyComponent={<ListEmptyComponent text={'no records found'} />}
                 />
 
-                <RNModal
-                    animationType={'slide'}
-                    transparent={true}
-                    visible={openModal}>
-
-                    <View style={styles.modal_container}>
-                        <View style={styles.modal_sub_container}>
-
-                            <TouchableOpacity style={styles.cross_icon}
-                                onPress={() => setopenModal(false)} >
-                                <Entypo name={'cross'} color={Colors.DGREY} size={20} />
-                            </TouchableOpacity>
-
-                            <Text style={styles.text_w}>Record for</Text>
-                            <Input
-                                value={name}
-                                onChangeText={(e) => setname(e)}
-                                pencil={true}
-                                style={styles.input}
-                                mainStyle={styles.main_input_container}
-                            />
-
-                            <Text style={styles.text_w}>Type of record</Text>
-                            <View style={{ flexDirection: "row", alignItems: "center" }}>
-                                {
-                                    Doctypes?.map((item, index) => {
-                                        return (
-                                            <TouchableOpacity
-                                                onPress={() => settype(item)} key={index}
-                                                style={styles.types_options}>
-                                                <FontAwesome5 name={item?.icon} color={item?.id == type?.id ? Colors.PRIMARY : Colors.DGREY} size={25} />
-                                                <Text style={[styles.text_z, { color: item?.id == type?.id ? Colors.PRIMARY : Colors.DGREY }]}>{item?.name}</Text>
-                                            </TouchableOpacity>
-                                        )
-                                    })
-                                }
-                            </View>
-                            <Text style={styles.text_w}>Record created on</Text>
-                            <Input
-                                value={date ? moment(date).format('D MMM, yy') : null}
-                                placeholder={'Date'}
-                                editable={false}
-                                pencil={true}
-                                onPencilPress={() => setdateModalOpen(true)}
-                                style={styles.input}
-                                mainStyle={styles.main_input_container}
-                            />
-                            <DatePicker
-                                modal
-                                mode="date"
-                                open={dateModalopen}
-                                date={currDate}
-                                onConfirm={(date) => {
-                                    setdateModalOpen(false)
-                                    setdate(date)
-                                }}
-                                onCancel={() => {
-                                    setdateModalOpen(false)
-                                }}
-                            />
-
-                            <TouchableOpacity style={styles.button} onPress={uploadDocument} >
-                                <Text style={styles.button_text}>{doc ? doc[0].name : 'Upload Document'}</Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity style={[styles.button, { marginTop: 5 }]}
-                                onPress={() => { alert('Document Uploaded!'), navigation.goBack() }} >
-                                <Text style={styles.button_text}>Add Record</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </RNModal>
-                {/* ---------------------------- MODAL END --------------------------------------------------------- */}
             </ScrollView>
+
+            <RNModal
+                animationType={'slide'}
+                transparent={true}
+                visible={openModal}>
+
+                <View style={styles.modal_container}>
+                    <View style={styles.modal_sub_container}>
+
+                        <TouchableOpacity style={styles.cross_icon}
+                            onPress={() => setopenModal(false)} >
+                            <Entypo name={'cross'} color={Colors.DGREY} size={20} />
+                        </TouchableOpacity>
+
+                       
+
+                        <TextComponent style={styles.text_w} text={'Type of record'} />
+                        <View style={styles.row}>
+                            {
+                                Doctypes?.map((item, index) => {
+                                    return (
+                                        <TouchableOpacity
+                                            onPress={() => settype(item)} key={index}
+                                            style={styles.types_options}>
+                                            <FontAwesome5 name={item?.icon} color={item?.id == type?.id ? Colors.PRIMARY : Colors.GREY} size={20} />
+                                            <TextComponent style={[styles.text_z, { color: item?.id == type?.id ? Colors.PRIMARY : Colors.DGREY }]} text={item?.name} />
+                                        </TouchableOpacity>
+                                    )
+                                })
+                            }
+                        </View>
+
+                        <Input
+                            label={'Record for'}
+                            placeholder={'e.g: Alex'}
+                            value={name}
+                            onChangeText={(e) => setname(e)}
+                            mainStyle={styles.input}
+                        />
+
+                        <TextComponent style={styles.text_w} text={'Record created on'} />
+                        <Input
+                            value={date ? moment(date).format('D MMM, yy') : null}
+                            placeholder={'Select Date'}
+                            editable={false}
+                            onPressRightIcon={() => setdateModalOpen(true)}
+                            rightIcon={<Icon name={'date-range'} type={IconTypes.MaterialIcons} color={Colors.GREY} />}
+                            mainStyle={styles.input}
+                        />
+
+                        <TouchableOpacity style={styles.button} onPress={uploadDocument} >
+                            {
+                                doc ?
+                                    <Icon name={'document-text'} type={IconTypes.Ionicons} color={Colors.PRIMARY} size={40} />
+                                    :
+                                    <Icon name={'cloud-upload'} type={IconTypes.MaterialCommunityIcons} color={Colors.PRIMARY} size={40} />
+
+                            }
+                            <TextComponent style={styles.button_text} text={doc ? doc[0].name : 'Upload Document'} numberOfLines={1} />
+                        </TouchableOpacity>
+
+                        <Button title={'Save Record'} onPress={()=> {
+                            setopenModal(false)
+                            navigation.goBack()
+                        }} />
+                    </View>
+                </View>
+            </RNModal>
+
+
+            <TouchableOpacity style={styles.add_icon} onPress={() => setopenModal(true)}>
+                <Icon name={'addfile'} type={IconTypes.AntDesign} color={Colors.WHITE} size={20} />
+            </TouchableOpacity>
+
+            <DatePicker
+                modal
+                mode="date"
+                open={dateModalopen}
+                date={currDate}
+                onConfirm={(date) => {
+                    setdateModalOpen(false)
+                    setdate(date)
+                }}
+                onCancel={() => {
+                    setdateModalOpen(false)
+                }}
+            />
         </View>
     )
 }
@@ -202,44 +218,26 @@ const styles = StyleSheet.create({
     Container: {
         flex: 1,
         backgroundColor: Colors.WHITE,
-        padding: 10
     },
-    heading: {
-        fontSize: 20,
-        fontWeight: "bold",
-        marginVertical: 10,
-        color: Colors.BLACK
-    },
-    no_record_image: {
-        width: 160,
-        height: 160,
-        resizeMode: "contain",
-        marginTop: 80,
-        marginBottom: 25
-    },
-    bio: {
-        textAlign: "center",
-        marginHorizontal: 20,
-        lineHeight: 20
-    },
+    row: { flexDirection: "row", alignItems: "center" }, 
     button: {
-        borderRadius: 5,
-        width: '80%',
-        backgroundColor: Colors.PRIMARY,
+        gap: 5,
+        borderRadius: 20,
+        width: '70%',
+        backgroundColor: Colors.WHITE,
         alignItems: "center",
         justifyContent: "center",
         paddingVertical: 15,
         alignSelf: "center",
-        marginTop: 40,
-        marginVertical: 10
-    },
-    list_empty_view: {
-        alignItems: "center",
+        marginVertical: 15,
+        borderStyle: "dotted",
+        borderColor: Colors.PRIMARY,
+        borderWidth: 1
     },
     button_text: {
-        color: Colors.WHITE,
-        fontSize: 15,
-        fontWeight: 500
+        color: Colors.PRIMARY,
+        fontSize: 13,
+        width: '80%'
     },
     doc_card: {
         backgroundColor: Colors.WHITE,
@@ -250,41 +248,33 @@ const styles = StyleSheet.create({
         marginHorizontal: 3,
         flexDirection: "row",
         alignItems: "center",
-    },
-    date_box: {
-        backgroundColor: Colors.PRIMARY,
-        borderRadius: 5,
-        padding: 10,
-        paddingHorizontal: 12,
-        alignItems: "center"
+        width: '90%',
+        alignSelf: 'center'
     },
     text: {
         color: Colors.WHITE,
         fontSize: 16
     },
     text_w: {
-        fontSize: 17,
+        fontSize: 12,
+        fontFamily: Fonts.MEDIUM,
         color: Colors.BLACK,
-        fontWeight: 500,
-        marginTop: 15
     },
     text_x: {
         fontSize: 14,
         color: Colors.BLACK,
-        fontWeight: 500
     },
     text_y: {
         fontSize: 11,
         color: Colors.DDGREY,
     },
     text_z: {
-        fontSize: 13,
+        fontSize: 12,
     },
     sub_doc_card: {
         marginLeft: 18
     },
     modal_container: {
-
         flex: 1,
         backgroundColor: 'rgba(0,0,0,0.5)',
         justifyContent: 'center',
@@ -296,31 +286,25 @@ const styles = StyleSheet.create({
         paddingVertical: 23,
         paddingHorizontal: 15,
         backgroundColor: Colors.WHITE,
-        marginTop: '70%',
+        marginTop: '60%',
         borderTopLeftRadius: 25,
         borderTopRightRadius: 25,
         width: '100%',
-
+        gap: 10
     },
     input: {
-        borderBottomColor: Colors.DGREY,
-        borderBottomWidth: 1,
-        fontSize: 15,
-        color: Colors.PRIMARY,
-        fontWeight: "bold"
-    },
-    main_input_container: {
-        elevation: 0,
-        marginVertical: 0,
-        paddingVertical: 0,
+        marginVertical: 5
     },
     types_options: {
         alignItems: "center",
-        margin: 15
+        marginLeft: 20,
+        marginBottom: 5,
+        gap: 3
     },
     cross_icon: {
         position: "absolute",
         right: 10,
-        top: 15
-    }
+        top: 15,
+    },
+    add_icon: { position: 'absolute', bottom: 30, right: 20, backgroundColor: Colors.PRIMARY, borderRadius: 100, width: 50, height: 50, justifyContent: 'center', alignItems: 'center' }
 })
