@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, ScrollView, Image } from "react-native";
 import { Colors } from "../../utilities/Colors";
 import BgImage from "../../components/BgImage";
 import Header from "../../components/Header";
-import testimage from '../../assets/images/testimage.png'
+// import testimage from '../../assets/images/testimage.png'
 
 const MyTestsDetails = (props) => {
 

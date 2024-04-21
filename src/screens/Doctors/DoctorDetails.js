@@ -132,7 +132,7 @@ const DoctorDetails = (props) => {
     return (
         <View style={styles.mainContainer}>
             <ScrollView>
-                <Header title={'Details'} backIcon style={{ margin: 10 }} titleColor={Colors?.WHITE} />
+                <Header title={'Details'} back style={{ margin: 10 }} titleStyle={{color: Colors?.WHITE}} iconColor={Colors.WHITE} />
                 <Image source={routeData?.image} style={styles.card_image} />
 
                 <View style={styles.details_card}>
@@ -305,7 +305,7 @@ const styles = StyleSheet.create({
         borderTopEndRadius: 30,
         borderTopLeftRadius: 30,
         backgroundColor: Colors.WHITE,
-        marginTop: 50,
+        marginTop: 70,
         padding: 15,
         paddingTop: 60
     },
@@ -321,7 +321,7 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         zIndex: 99,
         position: "absolute",
-        top: 60,
+        top: 75,
         alignSelf: 'center'
     },
 

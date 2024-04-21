@@ -7,6 +7,8 @@ import TextComponent from './TextComponent';
 import Icon, { IconTypes } from './Icon';
 import { Colors } from '../utilities/Colors';
 import { Fonts } from '../utilities/Fonts';
+import PROFILE from '../assets/images/profile.png'
+
 
 const Header = props => {
   const navigation = useNavigation();
@@ -36,16 +38,9 @@ const Header = props => {
         }
 
         {
-          props?.search &&
-          <TouchableOpacity onPress={() => navigation.navigate('Searching')}>
-            <Icon name={'search1'} type={IconTypes.AntDesign} size={22} color={Colors?.PRIMARY} />
-          </TouchableOpacity>
-        }
-
-        {
-          props?.edit &&
-          <TouchableOpacity onPress={() => navigation.navigate('EditProfile')} >
-            <Icon name={'pencil'} type={IconTypes.FontAwesome} size={22} color={Colors?.GREY} />
+          props?.profile &&
+          <TouchableOpacity onPress={() => navigation.navigate('Profile')} >
+            <Image source={PROFILE} style={styles.profile_image} resizeMode='cover'  />
           </TouchableOpacity>
         }
       </View>
@@ -106,9 +101,8 @@ const styles = StyleSheet.create({
     color: Colors.PRIMARY
   },
   profile_image: {
-    width: 40,
-    height: 40,
+    width: 30,
+    height: 30,
     borderRadius: 50,
-    marginRight: 10
   },
 });

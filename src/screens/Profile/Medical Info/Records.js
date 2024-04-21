@@ -111,7 +111,7 @@ const Records = () => {
     return (
         <View style={styles.Container}>
             <ScrollView>
-                <Header title={'Records'} back />
+                <Header title={'Records'} back profile/>
                 <FlatList
                     showsVerticalScrollIndicator={false}
                     data={SampleDocs}

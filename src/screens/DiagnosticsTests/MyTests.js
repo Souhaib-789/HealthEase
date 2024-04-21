@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, ScrollView, Image, TouchableOpacity, FlatList, 
 import { Colors } from "../../utilities/Colors";
 import BgImage from "../../components/BgImage";
 import Header from "../../components/Header";
-import noRecordImage from '../../assets/images/test.png'
+// import noRecordImage from '../../assets/images/test.png'
 import { useNavigation } from "@react-navigation/native";
 
 const MyTests = () => {
@@ -54,7 +54,7 @@ const MyTests = () => {
     const ListEmptyComponent = () => {
         return (
             <View style={styles.list_empty_view}>
-                <Image source={noRecordImage} style={styles.no_record_image} />
+                {/* <Image source={noRecordImage} style={styles.no_record_image} /> */}
                 <Text style={styles.heading}>You haven’t booked any tests yet</Text>
                 <Text style={styles.bio}>Get started with your first health checkup</Text>
             </View>

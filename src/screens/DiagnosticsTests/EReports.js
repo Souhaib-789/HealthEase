@@ -3,7 +3,6 @@ import { Text, View, StyleSheet, ScrollView, Image, TouchableOpacity, FlatList, 
 import { Colors } from "../../utilities/Colors";
 import BgImage from "../../components/BgImage";
 import Header from "../../components/Header";
-import noRecordImage from '../../assets/images/ereports.png'
 
 const EReports = () => {
     
@@ -43,7 +42,7 @@ const EReports = () => {
     const ListEmptyComponent = () => {
         return (
             <View style={styles.list_empty_view}>
-                <Image source={noRecordImage} style={styles.no_record_image} />
+                {/* <Image source={noRecordImage} style={styles.no_record_image} /> */}
                 <Text style={styles.heading}>No e-reports found</Text>
                 <Text style={styles.bio}>Once your dignosis will complete the lab-admin will upload the e-reports of your tests here.</Text>
             </View>

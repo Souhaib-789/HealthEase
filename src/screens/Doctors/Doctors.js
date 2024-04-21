@@ -97,9 +97,9 @@ const Doctors = () => {
 
     return (
         <View style={styles.mainContainer}>
-            <Header backIcon title={'Doctors'} />
+            <Header back profile title={'Doctors'} />
             <ScrollView>
-                <Input search placeholder={'Search'} mainStyle={{ marginVertical: 15 }} />
+                <Input search placeholder={'Search'} mainStyle={{ marginVertical: 15 , width: '90%' }} />
 
                 <FlatList
                     key={"CategoriesList"}
@@ -108,6 +108,7 @@ const Doctors = () => {
                     horizontal
                     renderItem={renderCategoryItem}
                     keyExtractor={item => item?.id}
+                    style={{width: '90%', alignSelf: 'center'}}
                 />
 
                 <FlatList
@@ -115,7 +116,7 @@ const Doctors = () => {
                     showsVerticalScrollIndicator={false}
                     data={Doctors}
                     renderItem={({ item }) => (
-                        <DoctorCard item={item}  />
+                        <DoctorCard item={item} style={{width: '90%'}} />
                     )}
                     keyExtractor={item => item?.id}
                     ListEmptyComponent={<ListEmptyComponent text={'no doctors found'} />}
@@ -131,7 +132,6 @@ const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         backgroundColor: Colors.WHITE,
-        paddingHorizontal: 15
     },
     category_box: {
         paddingVertical: 8,

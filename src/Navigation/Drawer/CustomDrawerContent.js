@@ -27,24 +27,30 @@ function CustomDrawerContent(props) {
             icon: <Icon type={IconTypes.Feather} name={'user'} size={18} />
         },
 
-        {
-            id: 3,
-            screenName: 'Diagnostics Tests',
-            goto: 'DiagnosticsTests',
-            icon: <Icon type={IconTypes.Entypo} name={'lab-flask'} size={18} />
+        // {
+        //     id: 3,
+        //     screenName: 'Diagnostics Tests',
+        //     goto: 'DiagnosticsTests',
+        //     icon: <Icon type={IconTypes.Entypo} name={'lab-flask'} size={18} />
 
-        },
+        // },
         {
             id: 4,
-            screenName: 'Settings',
-            goto: 'Settings',
-            icon: <Icon type={IconTypes.AntDesign} name={'setting'} size={18} />
+            screenName: 'Invite a Friend',
+            goto: 'InviteFriend',
+            icon: <Icon type={IconTypes.Octicons} name={'person-add'} size={18} />
         },
         {
             id: 5,
             screenName: 'About Us',
-            goto: 'AboutUs',
+            goto: 'About',
             icon: <Icon type={IconTypes.AntDesign} name={'infocirlceo'} size={18} />
+        },
+        {
+            id: 5,
+            screenName: 'Support',
+            goto: 'Support',
+            icon: <Icon type={IconTypes.Feather} name={'help-circle'} size={18} />
         },
     ]
 
@@ -158,7 +164,7 @@ const styles = StyleSheet.create({
         padding: 15
     },
     btn: {
-        marginTop: 160,
+        marginTop: 200,
         alignItems: 'center',
         flexDirection: 'row',
         gap: 5,

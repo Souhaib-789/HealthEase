@@ -11,7 +11,6 @@ import Button from "../../components/Button";
 import Icon, { IconTypes } from "../../components/Icon";
 import { Fonts } from "../../utilities/Fonts";
 import DoctorCard from "../../components/DoctorCard";
-import { Text } from "react-native-reanimated/lib/typescript/Animated";
 import moment from "moment";
 
 const AppointmentForm = (props) => {
@@ -49,10 +48,10 @@ const AppointmentForm = (props) => {
 
     return (
         <View style={styles.Container}>
-            <Header title={'Appointment'} backIcon />
+            <Header title={'Appointment'} back/>
             <ScrollView style={{ flex: 1 }}>
 
-                <DoctorCard item={routeData?.item} />
+                <DoctorCard item={routeData?.item} style={{width: '90%'}} />
 
                 <View style={styles.summary}>
                     <View style={styles.flexA}>
@@ -96,7 +95,7 @@ const AppointmentForm = (props) => {
                         </TouchableOpacity>
                 }
 
-                <Button title={'Next'} onPress={() => setopenModal(true)} style={styles.button} />
+                <Button title={'Book Appointment'} onPress={() => setopenModal(true)} style={styles.button} />
 
 
             </ScrollView>
@@ -126,10 +125,10 @@ const styles = StyleSheet.create({
     Container: {
         flex: 1,
         backgroundColor: Colors.WHITE,
-        paddingHorizontal: 15
     },
     input_parent_style: {
-        marginVertical: 10
+        marginVertical: 10,
+        alignSelf: 'center'
     },
     text: {
         fontSize: 25,
@@ -139,7 +138,7 @@ const styles = StyleSheet.create({
     },
     mainInput: {
         paddingVertical: 0,
-        width: '95%',
+        width: '90%',
         borderRadius: 10,
     },
     upload_image: {
@@ -151,7 +150,8 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         marginLeft: 5,
-        marginTop: 20
+        marginTop: 20,
+        marginLeft: 20
     },
     image_upload_view: {
         flexDirection: "row",
@@ -164,7 +164,9 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         resizeMode: 'cover',
         marginLeft: 5,
-        marginTop: 20
+        marginTop: 20,
+        marginLeft: 20
+
     },
     button: {
         marginVertical: 20
@@ -202,6 +204,8 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginBottom: 10,
         padding: 10,
-        marginHorizontal: 3
+        marginHorizontal: 3,
+        width: '90%',
+        alignSelf: 'center'
     }
 })

@@ -16,6 +16,7 @@ import { Fonts } from "../../utilities/Fonts";
 import ListEmptyComponent from "../../components/ListEmptyComponent";
 import DoctorCard from "../../components/DoctorCard";
 import bellIcon from '../../assets/images/bell.png'
+import NO_DOC from '../../assets/images/noDoc.png'
 
 const Home = () => {
     const navigation = useNavigation();
@@ -118,6 +119,8 @@ const Home = () => {
                             </View>
                         </View>
                     </TouchableOpacity>
+
+
                 </View>
 
                 <FlatList
@@ -135,7 +138,7 @@ const Home = () => {
                     decelerationRate={'fast'}
                     renderItem={({ item }) =>
                     (<DoctorCard item={item}/>)}
-                    ListEmptyComponent={<ListEmptyComponent text={'no doctors found'} />}
+                    ListEmptyComponent={<ListEmptyComponent image={NO_DOC} text={'no doctors found'} />}
                     keyExtractor={(item, index) => index.toString()}
                 />
             </ScrollView>
@@ -184,7 +187,6 @@ const styles = StyleSheet.create({
     },
     heading: {
         fontSize: 16,
-        color: Colors.PRIMARY,
         fontFamily: Fonts?.SEMIBOLD
     },
     headingx: {
