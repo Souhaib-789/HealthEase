@@ -2,7 +2,7 @@ import React from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { Colors } from "../../utilities/Colors";
 import Header from "../../components/Header";
-import perfil from '../../assets/images/profile.jpg'
+import perfil from '../../assets/images/profile.png'
 import Image from "../../components/Image";
 import TextComponent from "../../components/TextComponent";
 import { Fonts } from "../../utilities/Fonts";

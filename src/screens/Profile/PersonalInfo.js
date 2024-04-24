@@ -35,6 +35,11 @@ const PersonalInfo = () => {
             id: 6,
             icon: <Icon name={'human-male-height'} type={IconTypes.MaterialCommunityIcons} size={15} color={Colors.PRIMARY} />,
             info: '5.8 ft'
+        },
+        {
+            id: 7,
+            info: 'B+',
+            icon: <Icon name={'bloodtype'} type={IconTypes.MaterialIcons} size={15} color={Colors.PRIMARY} />,
         }
 
     ]

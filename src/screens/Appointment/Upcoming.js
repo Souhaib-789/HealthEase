@@ -78,7 +78,7 @@ const Upcoming = () => {
                         showsVerticalScrollIndicator={false}
                         data={FavoriteDoctors}
                         renderItem={({ item }) =>
-                            (<AppointCard item={item}  />)}
+                            (<AppointCard item={item} screenType={'upcoming'}  />)}
                         keyExtractor={(_ , index) => index.toString()}
                         ListEmptyComponent={<ListEmptyComponent text={'no doctors found'} />}
                     />

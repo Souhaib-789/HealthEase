@@ -7,17 +7,17 @@ import { Colors } from "../utilities/Colors";
 import Icon, { IconTypes } from "./Icon";
 import { Fonts } from "../utilities/Fonts";
 
-const AppointCard = ({ item, completed }) => {
+const AppointCard = ({ item,  screenType}) => {
     const navigation = useNavigation();
 
     return (
-        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('DoctorDetails', { item: item })}>
+        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('AppointmentDetails', { item: item , screenType: screenType })}>
             <Image source={item?.image} style={styles.image} resizeMode={'cover'} />
             <View style={styles.subview}>
                 <View style={styles.wide_row}>
                     <TextComponent style={styles.text} text={item?.name} numberOfLines={1} />
                     {
-                        completed ?
+                        screenType == 'completed'  ?
                             <Icon name={'check-circle-fill'} type={IconTypes.Octicons} color={'#03C03C'} size={20} />
                             :
                             <Icon type={IconTypes.MaterialCommunityIcons} name={'clock-fast'} color={Colors?.PRIMARY} size={20} />

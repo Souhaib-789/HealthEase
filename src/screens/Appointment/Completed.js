@@ -78,7 +78,7 @@ const Completed = () => {
                         showsVerticalScrollIndicator={false}
                         data={FavoriteDoctors}
                         renderItem={({ item }) =>
-                            (<AppointCard item={item} completed  />)}
+                            (<AppointCard item={item}  screenType={'completed'}   />)}
                         keyExtractor={(_ , index) => index.toString()}
                         ListEmptyComponent={<ListEmptyComponent text={'no doctors found'} />}
                     />

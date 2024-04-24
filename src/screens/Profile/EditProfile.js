@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { View, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import { Colors } from "../../utilities/Colors";
 import Header from "../../components/Header";
-import perfil from '../../assets/images/profile.jpg'
-import { useNavigation } from "@react-navigation/native";
+import perfil from '../../assets/images/profile.png'
 import Image from "../../components/Image";
 import Icon, { IconTypes } from "../../components/Icon";
 import Button from "../../components/Button";
@@ -12,12 +11,15 @@ import Avatar from '../../assets/images/avatar.png'
 
 const EditProfile = () => {
 
-    const navigation = useNavigation()
-    const [name, setname] = useState()
-    const [contact, setcontact] = useState()
-    const [address, setaddress] = useState()
-    const [weight, setweight] = useState()
-    const [height, setheight] = useState()
+     const [formData , setFormData] = useState({
+        name: '',
+        contact: '',
+        address: '',
+        weight: '',
+        height: '',
+        bloodGroup: ''
+    })
+
 
     return (
         <View style={styles.Container}>
@@ -31,35 +33,84 @@ const EditProfile = () => {
 
                 <Input
                     label={'Name'}
-                    value={name}
-                    onChangeText={(e) => setname(e)}
+                    value={
+                        formData.name
+                    }
+                    onChangeText={(e) => 
+                        setFormData({
+                            ...formData,
+                            name: e
+                        })
+                    }
                     parentStyle={styles.input} />
 
                 <Input
                     label={'Contact No.'}
                     keyboardType={'number-pad'}
-                    value={contact}
-                    onChangeText={(e) => setcontact(e)}
+                    value={
+                        formData.contact
+                    }
+                    onChangeText={(e) => 
+                        setFormData({
+                            ...formData,
+                            contact: e
+                        })
+                    }
                     parentStyle={styles.input} />
 
                 <Input
                     label={'Address'}
-                    value={address}
-                    onChangeText={(e) => setaddress(e)}
+                    value={
+                        formData.address
+                    }
+                    onChangeText={(e) => 
+                        setFormData({
+                            ...formData,
+                            address: e
+                        })
+                    }
                     parentStyle={styles.input}
                 />
 
                 <Input
                     label={'Weight'}
-                    value={weight}
-                    onChangeText={(e) => setweight(e)}
+                    value={
+                        formData.weight
+                    }
+                    onChangeText={(e) => 
+                        setFormData({
+                            ...formData,
+                            weight: e
+                        })
+                    }
                     parentStyle={styles.input}
                 />
 
                 <Input
                     label={'Height'}
-                    value={height}
-                    onChangeText={(e) => setheight(e)}
+                    value={
+                        formData.height
+                    }
+                    onChangeText={(e) => 
+                        setFormData({
+                            ...formData,
+                            height: e
+                        })
+                    }
+                    parentStyle={styles.input}
+                />
+
+<Input
+                    label={'Blood Group'}
+                    value={
+                        formData.bloodGroup
+                    }
+                    onChangeText={(e) => 
+                        setFormData({
+                            ...formData,
+                            bloodGroup: e
+                        })
+                    }
                     parentStyle={styles.input}
                 />
 

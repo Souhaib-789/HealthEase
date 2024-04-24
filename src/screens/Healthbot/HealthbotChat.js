@@ -7,7 +7,7 @@ import Header from "../../components/Header";
 import BotIcon from "../../assets/images/bot.png";
 import Image from "../../components/Image";
 import Avatar from "../../assets/images/avatar.png";
-import perfil from "../../assets/images/profile.jpg";
+import perfil from "../../assets/images/profile.png";
 import moment from "moment";
 import Input from "../../components/Input";
 import Icon, { IconTypes } from "../../components/Icon";

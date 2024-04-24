@@ -10,8 +10,12 @@ const Button = (props) => {
         <TouchableOpacity
             disabled={props?.disabled}
             style={[styles.button,
-                 { backgroundColor: props?.light ? Colors?.LIGHT : Colors?.PRIMARY }
+                 { backgroundColor: props?.light ? Colors?.LIGHT : Colors?.PRIMARY , borderWidth: props?.light ? 1 : 0, borderColor: Colors?.PRIMARY}
                 , { ...props?.style }]} onPress={props?.onPress}>
+
+                    {
+                        props?.icon && props?.icon
+                    }
             <TextComponent style={[styles.text, { color: props?.light ? Colors?.PRIMARY : Colors?.WHITE, fontFamily: Fonts?.SEMIBOLD }, { ...props?.text_style }]} text={props?.title} />
         </TouchableOpacity>
     )
@@ -25,6 +29,8 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         width: '90%',
         paddingVertical: 13,
+        flexDirection: 'row',
+        gap: 10
     },
     text: {
         fontSize: 12,

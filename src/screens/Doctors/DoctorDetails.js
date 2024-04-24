@@ -77,7 +77,8 @@ const DoctorDetails = (props) => {
         {
             name: 'Reviews',
             no: '50 +',
-            icon_name: 'star'
+            icon_name: 'star',
+            navigate: 'Reviews'
         },
         {
             name: 'Experience',
@@ -96,7 +97,7 @@ const DoctorDetails = (props) => {
 
     const renderDetailsItem = (item, index) => {
         return (
-            <View style={styles.flex}>
+            <TouchableOpacity style={styles.flex} disabled={!item?.navigate} onPress={() => navigation.navigate(item?.navigate)} >
                 <View style={{ backgroundColor: Colors?.LIGHT, padding: 8, borderRadius: 50, marginRight: 6 }}>
                     <Icon type={IconTypes?.MaterialIcons} name={item?.icon_name} size={16} color={Colors?.PRIMARY} />
                 </View>
@@ -104,7 +105,7 @@ const DoctorDetails = (props) => {
                     <TextComponent style={[styles.textx, { fontFamily: Fonts?.SEMIBOLD, fontSize: 12, color: Colors?.BLACK }]} text={item?.no} />
                     <TextComponent style={[styles.textx, { color: Colors?.DGREY, fontSize: 10 }]} text={item?.name} />
                 </View>
-            </View>
+            </TouchableOpacity>
         )
     }
 
