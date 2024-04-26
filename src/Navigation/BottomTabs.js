@@ -7,6 +7,7 @@ import Healthbot from '../screens/Healthbot/Healthbot';
 import Icon, { IconTypes } from '../components/Icon';
 import Appointments from '../screens/Appointment';
 import Image from '../components/Image';
+import DoctorHome from '../screens/Home/DoctorHome';
 
 const Tab = createBottomTabNavigator();
 
@@ -39,7 +40,7 @@ export default function BottomTabs() {
 
       })}
     >
-      <Tab.Screen name="Home" component={Home} options={{ headerShown: false }} />
+      <Tab.Screen name="Home" component={DoctorHome} options={{ headerShown: false }} />
       <Tab.Screen name="FavDoctors" component={FavDoctors} options={{ headerShown: false }} />
       <Tab.Screen name="Healthbot" component={Healthbot} options={{ headerShown: false }} />
       <Tab.Screen name="Appointments" component={Appointments} options={{ headerShown: false }} />
