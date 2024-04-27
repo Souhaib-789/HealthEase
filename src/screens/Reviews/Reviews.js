@@ -59,12 +59,13 @@ const Reviews = () => {
                             <Rating
                                 type='custom'
                                 ratingImage={STAR}
-                                ratingColor={Colors.YELLOW}
-                                ratingBackgroundColor='#c8c7c8'
-                                ratingCount={10}
-                                imageSize={30}
+                                ratingColor={Colors.WHITE}
+                                ratingBackgroundColor={Colors.WHITE}
+                                ratingCount={5}
+                                readonly={true}
+                                imageSize={18}
                                 onFinishRating={this.ratingCompleted}
-                                style={{ paddingVertical: 10 }}
+                                style={{ paddingVertical: 5 , alignSelf: 'flex-start' }}
                             />
                             <TextComponent style={styles.reviewText} text={item.category} />
                             <TextComponent style={styles.reviewAuthor} text={item.hospital_name} />

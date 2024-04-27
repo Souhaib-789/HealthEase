@@ -85,7 +85,7 @@ const AppointmentForm = (props) => {
                     onChangeText={(e) => setdetail(e)}
                     mainStyle={styles.mainInput} parentStyle={styles.input_parent_style} />
 
-                {
+                {/* {
                     image ?
                         <Image source={{ uri: image?.uri }} style={styles.uploaded_image} />
                         :
@@ -93,7 +93,7 @@ const AppointmentForm = (props) => {
                             <Icon type={IconTypes.Feather} name={'plus'} size={30} color={Colors.PRIMARY} />
                             <TextComponent style={{ color: Colors.PRIMARY, fontSize: 12 }} text={'Add Image'} />
                         </TouchableOpacity>
-                }
+                } */}
 
                 <Button title={'Book Appointment'} onPress={() => setopenModal(true)} style={styles.button} />
 

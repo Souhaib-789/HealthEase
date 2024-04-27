@@ -44,6 +44,35 @@ const PersonalInfo = () => {
 
     ]
 
+    const doctorInfo = [
+        {
+            id: 2,
+            info: 'doctor@gmail.com',
+            icon: <Icon name={'envelope'} type={IconTypes.FontAwesome} size={15} color={Colors.PRIMARY} />
+        },
+        {
+            id: 4,
+            icon: <Icon name={'location-pin'} type={IconTypes.Entypo} size={15} color={Colors.PRIMARY} />,
+            info: 'City Hospital , California'
+        },
+        {
+            id: 5,
+            icon: <Icon name={'user-doctor'} type={IconTypes.FontAwesome6} size={15} color={Colors.PRIMARY} />,
+            info: 'Cardiologist'
+        },
+        {
+            id: 6,
+            icon: <Icon name={'tips-and-updates'} type={IconTypes.MaterialIcons} size={15} color={Colors.PRIMARY} />,
+            info: '5 Years Experience'
+        },
+        {
+            id: 7,
+            info: '2500 per slot',
+            icon: <Icon name={'price-change'} type={IconTypes.MaterialIcons} size={15} color={Colors.PRIMARY} />,
+        }
+
+    ]
+
     const renderItem = ({ item, index }) => {
         return (
             <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', gap: 15, marginVertical: 10, }}>
@@ -61,7 +90,7 @@ const PersonalInfo = () => {
             <ScrollView showsVerticalScrollIndicator={false}>
 
                 <FlatList
-                    data={personalInfo}
+                    data={doctorInfo}
                     renderItem={renderItem}
                     keyExtractor={(item, index) => index.toString()}
                     showsVerticalScrollIndicator={false}

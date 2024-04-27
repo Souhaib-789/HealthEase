@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {  View, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+import { View, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import { Colors } from "../../utilities/Colors";
 import logo from '../../assets/images/logo.png'
 import google from '../../assets/images/google.png'
@@ -14,6 +14,7 @@ import { hideLoading, showAlert, showLoading } from "../../redux/actions/General
 import { Storage } from "../../utilities/AsyncStorage";
 import { login, userData } from "../../redux/actions/AuthAction";
 import { useDispatch } from "react-redux";
+import Dropdown from "../../components/Dropdown";
 
 const Login = () => {
 
@@ -21,26 +22,21 @@ const Login = () => {
     const dispatch = useDispatch();
     const [email, setemail] = useState()
     const [password, setpassword] = useState()
-
+    const [userRole, setuserRole] = useState()
 
     const onPressLogin = () => {
-        if (!email) {
-          dispatch(showAlert({ message: 'Please enter email' }))
-        }
-        else if (!password) {
-          dispatch(showAlert({ message: 'Please enter password' }))
-        }
-        else {
-          dispatch(showLoading())
-          setTimeout(() => {
-            Storage.set('@user', JSON.stringify({ email: email }));
-            dispatch(userData({ email: email }));
-            dispatch(login(true));
-            dispatch(hideLoading())
-          }, 1000)
-    
-        }
-      };
+        // if (!email) {
+        //   dispatch(showAlert({ message: 'Please enter email' }))
+        // }
+        // else if (!password) {
+        //   dispatch(showAlert({ message: 'Please enter password' }))
+        // }
+        // else {
+        Storage.set('@user', JSON.stringify({ email: email }));
+        dispatch(userData({ email: email, userRole: userRole?.name }));
+        dispatch(login(true));
+        // }
+    };
 
     return (
         <View style={styles.Container}>
@@ -63,6 +59,13 @@ const Login = () => {
                     onChangeText={(e) => setpassword(e)}
                     mainStyle={styles.mainInput} />
 
+                <Dropdown
+                    placeholder={'Select User Role'}
+                    state={userRole}
+                    array={[{ id: 1, name: 'doctor' }, { id: 2, name: 'patient' }, { id: 3, name: 'hospital' }]}
+                    setState={(e) => setuserRole(e)}
+                />
+
                 <Button title={'Login'} onPress={onPressLogin} style={styles.button} />
                 <TextComponent style={styles.link_text} text={'Forgot Passsword?'} />
 
@@ -77,7 +80,7 @@ const Login = () => {
 
                 </View>
 
-                <TouchableOpacity onPress={()=> navigation.navigate('Signup')}>
+                <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
                     <TextComponent style={styles.link_textx} text={'Don’t have an account? Create'} />
                 </TouchableOpacity>
             </ScrollView>

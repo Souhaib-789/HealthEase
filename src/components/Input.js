@@ -24,12 +24,14 @@ const Input = props => {
                 }
 
                 <TextInput
-                    style={[styles.input, { width: props?.search ? '80%' : props?.rightIcon || props?.isPassword ? '90%' : '100%' }, { ...props?.style }]}
+                    style={[styles.input, {  width: props?.search ? '80%' : props?.rightIcon || props?.isPassword ? '90%' : '100%' }, { ...props?.style }]}
                     placeholder={props?.placeholder}
                     placeholderTextColor={Colors.DGREY}
                     value={props?.value}
                     onChangeText={props?.onChangeText}
                     editable={props?.editable}
+                    multiline={props?.multiline}
+                    numberOfLines={props?.numberOfLines}
                     secureTextEntry={props?.isPassword ? props?.isPassword : props?.secureTextEntry}
                     keyboardType={props?.keyboardType}
                 />
@@ -82,5 +84,6 @@ const styles = StyleSheet.create({
         color: '#000',
         fontSize: 12,
         fontFamily: Fonts?.REGULAR,
+        textAlignVertical: 'top',
     },
 });

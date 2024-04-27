@@ -8,10 +8,14 @@ import Icon, { IconTypes } from '../components/Icon';
 import Appointments from '../screens/Appointment';
 import Image from '../components/Image';
 import DoctorHome from '../screens/Home/DoctorHome';
+import { useSelector } from 'react-redux';
+import HospitalHome from '../screens/Home/HospitalHome';
 
 const Tab = createBottomTabNavigator();
 
 export default function BottomTabs() {
+
+  const USER = useSelector(state => state.AuthReducer?.user);
   return (
 
     <Tab.Navigator
@@ -40,10 +44,21 @@ export default function BottomTabs() {
 
       })}
     >
-      <Tab.Screen name="Home" component={DoctorHome} options={{ headerShown: false }} />
+      <Tab.Screen name="Home" component={HospitalHome} options={{ headerShown: false }} />
       <Tab.Screen name="FavDoctors" component={FavDoctors} options={{ headerShown: false }} />
       <Tab.Screen name="Healthbot" component={Healthbot} options={{ headerShown: false }} />
       <Tab.Screen name="Appointments" component={Appointments} options={{ headerShown: false }} />
+
+      {/* if doctor ? 
+      DoctorHome
+      Reviews
+      Profile */}
+
+      {/* if hospital
+      HospitalHome
+      HospitalProfile
+      Appointments */}
+      
     </Tab.Navigator>
 
   );

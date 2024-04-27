@@ -13,6 +13,7 @@ import Icon, { IconTypes } from '../../components/Icon';
 import { Storage } from '../../utilities/AsyncStorage';
 import { useDispatch } from 'react-redux';
 import { Logout } from '../../redux/actions/AuthAction';
+import Button from '../../components/Button';
 
 function CustomDrawerContent(props) {
     const navigation = useNavigation();
@@ -120,18 +121,13 @@ function CustomDrawerContent(props) {
                 onRequestClose={() => setModalVisible(false)}>
                 <View style={styles.modal_view}>
                     <View style={styles.modal_sub_view}>
-                        <SimpleLineIcons name={'logout'} color={Colors.PRIMARY} size={50} />
-                        <Text style={styles.modal_heading}>Hold on !</Text>
-                        <Text style={{ marginVertical: 5 }}>are you sure to want to logout ?</Text>
+                        <Icon name={'alert'} type={IconTypes.Octicons} color={Colors.YELLOW} size={30} />
+                        <TextComponent style={styles.modal_heading} text={'Hold on !'} />
+                        <TextComponent style={{ marginVertical: 5 }} text={'are you sure to want to logout ?'} />
 
                         <View style={styles.modal_bottom_view}>
-                            <TouchableOpacity style={styles.modal_button} onPress={cancelModal}>
-                                <Text style={styles.text}>Cancel</Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity style={styles.modal_button} onPress={onPressLogout}>
-                                <Text style={styles.text}>Ok</Text>
-                            </TouchableOpacity>
+                            <Button title={'Cancel'} onPress={cancelModal} style={{width: '45%'}} />
+                            <Button title={'Yes'} light onPress={onPressLogout} style={{width: '45%'}} />
                         </View>
                     </View>
                 </View>
@@ -188,8 +184,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    modal_heading: { fontSize: 25, color: Colors.BLACK, fontWeight: 'bold', marginTop: 10 },
-    modal_bottom_view: { width: '60%', marginTop: 15, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+    modal_heading: { fontSize: 20, marginTop: 3 , fontFamily: Fonts.BOLD  },
+    modal_bottom_view: { width: '80%', marginTop: 15, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
     modal_button: {
         backgroundColor: Colors.PRIMARY, borderRadius: 5,
         width: 75, alignItems: 'center', justifyContent: 'center', paddingVertical: 8
