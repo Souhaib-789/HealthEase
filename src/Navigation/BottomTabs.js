@@ -10,6 +10,7 @@ import Image from '../components/Image';
 import DoctorHome from '../screens/Home/DoctorHome';
 import { useSelector } from 'react-redux';
 import HospitalHome from '../screens/Home/HospitalHome';
+import Scanner from '../screens/Scanner/Scanner';
 
 const Tab = createBottomTabNavigator();
 
@@ -32,6 +33,10 @@ export default function BottomTabs() {
           } else if (route?.name == 'Appointments') {
             ICON = <Icon type={IconTypes?.AntDesign} name={'profile'} size={23} color={color} />
           }
+          else if (route?.name == 'Scanner') {
+            ICON = <Icon type={IconTypes?.MaterialIcons} name={'document-scanner'} size={23} color={color} />
+          }
+
           return ICON;
         },
         tabBarShowLabel: false,
@@ -44,8 +49,9 @@ export default function BottomTabs() {
 
       })}
     >
-      <Tab.Screen name="Home" component={HospitalHome} options={{ headerShown: false }} />
+      <Tab.Screen name="Home" component={Home} options={{ headerShown: false }} />
       <Tab.Screen name="FavDoctors" component={FavDoctors} options={{ headerShown: false }} />
+      <Tab.Screen name="Scanner" component={Scanner} options={{ headerShown: false }} />
       <Tab.Screen name="Healthbot" component={Healthbot} options={{ headerShown: false }} />
       <Tab.Screen name="Appointments" component={Appointments} options={{ headerShown: false }} />
 
