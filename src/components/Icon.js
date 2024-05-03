@@ -12,6 +12,8 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Octicons from 'react-native-vector-icons/Octicons';
 import Foundation from 'react-native-vector-icons/Foundation';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import Fontisto from 'react-native-vector-icons/Fontisto';
+
 import { Colors } from '../utilities/Colors';
 
 export const IconTypes = {
@@ -28,6 +30,7 @@ export const IconTypes = {
     Octicons,
     Foundation,
     EvilIcons,
+    Fontisto
 }
 
 const Icon = ({ type, name, color=Colors.BLACK, size = 23, style }) => {
