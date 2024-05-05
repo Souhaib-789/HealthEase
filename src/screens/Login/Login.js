@@ -31,11 +31,14 @@ const Login = () => {
         // else if (!password) {
         //   dispatch(showAlert({ message: 'Please enter password' }))
         // }
-        // else {
-        Storage.set('@user', JSON.stringify({ email: email }));
+         if (!userRole) {
+              dispatch(showAlert({ message: 'Please select user role' }))
+            }
+        else {
+        Storage.set('@user', JSON.stringify({ email: email ,  userRole: userRole?.name }));
         dispatch(userData({ email: email, userRole: userRole?.name }));
         dispatch(login(true));
-        // }
+        }
     };
 
     return (

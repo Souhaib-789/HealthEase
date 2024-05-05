@@ -18,8 +18,8 @@ const Reviews = () => {
             fees: '2500',
             rating: 5,
             hearted: false,
-            category: 'Medicine Specialist',
-            hospital_name: 'City Hospital',
+            category: 'Doc is very cooperative and i trust him.',
+            hospital_name: 'Jhon Pablo',
             experience: 5,
         },
         {
@@ -28,8 +28,8 @@ const Reviews = () => {
             fees: '2200',
             rating: 3,
             hearted: true,
-            category: 'Dentist ',
-            hospital_name: 'City Hospital',
+            category: 'Doc is very cooperative and i trust him.',
+            hospital_name: 'henry ford',
             experience: 3,
         },
         {

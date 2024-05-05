@@ -12,6 +12,8 @@ import Support from '../../screens/InfoPages/Support';
 const Drawer = createDrawerNavigator();
 
 const DrawerBar = () => {
+
+    
     return (
         <Drawer.Navigator
             screenOptions={{ headerShown: false }}

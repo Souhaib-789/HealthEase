@@ -1,7 +1,6 @@
 import { TouchableOpacity, Text, View, StyleSheet, Modal as RNModal, Image, } from 'react-native';
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { useNavigation } from '@react-navigation/native';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { useState } from 'react';
 import { Colors } from "../../utilities/Colors";
 import profile from '../../assets/images/profile.png'
@@ -11,11 +10,13 @@ import { FlatList } from 'react-native-gesture-handler';
 import { Fonts } from '../../utilities/Fonts';
 import Icon, { IconTypes } from '../../components/Icon';
 import { Storage } from '../../utilities/AsyncStorage';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Logout } from '../../redux/actions/AuthAction';
 import Button from '../../components/Button';
 
 function CustomDrawerContent(props) {
+
+    const USER = useSelector(state => state.AuthReducer?.user?.userRole);
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const [modalVisible, setModalVisible] = useState(false);
@@ -27,14 +28,6 @@ function CustomDrawerContent(props) {
             goto: 'Profile',
             icon: <Icon type={IconTypes.Feather} name={'user'} size={18} />
         },
-
-        // {
-        //     id: 3,
-        //     screenName: 'Diagnostics Tests',
-        //     goto: 'DiagnosticsTests',
-        //     icon: <Icon type={IconTypes.Entypo} name={'lab-flask'} size={18} />
-
-        // },
         {
             id: 4,
             screenName: 'Invite a Friend',
@@ -54,6 +47,24 @@ function CustomDrawerContent(props) {
             icon: <Icon type={IconTypes.Feather} name={'help-circle'} size={18} />
         },
     ]
+
+    const otherScreens = [
+        
+        {
+            id: 4,
+            screenName: 'Invite a Friend',
+            goto: 'InviteFriend',
+            icon: <Icon type={IconTypes.Octicons} name={'person-add'} size={18} />
+        },
+        {
+            id: 5,
+            screenName: 'About Us',
+            goto: 'About',
+            icon: <Icon type={IconTypes.AntDesign} name={'infocirlceo'} size={18} />
+        }
+    ]
+
+
 
     const openModal = () => {
         setModalVisible(true)
@@ -101,7 +112,9 @@ function CustomDrawerContent(props) {
             <DrawerContentScrollView  {...props} showsVerticalScrollIndicator={false}>
 
                 <FlatList
-                    data={screens}
+                    data={
+                        USER == 'patient' ?
+                        screens : otherScreens}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={renderOptionItem}
                 />

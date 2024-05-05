@@ -9,8 +9,10 @@ import { Fonts } from "../../utilities/Fonts";
 import Avatar from '../../assets/images/avatar.png'
 import PersonalInfo from "./PersonalInfo";
 import MedicalRecords from "./Medical Info/MedicalInfo";
+import { useSelector } from "react-redux";
 
 const Profile = () => {
+    const USER = useSelector(state => state.AuthReducer?.user?.userRole);
 
     const [activeComponent, setActiveComponent] = React.useState({ name: 'Personal Info' })
 
@@ -26,23 +28,30 @@ const Profile = () => {
 
     return (
         <View style={styles.Container}>
-            <Header title={'Profile'} back bell style={{ backgroundColor: Colors.PRIMARY }}
-                titleStyle={{ color: Colors.WHITE }} iconColor={Colors.WHITE} />
+            <Header title={'Profile'} back bell={USER != 'doctor'} style={{ backgroundColor: Colors.PRIMARY }}
+                titleStyle={{ color: Colors.WHITE }} iconColor={Colors.WHITE} logout={USER == 'doctor'} />
 
-                <View style={styles.flex}>
-                    <Image source={perfil ? perfil : Avatar} style={styles.profile_image} resizeMode={'cover'} />
-                    <TextComponent text={'Andrew Ainsley'} style={styles.text} />
-                </View>
+            <View style={styles.flex}>
+                <Image source={perfil ? perfil : Avatar} style={styles.profile_image} resizeMode={'cover'} />
+                <TextComponent text={'Andrew Ainsley'} style={styles.text} />
+            </View>
 
-                <View style={styles.tab_container}>
-                    {[{ id: 1, name: 'Personal Info' }, { id: 2, name: 'Medical Info' }].map(renderTopTab)}
-                </View>
-                {
-                    activeComponent.name == 'Personal Info' ?
+            {
+                USER == 'doctor' ?
+                    null :
+                    (
+                        <View style={styles.tab_container}>
+                            {[{ id: 1, name: 'Personal Info' }, { id: 2, name: 'Medical Info' }].map(renderTopTab)}
+                        </View>
+                    )
+            }
+
+            {
+                activeComponent.name == 'Personal Info' ?
                     <PersonalInfo />
                     :
                     <MedicalRecords />
-                }
+            }
         </View>
     )
 }
@@ -59,7 +68,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         width: '60%'
     },
-   
+
     profile_image: {
         width: 80,
         borderRadius: 100,

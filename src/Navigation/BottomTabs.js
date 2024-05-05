@@ -13,20 +13,23 @@ import HospitalDoctors from '../screens/Doctors/HospitalDoctors';
 import HospitalHome from '../screens/Home/HospitalHome';
 import HospitalProfile from '../screens/Profile/HospitalProfile';
 import Scanner from '../screens/Scanner/Scanner';
+import Reviews from '../screens/Reviews/Reviews';
+import Profile from '../screens/Profile/Profile';
 
 const Tab = createBottomTabNavigator();
 
 export default function BottomTabs() {
 
-  const USER = useSelector(state => state.AuthReducer?.user);
+  const USER = useSelector(state => state.AuthReducer?.user?.userRole);
+
   return (
 
     <Tab.Navigator
       labeled={false}
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color}) => {
+        tabBarIcon: ({ focused, color }) => {
           if (route?.name == 'Home') {
-            ICON = <Icon type={IconTypes?.AntDesign} name={'home'} size={23} color={color} /> 
+            ICON = <Icon type={IconTypes?.AntDesign} name={'home'} size={23} color={color} />
           } else if (route?.name == 'FavDoctors') {
             ICON = <Icon type={IconTypes?.Ionicons} name={'heart-outline'} size={23} color={color} />
           } else if (route?.name == 'Healthbot') {
@@ -38,6 +41,16 @@ export default function BottomTabs() {
           else if (route?.name == 'Scanner') {
             ICON = <Icon type={IconTypes?.MaterialIcons} name={'document-scanner'} size={23} color={color} />
           }
+          else if (route?.name == 'Reviews') {
+            ICON = <Icon type={IconTypes?.MaterialCommunityIcons} name={'card-account-details-star-outline'} size={23} color={color} />
+          }
+          else if (route?.name == 'Profile') {
+            ICON = <Icon type={IconTypes?.Feather} name={'user'} size={23} color={color} />
+          }
+          else if (route?.name == 'HospitalDoctors') {
+            ICON = <Icon type={IconTypes?.Ionicons} name={'list'} size={23} color={color} />
+          }
+
 
           return ICON;
         },
@@ -46,27 +59,38 @@ export default function BottomTabs() {
         tabBarInactiveTintColor: 'black',
         tabBarActiveBackgroundColor: Colors.PRIMARY,
         tabBarInactiveTintColor: Colors.DDGREY,
-        tabBarItemStyle: { borderRadius: 100, marginHorizontal: 20, marginVertical: 4 },
+        tabBarItemStyle: { borderRadius: 100, marginHorizontal: USER == 'patient' ? 10 : 35, marginVertical: 4 },
         tabBarStyle: { paddingTop: 2, backgroundColor: 'white', height: 58, borderTopWidth: 0, borderTopEndRadius: 20, borderTopLeftRadius: 20 },
 
       })}
     >
-      <Tab.Screen name="Home" component={Home} options={{ headerShown: false }} />
-      <Tab.Screen name="FavDoctors" component={FavDoctors} options={{ headerShown: false }} />
-      <Tab.Screen name="Scanner" component={Scanner} options={{ headerShown: false }} />
-      <Tab.Screen name="Healthbot" component={Healthbot} options={{ headerShown: false }} />
-      <Tab.Screen name="Appointments" component={Appointments} options={{ headerShown: false }} />
+      <Tab.Screen name="Home" component={USER == 'patient' ? Home : USER == 'doctor' ? DoctorHome : HospitalHome} options={{ headerShown: false }} />
+      {
+        USER == 'patient' &&
+        <>
+          <Tab.Screen name="FavDoctors" component={FavDoctors} options={{ headerShown: false }} />
+          <Tab.Screen name="Scanner" component={Scanner} options={{ headerShown: false }} />
+          <Tab.Screen name="Healthbot" component={Healthbot} options={{ headerShown: false }} />
+          <Tab.Screen name="Appointments" component={Appointments} options={{ headerShown: false }} />
+        </>
+      }
 
-      {/* if doctor ? 
-      DoctorHome
-      Reviews
-      Profile */}
+      {
+        USER == 'doctor' &&
+        <>
+          <Tab.Screen name="Reviews" component={Reviews} options={{ headerShown: false }} />
+          <Tab.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
+        </>
+      }
 
-      {/* if hospital
-      HospitalHome
-      HospitalProfile
-      HospitalDoctors */}
-      
+      {
+        USER == 'hospital' &&
+        <>
+          <Tab.Screen name="HospitalDoctors" component={HospitalDoctors} options={{ headerShown: false }} />
+          <Tab.Screen name="Profile" component={HospitalProfile} options={{ headerShown: false }} />
+        </>
+      }
+
     </Tab.Navigator>
 
   );
