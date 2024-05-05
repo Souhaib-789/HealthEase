@@ -9,7 +9,9 @@ import Appointments from '../screens/Appointment';
 import Image from '../components/Image';
 import DoctorHome from '../screens/Home/DoctorHome';
 import { useSelector } from 'react-redux';
+import HospitalDoctors from '../screens/Doctors/HospitalDoctors';
 import HospitalHome from '../screens/Home/HospitalHome';
+import HospitalProfile from '../screens/Profile/HospitalProfile';
 
 const Tab = createBottomTabNavigator();
 
@@ -44,7 +46,7 @@ export default function BottomTabs() {
 
       })}
     >
-      <Tab.Screen name="Home" component={HospitalHome} options={{ headerShown: false }} />
+      <Tab.Screen name="Home" component={HospitalDoctors} options={{ headerShown: false }} />
       <Tab.Screen name="FavDoctors" component={FavDoctors} options={{ headerShown: false }} />
       <Tab.Screen name="Healthbot" component={Healthbot} options={{ headerShown: false }} />
       <Tab.Screen name="Appointments" component={Appointments} options={{ headerShown: false }} />
@@ -57,7 +59,7 @@ export default function BottomTabs() {
       {/* if hospital
       HospitalHome
       HospitalProfile
-      Appointments */}
+      HospitalDoctors */}
       
     </Tab.Navigator>
 

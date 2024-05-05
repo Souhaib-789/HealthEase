@@ -11,12 +11,11 @@ import Icon, { IconTypes } from "../../components/Icon";
 import Image from "../../components/Image";
 import { Fonts } from "../../utilities/Fonts";
 import ListEmptyComponent from "../../components/ListEmptyComponent";
+import HOSPITAL from '../../assets/images/hospital.jpg'
 import NO_DOC from '../../assets/images/noDoc.png'
-import CustomCategoryIcon from "../../components/CustomCategoryIcon";
 
 const HospitalHome = () => {
     const navigation = useNavigation();
-    const [currCategory, setcurrCategory] = useState({ id: 1 });
 
 
     const Featured = [
@@ -55,97 +54,77 @@ const HospitalHome = () => {
         }
     ]
 
-    const Categories = [
-        {
-            id: 1,
-            name: 'All',
-        },
-        {
-            id: 2,
-            name: 'Dentist'
-        },
-        {
-            id: 3,
-            name: 'Cardiologist'
-        },
-        {
-            id: 4,
-            name: 'Physio Therapist'
-        },
-        {
-            id: 5,
-            name: 'Neurologist'
-        },
-        {
-            id: 6,
-            name: 'Dermatologist'
-        },
-        {
-            id: 7,
-            name: 'Gastroenterologist'
-        },
-    ]
-
-    const renderCategoryItem = ({ item }) => {
-        return (
-            <TouchableOpacity style={[styles.category_box, { backgroundColor: item?.id == currCategory?.id ? Colors.BLACK : Colors?.WHITE }]}
-                onPress={() => setcurrCategory(item)}>
-                <CustomCategoryIcon category={item?.name.toLowerCase()} size={15} color={item?.id == currCategory?.id ? Colors?.WHITE : Colors.PRIMARY} />
-                <TextComponent style={[styles.category_text, { color: item?.id == currCategory?.id ? Colors?.WHITE : Colors.PRIMARY }]} text={item?.name} />
-            </TouchableOpacity>
-        )
-    }
-
     const renderItem = ({ item }) => {
         return (
             <TouchableOpacity style={styles.Appointment_card} onPress={() => navigation.navigate('PatientDetails')} >
-                <View style={styles.appointment_card_subview1}>
-                    <View style={styles.appointment_card_subview2}>
                         <Image source={docF} style={styles.Appointment_image} />
                         <View>
                             <TextComponent style={[styles.appointment_card_text, { fontFamily: Fonts?.SEMIBOLD }]} text={'Mr. Fernendes'} />
-                            <TextComponent style={styles.appointment_card_span} text={item?.category} />
+                            <TextComponent style={styles.appointment_card_span} text={'Cardiologist'} />
                         </View>
-                    </View>
                     <Icon type={IconTypes.MaterialIcons} name={'keyboard-arrow-right'} size={25} color={Colors.PRIMARY} />
-                </View>
             </TouchableOpacity>
         )
     }
+
+    const info = [
+        {
+            id: 1,
+            name: 'Doctors',
+            info: '50',
+            icon: 'stethoscope'
+
+        },
+        {
+            id: 2,
+            name: 'Appointments',
+            info: '200',
+            icon: 'clipboard'
+        },
+        {
+            id: 4,
+            name: 'Departments',
+            info: '10',
+            icon: 'building-o'
+        }
+    ]
 
     return (
         <View style={styles.mainContainer}>
             <ScrollView showsVerticalScrollIndicator={false} >
-                <View style={styles.sub_container}>
-                    <View style={styles.home_header}>
-                        <Icon type={IconTypes.FontAwesome5} name={'hospital-alt'} size={18} color={Colors.WHITE} />
-                        <TextComponent style={styles.heading} text={'The City Hospital'} />
-                    </View>
-
-                    <View style={styles.wide_row}>
-                        <TextComponent style={styles.sub_container_heading} text={"Manage your doctors seamlessly"} />
-
-                        <TouchableOpacity style={{ backgroundColor: Colors.WHITE, padding: 10, borderRadius: 40, elevation: 5 }}>
-                            <Icon type={IconTypes.Ionicons} name={'add'} size={20} color={Colors.PRIMARY} />
-                        </TouchableOpacity>
-                    </View>
-
-
-                    <FlatList
-                        key={"CategoriesList"}
-                        showsHorizontalScrollIndicator={false}
-                        data={Categories}
-                        horizontal
-                        renderItem={renderCategoryItem}
-                        keyExtractor={item => item?.id}
-                        style={{ width: '100%', marginTop: 10, alignSelf: 'center' }}
-                    />
+                <View style={styles.home_header}>
+                    <Icon name='hospital-o' type={IconTypes.FontAwesome} size={20} color={Colors.BLACK} />
+                    <TextComponent style={styles.sub_heading} text={'The City Hospital'} />
                 </View>
 
+                <Image source={HOSPITAL} resizeMode={'cover'} style={{width: '100%', marginTop: 20 , alignSelf: 'center', height: 130 , borderRadius: 10}} />
+
+
+                <View style={styles.wrap_row}>
+                    {
+                        info.map((item, index) => {
+                            return (
+                                <View style={[styles.card , { backgroundColor: index == 1 ? Colors.PRIMARY : Colors.WHITE}]} key={index}>
+                                    <View style={styles.wide_row}>
+                                        <View style={styles.card_icon}>
+                                            <Icon name={item.icon} type={IconTypes.FontAwesome} size={18} color={index == 1 ? Colors.WHITE : Colors.PRIMARY} />
+                                        </View>
+                                        <TextComponent style={[styles.card_headingx , { color: index == 1 ? Colors.WHITE : Colors.PRIMARY}]} text={item.info} />
+                                    </View>
+                                    <TextComponent style={[styles.card_heading , { color: index == 1 ? Colors.WHITE : Colors.BLACK}]} text={item.name} />
+                                </View>
+                            )
+                        }
+                        )
+                    }
+                </View>
+
+                <TextComponent style={styles.heading} text={'Your Top Doctors'} />
                 <FlatList
                     key={'Featured Doctors'}
                     showsHorizontalScrollIndicator={false}
                     data={Featured}
+                    horizontal
                     decelerationRate={'fast'}
                     renderItem={renderItem}
                     ListEmptyComponent={<ListEmptyComponent image={NO_DOC} text={'no doctors found'} />}
@@ -162,12 +141,7 @@ const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         backgroundColor: Colors?.WHITE,
-    },
-    mV: {
-        marginVertical: 10
-    },
-    scrollView: {
-        marginBottom: 10
+        padding: 20
     },
     wide_row: {
         flexDirection: "row",
@@ -175,193 +149,68 @@ const styles = StyleSheet.create({
         alignItems: "center",
         width: '100%',
     },
-    search_input: {
-        marginTop: 10,
-        elevation: 2,
-        borderRadius: 25,
-        backgroundColor: Colors.WHITE,
-        width: '100%',
-        alignSelf: 'center',
-        borderWidth: 0,
+    row: {
+        flexDirection: "row",
+        gap: 10
     },
-    sub_container: {
-        width: '100%',
-        gap: 10,
-        paddingTop: 10,
-        padding: 15,
-        alignSelf: "center",
-        backgroundColor: Colors.PRIMARY,
-        marginBottom: 20,
-    },
-    sub_container_heading: {
-        fontSize: 20,
-        color: Colors.WHITE,
-        width: '70%',
-        lineHeight: 28,
-        marginVertical: 8
-    },
-    heading: {
-        fontSize: 14,
-        color: Colors.WHITE,
+    wrap_row: {flexDirection: "row" , flexWrap: 'wrap' , marginVertical: 15 , justifyContent: 'space-between' , alignItems: 'center' },
+    card: { gap: 5, width: '45%', backgroundColor: Colors.WHITE, elevation: 5, borderRadius: 10, padding: 13, marginVertical: 10, marginHorizontal: 5 },
+    card_icon: { width: 30, backgroundColor: Colors.LIGHT, height: 30, borderRadius: 100, alignItems: 'center', justifyContent: 'center' },
+    card_heading: {
+        fontSize: 13,
         fontFamily: Fonts?.SEMIBOLD
     },
-    headingx: {
-        fontSize: 15,
+    card_headingx: {
+        fontSize: 20,
         fontFamily: Fonts?.SEMIBOLD,
-        color: Colors.BLACK
+        color: Colors.PRIMARY
+    },
+    heading: {
+        fontSize: 15,
+        color: Colors.BLACK,
+        fontFamily: Fonts?.SEMIBOLD
     },
     appointment_card_text: {
         fontSize: 14,
         color: Colors.BLACK,
-        marginTop: 2,
+        marginVertical: 2,
     },
     appointment_card_span: {
-        fontSize: 11,
-        color: Colors.DGREY,
-    },
-    text: {
-        fontSize: 16,
-        color: Colors.BLACK,
-        marginVertical: 2,
-        fontWeight: "bold"
-    },
-    textx: {
         fontSize: 12,
-    },
-    sub_heading: {
-        fontSize: 11,
-        color: Colors.LGREY,
+        color: Colors.BLACK,
         fontFamily: Fonts?.REGULAR
     },
-    upper_view: {
-        width: '100%',
-        borderBottomLeftRadius: 40,
-        borderBottomRightRadius: 40,
-        backgroundColor: Colors.PRIMARY,
-        paddingBottom: 40,
-        padding: 15
-    },
-    profile_image: {
-        borderRadius: 50,
-        width: 45,
-        height: 45,
+    sub_heading: {
+        fontSize: 14,
+        color: Colors.BLACK,
+        fontFamily: Fonts?.SEMIBOLD
     },
     home_header: {
         alignItems: "center",
         flexDirection: "row",
-        gap: 10
-    },
-    category_box: {
-        width: 50,
-        height: 50,
-        marginHorizontal: 5,
-        backgroundColor: Colors.BG_BLUE,
-        alignItems: "center",
-        justifyContent: "center",
-        borderRadius: 15
-    },
-    category_image: {
-        width: 25,
-        height: 25,
-        resizeMode: "contain"
-    },
-    flex: {
-        marginVertical: 15,
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between"
+        gap: 10,
+        alignSelf: "center"
     },
     Appointment_card: {
         borderRadius: 15,
         backgroundColor: Colors.WHITE,
-        elevation: 5,
+        elevation: 3,
         shadowColor: Colors.BLACK,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
-        width: '90%',
         alignSelf: "center",
-        paddingHorizontal: 15,
+        paddingHorizontal: 10,
         paddingVertical: 13,
         alignItems: "center",
-        marginVertical: 10
-    },
-    appointment_card_subview2: {
-        gap: 10,
         flexDirection: "row",
-        alignItems: "center",
-    },
-    appointment_card_subview3:
-    {
-        marginTop: 10,
-
-        paddingVertical: 10,
-        width: '100%',
-        backgroundColor: Colors.LIGHT,
-        borderRadius: 10,
-        flexDirection: "row",
-        justifyContent: "space-evenly"
-    },
-    appointment_card_subview4:
-    {
-        flexDirection: "row",
-        alignItems: "center",
-        gap: 6
-    },
-    appointment_card_subview1: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        width: '100%'
+        gap: 15,
+        marginVertical: 10,
+        marginHorizontal: 8
     },
     Appointment_image: {
         width: 50,
         height: 50,
         borderRadius: 100,
-    },
-    featured_card: {
-        borderRadius: 10,
-        width: 120,
-        paddingTop: 10,
-        paddingBottom: 15,
-        backgroundColor: Colors.WHITE,
-        elevation: 2,
-        marginHorizontal: 10,
-        marginVertical: 4,
-        alignItems: "center"
-    },
-    featured_image: {
-        width: 60,
-        height: 60,
-        borderRadius: 50,
-        marginVertical: 5
-    },
-    flexA: {
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-    },
-    bell_icon: {
-        backgroundColor: Colors?.WHITE,
-        elevation: 5,
-        borderRadius: 50,
-        padding: 5,
-        margin: 2
-    },
-    category_text: {
-        color: Colors.PRIMARY,
-        fontSize: 12
-    },
-
-    category_box: {
-        paddingVertical: 8,
-        paddingHorizontal: 15,
-        marginHorizontal: 10,
-        marginVertical: 8,
-        alignItems: "center",
-        justifyContent: "center",
-        flexDirection: "row",
-        borderRadius: 8,
-        gap: 6
     },
 })

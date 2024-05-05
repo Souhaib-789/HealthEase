@@ -16,6 +16,9 @@ import AppointmentDetails from '../screens/Appointment/AppointmentDetails';
 import Reviews from '../screens/Reviews/Reviews';
 import Profile from '../screens/Profile/Profile';
 import PatientDetails from '../screens/Patient/PatientDetails';
+import HospitalEditProfile from '../screens/Profile/HospitalEditProfile';
+import HospitalProfile from '../screens/Profile/HospitalProfile';
+import HospitalDoctorDetails from '../screens/Doctors/HospitalDoctorDetails';
 
 
 const Stack = createNativeStackNavigator();
@@ -33,15 +36,15 @@ const AppStack = () =>{
         <Stack.Screen name="Notifications" component={Notifications} options={{ headerShown: false }} />
 
         <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
-        <Stack.Screen name="EReports" component={EReports} options={{ headerShown: false }} />
-        <Stack.Screen name="BookTest" component={BookTest} options={{ headerShown: false }} />
-        <Stack.Screen name="MyTestsDetails" component={MyTestsDetails} options={{ headerShown: false }} />
         <Stack.Screen name="EditProfile" component={EditProfile} options={{ headerShown: false }} />
         <Stack.Screen name="Records" component={Records} options={{ headerShown: false }} />
 
         <Stack.Screen name="AppointmentDetails" component={AppointmentDetails} options={{ headerShown: false }} />
         <Stack.Screen name="Reviews" component={Reviews} options={{ headerShown: false }} />
         <Stack.Screen name="PatientDetails" component={PatientDetails} options={{ headerShown: false }} />
+        <Stack.Screen name="HospitalEditProfile" component={HospitalEditProfile} options={{ headerShown: false }} />
+        <Stack.Screen name="HospitalProfile" component={HospitalProfile} options={{ headerShown: false }} />
+        <Stack.Screen name="HospitalDoctorDetails" component={HospitalDoctorDetails} options={{ headerShown: false }} />
 
       </Stack.Navigator>
   );
