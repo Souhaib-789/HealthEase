@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.23.1",
+    "@react-native-clipboard/clipboard": "^1.14.1",
     "@react-native-ml-kit/text-recognition": "^1.5.1",
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/drawer": "^6.6.2",
@@ -40,6 +41,7 @@
     "react-native-slideable-calendar-strip": "^0.4.0",
     "react-native-splash-screen": "^3.3.0",
     "react-native-tab-view": "^3.5.2",
+    "react-native-tts": "^4.1.0",
     "react-native-vector-icons": "^10.0.2",
     "react-redux": "^9.1.0",
     "redux": "^5.0.1"
