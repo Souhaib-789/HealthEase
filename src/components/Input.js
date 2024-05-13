@@ -84,6 +84,5 @@ const styles = StyleSheet.create({
         color: '#000',
         fontSize: 12,
         fontFamily: Fonts?.REGULAR,
-        textAlignVertical: 'top',
     },
 });

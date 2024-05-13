@@ -13,6 +13,7 @@ import { Fonts } from "../../utilities/Fonts";
 import ListEmptyComponent from "../../components/ListEmptyComponent";
 import NO_DOC from '../../assets/images/noDoc.png'
 import CustomCategoryIcon from "../../components/CustomCategoryIcon";
+import { useSelector } from "react-redux";
 
 const HospitalDoctors = () => {
     const navigation = useNavigation();
@@ -98,7 +99,7 @@ const HospitalDoctors = () => {
 
     const renderItem = ({ item }) => {
         return (
-            <TouchableOpacity style={styles.Appointment_card} onPress={() => navigation.navigate('HospitalDoctorDetails')} >
+            <TouchableOpacity style={styles.Appointment_card} onPress={() => navigation.navigate('DoctorDetails', { item: item })} >
                 <View style={styles.appointment_card_subview1}>
                     <View style={styles.appointment_card_subview2}>
                         <Image source={docF} style={styles.Appointment_image} />
@@ -141,7 +142,7 @@ const HospitalDoctors = () => {
 
              
 
-            <TouchableOpacity style={{position: "absolute" , bottom: 15 , right: 20 , backgroundColor: Colors.PRIMARY, padding: 10, borderRadius: 40, elevation: 5 }}>
+            <TouchableOpacity onPress={()=> navigation.navigate('CreateDoctor')} style={{position: "absolute" , bottom: 15 , right: 20 , backgroundColor: Colors.PRIMARY, padding: 10, borderRadius: 40, elevation: 5 }}>
                     <Icon type={IconTypes.Ionicons} name={'add'} size={20} color={Colors.WHITE} />
                 </TouchableOpacity>
         </View>

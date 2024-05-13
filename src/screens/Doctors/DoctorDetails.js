@@ -10,10 +10,15 @@ import Icon, { IconTypes } from "../../components/Icon";
 import Button from "../../components/Button";
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import FormModal from "../../components/FormModal";
+import { useDispatch, useSelector } from "react-redux";
+import { showAlert } from "../../redux/actions/GeneralAction";
 
 const DoctorDetails = (props) => {
 
     const navigation = useNavigation();
+    const dispatch = useDispatch();
+    const USER = useSelector(state => state.AuthReducer.user)
+
     const routeData = props?.route?.params?.item;
     const [confirmedSlot, setconfirmedSlot] = useState();
     const [selectedDate, setSelectedDate] = useState();
@@ -130,16 +135,31 @@ const DoctorDetails = (props) => {
         console.log(date.toString().substr(0, 15));
     }
 
+    const onScheduleAppoitment = () => {
+        if (!selectedDate) return dispatch(showAlert({ message: 'Please select a day' }));
+        else if (!confirmedSlot) return dispatch(showAlert({ message: 'Please select any timeslot for ' + moment(selectedDate).format('dddd') }));
+        navigation.navigate('Appointment', { item: routeData, timeSlot: confirmedSlot, date: selectedDate })
+    }
+
     return (
         <View style={styles.mainContainer}>
             <ScrollView>
-                <Header title={'Details'} back style={{ margin: 10 }} titleStyle={{color: Colors?.WHITE}} iconColor={Colors.WHITE} />
+                <Header title={'Details'} back style={{ margin: 10 }} titleStyle={{ color: Colors?.WHITE }} iconColor={Colors.WHITE} />
                 <Image source={routeData?.image} style={styles.card_image} />
 
                 <View style={styles.details_card}>
-                    <TouchableOpacity style={styles.heart}>
-                        <Icon type={IconTypes.Ionicons} name={'heart-sharp'} color={Colors?.GREY} size={22} />
-                    </TouchableOpacity>
+                    {
+                        USER?.userRole == 'hospital' ?
+                            <TouchableOpacity style={styles.heart} onPress={()=> navigation.navigate('CreateDoctor' , {screenType: 'edit'})}>
+                                <Icon type={IconTypes.AntDesign} name={'edit'} color={Colors?.DGREY} size={22} />
+                            </TouchableOpacity>
+                            :
+                            <TouchableOpacity style={styles.heart}>
+                                <Icon type={IconTypes.Ionicons} name={'heart-sharp'} color={Colors?.GREY} size={22} />
+                            </TouchableOpacity>
+
+                    }
+
 
                     <View style={{ alignItems: 'center' }}>
                         <TextComponent style={styles.text} text={routeData?.name} />
@@ -181,15 +201,25 @@ const DoctorDetails = (props) => {
                     </View>
 
 
-                    <TextComponent style={styles.heading} text={'Available Slots'} />
-                    <View style={styles.slots_view}>
-                        {Slots?.map(renderSlotCard)}
-                    </View>
+                    <TextComponent style={styles.heading} text={'Available Slots' + (selectedDate ? ` for ${moment(selectedDate).format('dddd')}` : ' ')} />
+                    {
+                        selectedDate ?
+                            <View style={styles.slots_view}>
+                                {Slots?.map(renderSlotCard)}
+                            </View>
+                            :
+                            <TextComponent style={styles.textx} text={'Select day first'} />
+                    }
 
-                    <Button title={'Schedule appointment'}
-                        disabled={confirmedSlot ? false : true}
-                        style={{ marginVertical: 15 }}
-                        onPress={() => navigation.navigate('Appointment', { item: routeData, timeSlot: confirmedSlot, date: selectedDate })} />
+                    {
+                        USER?.userRole == 'hospital' ?
+                            null
+                            :
+                            <Button title={'Schedule appointment'}
+                                style={{ marginVertical: 15 }}
+                                onPress={onScheduleAppoitment} />
+                    }
+
 
                 </View>
                 <FormModal

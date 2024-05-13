@@ -6,9 +6,11 @@ import Button from '../../components/Button'
 import { useNavigation } from '@react-navigation/native'
 import TextComponent from '../../components/TextComponent'
 import { Fonts } from '../../utilities/Fonts'
+import { useSelector } from 'react-redux'
 
 const PersonalInfo = () => {
     const navigation = useNavigation()
+    const USER = useSelector(state => state.AuthReducer?.user?.userRole);
 
     const personalInfo = [
         {
@@ -90,14 +92,19 @@ const PersonalInfo = () => {
             <ScrollView showsVerticalScrollIndicator={false}>
 
                 <FlatList
-                    data={doctorInfo}
+                    data={USER == 'doctor' ? doctorInfo : personalInfo}
                     renderItem={renderItem}
                     keyExtractor={(item, index) => index.toString()}
                     showsVerticalScrollIndicator={false}
                 />
 
             </ScrollView>
-            <Button title={'Edit Profile'} onPress={() => navigation.navigate('EditProfile')} style={{ marginBottom: 20 }} />
+
+            {
+                USER == 'doctor' ?
+                    null :
+                    <Button title={'Edit Profile'} onPress={() => navigation.navigate('EditProfile')} style={{ marginBottom: 20 }} />
+            }
         </View>
     )
 }

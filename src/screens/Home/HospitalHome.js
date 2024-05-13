@@ -56,7 +56,7 @@ const HospitalHome = () => {
 
     const renderItem = ({ item }) => {
         return (
-            <TouchableOpacity style={styles.Appointment_card} onPress={() => navigation.navigate('PatientDetails')} >
+            <TouchableOpacity style={styles.Appointment_card} onPress={() => navigation.navigate('DoctorDetails', { item: item })} >
                         <Image source={docF} style={styles.Appointment_image} />
                         <View>
                             <TextComponent style={[styles.appointment_card_text, { fontFamily: Fonts?.SEMIBOLD }]} text={'Mr. Fernendes'} />
