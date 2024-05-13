@@ -13,7 +13,7 @@ const FormModal = props => {
             <View style={styles.modal_parent}>
                 <View style={styles.ModalContainer}>
                     <TouchableOpacity onPress={props?.onClose} style={styles.icon}>
-                        <Icon name="close" type={IconTypes.AntDesign} color={Colors.DGREY} size={15} />
+                        <Icon name="close" type={IconTypes.AntDesign} color={Colors.BLACK} size={15} />
                     </TouchableOpacity>
                     {props?.children}
                 </View>
