@@ -11,6 +11,7 @@ const TextComponent = (props) => {
   return (
     <Text
       numberOfLines={props?.numberOfLines}
+      onTextLayout={props?.onTextLayout}
       style={[styles.text,props?.style]}>{props?.text}</Text>
   )
 };

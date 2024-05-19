@@ -25,8 +25,8 @@ const Healthbot = () => {
 
                 />
 
-                <TextComponent style={styles.headingy} text={"Do you want any health advice ?"} />
-                <Button onPress={() => navigation.navigate('HealthbotChat')} title={"Ask"} style={styles.button} />
+                <TextComponent style={styles.headingy} text={"Do you want any healthy food advice ?"} />
+                <Button onPress={() => navigation.navigate('HealthbotChat')} title={"Ask me"} style={styles.button} />
             </ScrollView>
 
         </View>

@@ -96,13 +96,15 @@ const Scanner = () => {
 
             <FormModal
                 visible={result}
-                onClose={() => { setResult(false), setImage(null), setText(null) }}
+                onClose={() => { setResult(false), setImage(null), setText(null) , Tts.stop()}}
             >
-                <View style={{ padding: 10 }}>
+                <View style={{ padding: 10 , maxHeight: 500 }}>
+                <ScrollView>
                     <View style={styles.image_container}>
                         <Image source={{ uri: image?.uri }} style={styles.image} resizeMode='cover' />
                     </View>
                     <TextComponent text={text} style={styles.output_text} />
+                    </ScrollView>
                     <View style={styles.row}>
                         <Button onPress={onCopyToClipboard} title={"Copy"} style={styles.button} />
                         <TouchableOpacity onPress={onShareMedicine} style={styles.share_button}>

@@ -1,15 +1,18 @@
 import React from "react";
 import AppNavigation from "./src/Navigation";
-import Store from "./src/redux/store";
+import { Store, persist } from "./src/redux/store";
 import { Provider } from "react-redux";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { PersistGate } from 'redux-persist/integration/react'
 
 function App() {
   return (
     <Provider store={Store}>
-      <SafeAreaProvider>
-        <AppNavigation />
+      <PersistGate loading={null} persistor={persist}>
+        <SafeAreaProvider>
+          <AppNavigation />
         </SafeAreaProvider>
+      </PersistGate>
     </Provider>
 
   );

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, StyleSheet, FlatList, } from "react-native";
+import React, { useCallback, useState } from "react";
+import { View, StyleSheet, FlatList, TouchableOpacity, } from "react-native";
 import { Colors } from "../../utilities/Colors";
 import TextComponent from "../../components/TextComponent";
 import { Fonts } from "../../utilities/Fonts";
@@ -12,52 +12,23 @@ import moment from "moment";
 import Input from "../../components/Input";
 import Icon, { IconTypes } from "../../components/Icon";
 import ChatLoader from "../../components/ChatLoader";
+import { useDispatch, useSelector } from "react-redux";
+import { showAlert } from "../../redux/actions/GeneralAction";
+import { askHealthbot } from "../../apis/Gemini";
+import { saveChat } from "../../redux/actions/HealthbotActions";
+import ListEmptyComponent from "../../components/ListEmptyComponent";
 
 const HealthbotChat = () => {
     const user = { id: 1 }
+    const dispatch = useDispatch()
     const [message, setMessage] = useState(null)
     const [loader, setLoader] = useState(false)
     const [refreshing, setRefreshing] = useState(false)
+    const XList = useSelector(state => state.HealthbotReducer?.chatList)
+    console.log('XList', JSON.stringify(XList, null, 8))
 
-    const [ChatList, setChatList] = useState([
-        {
-            id: 1,
-            message: 'Oh , Thats great Thank you ',
-            type: 'text',
-            createdAt: new Date(),
-            user: {
-                id: 1,
-            },
-        },
-        {
-            id: 2,
-            message: 'Yeah sure , You should drink corn soup , and avoid eating ice-cream and drinking juices',
-            createdAt: new Date(),
-            type: 'text',
-            user: {
-                id: 2,
-            },
-        },
-        {
-            id: 3,
-            message: "I'm feeling very cold , can you suggest anything that can releif me?",
-            type: 'text',
-            createdAt: new Date(),
-            user: {
-                id: 1,
-            },
-        },
-        {
-            id: 4,
-            message: 'Hii ! Andrew how are you feeling today ?',
-            type: 'text',
-            createdAt: new Date(),
-            user: {
-                id: 2,
-            },
-        },
-
-    ])
+    const [isTextShown, setisTextShown] = useState(false);
+    const [lengthMore, setLengthMore] = useState(false);
 
     const renderChatItem = ({ item }) => {
         if (item?.user?.id != user?.id) {
@@ -66,7 +37,22 @@ const HealthbotChat = () => {
                     <Image source={BotIcon} style={styles.bot_image} />
                     <View>
                         <View style={styles.healthbot_chat_item}>
-                            <TextComponent text={item?.message} style={styles.message} />
+                            {
+                                item?.message?.length > 50 ?
+                                    <>
+                                        <TextComponent
+                                            onTextLayout={onTextLayout}
+                                            numberOfLines={isTextShown ? undefined : 8}
+                                            text={item?.message} style={styles.message} />
+                                        {lengthMore && (
+                                            <TouchableOpacity onPress={toggleNumberOfLines}>
+                                                <TextComponent text={isTextShown ? 'Read Less' : 'Read More'} style={[styles.message, { color: Colors.PRIMARY, fontSize: 12 }]} />
+                                            </TouchableOpacity>
+                                        )}
+                                    </>
+                                    :
+                                    <TextComponent text={item?.message} style={styles.message} />
+                            }
                         </View>
                         <TextComponent text={moment(item?.createdAt).fromNow()} style={styles.chat_time} />
                     </View>
@@ -87,39 +73,75 @@ const HealthbotChat = () => {
         }
     };
 
-    const onSendMessage = () => {
-        let copy_arr = []
-        copy_arr.push({
-            message: message,
-            type: 'text',
-            createdAt: new Date(),
-            user: {
-                id: 1,
-            },
-        })
-        setChatList([ ...copy_arr , ...ChatList])
-        setMessage(null)
-        setRefreshing(!refreshing)
+    const onSendMessage = async () => {
+        if (!message) {
+            dispatch(showAlert({ message: 'Please enter a message' }))
+        } else {
+            setMessage(null)
+            setLoader(true)
+            let copy_arr = [...XList]
+            copy_arr.unshift({
+                message: message,
+                type: 'text',
+                createdAt: new Date(),
+                user: {
+                    id: 1,
+                },
+            })
+            dispatch(saveChat([...copy_arr]))
+
+            await askHealthbot(message)
+                .then(response => {
+                    copy_arr.unshift({
+                        message: response,
+                        type: 'text',
+                        createdAt: new Date(),
+                        user: {
+                            id: 2,
+                        },
+                    })
+                    dispatch(saveChat([...copy_arr]))
+                    setLoader(false)
+                })
+                .catch(error => {
+                    console.error(error)
+                    setLoader(false)
+                }
+
+                )
+            setRefreshing(!refreshing)
+        }
     }
+
+    const toggleNumberOfLines = () => {
+        setisTextShown(!isTextShown);
+    };
+
+    const onTextLayout = useCallback(e => {
+        setLengthMore(e.nativeEvent.lines.length >= 4);
+    }, []);
 
     return (
         <View style={styles.Container}>
             <Header title={"Healthbot"} back />
             <FlatList
-                style={{ flex: 1 , width: '95%' , alignSelf: 'center' }}
+                style={{ flex: 1, width: '95%', alignSelf: 'center' }}
                 showsVerticalScrollIndicator={false}
-                data={ChatList}
+                data={XList}
                 keyExtractor={(item, index) => index?.toString()}
                 renderItem={renderChatItem}
-                inverted={ChatList.length > 0 ? true : false}
+                inverted={XList.length > 0 ? true : false}
+                ListEmptyComponent={
+                    <ListEmptyComponent text={'No Chats Found'} />
+                }
             />
 
             {
                 loader &&
 
-                <View style={{ flexDirection: "row", alignItems: 'center' }}>
+                <View style={{ flexDirection: "row", alignItems: 'center', marginLeft: 10 }}>
                     <Image source={BotIcon} style={styles.bot_image} />
-                    <View style={{ height: 70 }}>
+                    <View style={{ height: 80 }}>
                         <ChatLoader />
                     </View>
                 </View>
@@ -131,8 +153,9 @@ const HealthbotChat = () => {
                 value={message}
                 extraData={refreshing}
                 onChangeText={(e) => setMessage(e)}
-                onPressRightIcon={onSendMessage}
+                onPressRightIcon={loader ? null : onSendMessage}
                 mainStyle={styles.input}
+                editable={!loader}
                 rightIcon={<Icon name={'send'} type={IconTypes.Ionicons} size={20} color={Colors.PRIMARY} />}
             />
 
@@ -155,7 +178,8 @@ const styles = StyleSheet.create({
     },
     message: {
         fontSize: 13,
-        fontFamily: Fonts?.REGULAR
+        fontFamily: Fonts?.REGULAR,
+        lineHeight: 22,
     },
     person_main_chat_item: {
         paddingVertical: 8,
@@ -177,7 +201,7 @@ const styles = StyleSheet.create({
     healthbot_main_chat_item: {
         paddingVertical: 8,
         flexDirection: 'row',
-        width: '70%',
+        width: '75%',
         marginVertical: 5,
     },
 
@@ -197,11 +221,12 @@ const styles = StyleSheet.create({
 
     },
     input: {
-        marginVertical: 10,
+        marginVertical: 15,
         paddingVertical: 3,
         borderWidth: 0,
         backgroundColor: Colors.WHITE,
         elevation: 5,
+        width: '90%',
 
     }
 })
