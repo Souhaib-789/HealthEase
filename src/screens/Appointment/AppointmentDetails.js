@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet,  ScrollView, Image } from "react-native";
+import { View, StyleSheet, ScrollView, Image } from "react-native";
 import Header from "../../components/Header";
 import moment, { duration } from "moment";
 import { Colors } from "../../utilities/Colors";
@@ -8,11 +8,16 @@ import { Fonts } from "../../utilities/Fonts";
 import Icon, { IconTypes } from "../../components/Icon";
 import Button from "../../components/Button";
 import FormModal from "../../components/FormModal";
+import { AirbnbRating, Rating } from "react-native-ratings";
+import STAR from '../../assets/images/star.png';
+import Input from "../../components/Input";
+import { useNavigation } from "@react-navigation/native";
 
 const AppointmentDetails = (props) => {
 
     const routeData = props?.route?.params?.item;
     const screenType = props?.route?.params?.screenType;
+
 
     const details = [
         {
@@ -45,6 +50,13 @@ const AppointmentDetails = (props) => {
             </View>
         )
     }
+
+    const navigation = useNavigation();
+    const [showReviewModal, setShowReviewModal] = useState(false);
+    const [review, setReview] = useState('');
+    const [rating, setRating] = useState(0);
+
+
 
     return (
         <View style={styles.mainContainer}>
@@ -119,10 +131,58 @@ const AppointmentDetails = (props) => {
 
                             <Button icon={<Icon name='map-location' type={IconTypes.FontAwesome6} size={20} color={Colors?.PRIMARY} />} title={`Get Directions to ${routeData.hospital_name ? routeData.hospital_name : 'hopital'}`} light style={styles.button} />
                             :
-                            <Button icon={<Icon name='star' type={IconTypes.AntDesign} size={20} color={Colors?.PRIMARY} />} title={'Add Review'} light style={styles.button} />
+                            <Button onPress={() => setShowReviewModal(true)} icon={<Icon name='star' type={IconTypes.AntDesign} size={20} color={Colors?.PRIMARY} />} title={'Add Review'} light style={styles.button} />
                     }
                 </View>
             </ScrollView>
+
+            {/* -------------------- ADD REVIEW MODAL -------------------- */}
+
+            <FormModal
+                visible={showReviewModal}
+                title={'Add Review'}
+                onClose={() => setShowReviewModal(false)}
+                onSubmit={() => setShowReviewModal(false)}
+                submitTitle={'Submit'}
+            >
+                <View style={{ padding: 15 }}>
+                    <TextComponent text={'Rate your experience'} style={styles.heading} />
+
+                    <AirbnbRating
+                        count={5}
+                        defaultRating={rating}
+                        size={28}
+                        showRating={false}
+                        starImage={STAR}
+                        selectedColor={Colors?.YELLOW}
+                        onFinishRating={(e) => setRating(e)}
+                        ratingContainerStyle={{ alignSelf: 'center', marginBottom: 10, }}
+                    />
+
+                    <Input
+                        style={{ textAlignVertical: 'top' }}
+                        placeholder={'Write your review'}
+                        multiline
+                        numberOfLines={5}
+                        value={review}
+                        onChangeText={(text) => setReview(text)}
+                    />
+
+                </View>
+                <Button title={'Submit'} onPress={() => {
+                    if (!rating) {
+                        alert('Please give rating')
+                    }
+                    else if (!review) {
+                        alert('Please write review statement')
+                    }
+                    else {
+                        setShowReviewModal(false), navigation.goBack()
+                    }
+                }
+                }
+                />
+            </FormModal>
         </View>
     )
 }

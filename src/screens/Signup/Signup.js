@@ -8,12 +8,16 @@ import TextComponent from "../../components/TextComponent";
 import Image from "../../components/Image";
 import Button from "../../components/Button";
 import { Fonts } from "../../utilities/Fonts";
+import Dropdown from "../../components/Dropdown";
 
 const Signup = () => {
 
     const navigation = useNavigation();
     const [name, setname] = useState()
     const [email, setemail] = useState()
+    const [contact, setcontact] = useState()
+    const [address, setaddress] = useState()
+    const [userRole, setuserRole] = useState()
     const [password, setpassword] = useState()
     const [confirmPassword, setconfirmPassword] = useState()
 
@@ -26,7 +30,7 @@ const Signup = () => {
         <View style={styles.Container}>
             <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollview}>
 
-                <Image source={logo} style={styles.logo} tintColor={Colors.PRIMARY} />
+                {/* <Image source={logo} style={styles.logo} tintColor={Colors.PRIMARY} /> */}
                 <TextComponent style={styles.heading} text={'Create your account'} />
 
 
@@ -40,6 +44,27 @@ const Signup = () => {
                     placeholder={'Enter email address'}
                     value={email}
                     onChangeText={(e) => setemail(e)}
+                    mainStyle={styles.mainInput} />
+
+                <Dropdown
+                    placeholder={'Select User Role'}
+                    state={userRole}
+                    array={[{ id: 1, name: 'patient' }, { id: 2, name: 'hospital' }]}
+                    setState={(e) => setuserRole(e)}
+                    style={{ marginBottom: 8 }}
+                />
+
+                <Input
+                    placeholder={'Enter contact no.'}
+                    value={contact}
+                    onChangeText={(e) => setcontact(e)}
+                    keyboardType={'number-pad'}
+                    mainStyle={styles.mainInput} />
+
+                <Input
+                    placeholder={'Enter address'}
+                    value={address}
+                    onChangeText={(e) => setaddress(e)}
                     mainStyle={styles.mainInput} />
 
                 <Input
@@ -77,7 +102,8 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: Colors.BLACK,
         fontFamily: Fonts.SEMIBOLD,
-        marginVertical: 10,
+        marginTop: 20,
+        marginBottom: 15,
     },
     link_textx: {
         fontSize: 11,
@@ -107,5 +133,5 @@ const styles = StyleSheet.create({
         marginTop: 40,
         marginVertical: 10
     },
-    
+
 })

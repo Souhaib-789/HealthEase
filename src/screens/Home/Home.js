@@ -89,12 +89,12 @@ const Home = () => {
 
                     <View style={styles.flex}>
                         <TextComponent style={styles.headingx} text={'Upcoming Appointments'} />
-                        <TouchableOpacity onPress={() => navigation.navigate('Doctors')}>
+                        <TouchableOpacity onPress={() => navigation.navigate('Appointments')}>
                             <TextComponent text={'See all '} />
                         </TouchableOpacity>
                     </View>
 
-                    <TouchableOpacity onPress={() => navigation.navigate('DoctorDetails')}>
+                    <TouchableOpacity onPress={() => navigation.navigate('AppointmentDetails', { item: Featured[0] , screenType: 'upcoming' })}>
                         <View style={styles.Appointment_card} >
                             <View style={styles.appointment_card_subview1}>
                                 <View style={styles.appointment_card_subview2}>

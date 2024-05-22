@@ -43,11 +43,13 @@ const navigation = useNavigation()
                             name: e
                         })
                     }
+                    placeholder={'Enter your name'}
                     parentStyle={styles.input} />
 
                 <Input
                     label={'Contact No.'}
                     keyboardType={'number-pad'}
+                    placeholder={'Enter your contact number'}
                     value={
                         formData.contact
                     }
@@ -61,6 +63,7 @@ const navigation = useNavigation()
 
                 <Input
                     label={'Address'}
+                    placeholder={'Enter your address'}
                     value={
                         formData.address
                     }
@@ -75,6 +78,7 @@ const navigation = useNavigation()
 
                 <Input
                     label={'Weight'}
+                    placeholder={'Enter your weight'}
                     value={
                         formData.weight
                     }
@@ -89,6 +93,7 @@ const navigation = useNavigation()
 
                 <Input
                     label={'Height'}
+                    placeholder={'Enter your height'}
                     value={
                         formData.height
                     }
@@ -103,6 +108,7 @@ const navigation = useNavigation()
 
 <Input
                     label={'Blood Group'}
+                    placeholder={'Enter your blood group'}
                     value={
                         formData.bloodGroup
                     }

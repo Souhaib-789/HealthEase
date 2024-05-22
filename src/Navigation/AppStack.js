@@ -27,7 +27,6 @@ const Stack = createNativeStackNavigator();
 const AppStack = () =>{
   return (
       <Stack.Navigator>
-       <Stack.Screen name="IntroSlider" component={IntroSlider} options={{ headerShown: false }} />
         <Stack.Screen name="DrawerBar" component={DrawerBar} options={{ headerShown: false }} />
         <Stack.Screen name="Doctors" component={Doctors} options={{ headerShown: false }} />
         <Stack.Screen name="DoctorDetails" component={DoctorDetails} options={{ headerShown: false }} />

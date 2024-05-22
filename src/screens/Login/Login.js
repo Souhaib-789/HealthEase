@@ -70,7 +70,7 @@ const Login = () => {
                 />
 
                 <Button title={'Login'} onPress={onPressLogin} style={styles.button} />
-                <TextComponent style={styles.link_text} text={'Forgot Passsword?'} />
+                {/* <TextComponent style={styles.link_text} text={'Forgot Passsword?'} /> */}
 
                 <View style={styles.flex_ultra}>
                     <TouchableOpacity style={styles.social_button} >

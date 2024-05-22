@@ -90,22 +90,27 @@ const DoctorHome = () => {
         <View style={styles.mainContainer}>
             <ScrollView showsVerticalScrollIndicator={false} >
                 <View style={styles.sub_container}>
-                    <View style={styles.home_header}>
-                        <TouchableOpacity onPress={() => navigation.navigate('Profile')} >
-                            <Image source={PROFILE} style={{ width: 35, height: 35 }} />
-                        </TouchableOpacity>
+                    <View style={styles.wide_row}>
+                        <View style={styles.home_header}>
+                    <TouchableOpacity onPress={() => navigation.openDrawer()}>
+                        <Icon type={IconTypes.Feather} name='menu' size={23} color={Colors.WHITE} />
+                    </TouchableOpacity>
                         <View>
                             <TextComponent style={styles.sub_heading} text={'Hey Doctor !'} />
                             <TextComponent style={styles.heading} text={'Sam Will'} />
                         </View>
+                        </View>
+                        <TouchableOpacity onPress={() => navigation.navigate('Profile')} >
+                            <Image source={PROFILE} style={{ width: 35, height: 35 }} />
+                        </TouchableOpacity>
                     </View>
 
                     <View style={styles.wide_row}>
                         <TextComponent style={styles.sub_container_heading} text={"Lets explore patient's Appointments!"} />
 
-                        <TouchableOpacity style={{ backgroundColor: Colors.WHITE, padding: 10, borderRadius: 40, elevation: 5 }}>
+                        {/* <TouchableOpacity style={{ backgroundColor: Colors.WHITE, padding: 10, borderRadius: 40, elevation: 5 }}>
                             <Icon type={IconTypes.Ionicons} name={'filter-outline'} size={20} color={Colors.PRIMARY} />
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
 
                     <View style={{ alignSelf: 'center' }}>
@@ -192,7 +197,7 @@ const styles = StyleSheet.create({
     home_header: {
         alignItems: "center",
         flexDirection: "row",
-        gap: 10
+        gap: 15
     },
     Appointment_card: {
         borderRadius: 15,

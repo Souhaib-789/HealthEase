@@ -3,8 +3,8 @@ import AppIntroSlider from 'react-native-app-intro-slider';
 import { useNavigation } from '@react-navigation/native';
 import CircleOne from '../../assets/images/circleone.png'
 import One from '../../assets/images/splash1.jpg'
-import Two from '../../assets/images/splash7.png'
-import Three from '../../assets/images/splash5.png'
+import Two from '../../assets/images/healthbot.png'
+import Three from '../../assets/images/capturing.jpg'
 import { View,StyleSheet, TouchableOpacity } from 'react-native';
 import { Colors } from "../../utilities/Colors";
 import Image from '../../components/Image';
@@ -24,14 +24,14 @@ const IntroSlider = () => {
         },
         {
             key: 2,
-            heading: 'Pharmacy on Fingertips',
-            text: 'Get your medications delivered right to your doorstep with just a few taps on our app.',
+            heading: 'HealthBot: AI Diet Assistant',
+            text: "Get meal suggestions customized to your health needs with our HealthBot." ,
             image: Two,
         },
         {
             key: 3,
-            heading: 'Contented Test Bookings ',
-            text: 'Take control of your health and schedule diagnostic tests online with our app',
+            heading: 'Instant Med Recognition',
+            text: 'Scan and share medication details in seconds with scanner feature.',
             image: Three,
         },
     ];
@@ -49,7 +49,7 @@ const IntroSlider = () => {
 
                     <TouchableOpacity style={styles.button} onPress={() => {
                         if (item?.key == 3) {
-                            navigation.navigate('DrawerBar')
+                            navigation.navigate('Login')
                         } else {
                             SliderRef.goToSlide(index + 1);
                         }
@@ -57,7 +57,7 @@ const IntroSlider = () => {
                         <TextComponent style={styles.button_text} text={'Next'} />
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={{ marginTop: 15 }} onPress={() => navigation.navigate('DrawerBar')}>
+                    <TouchableOpacity style={{ marginTop: 15 }} onPress={() => navigation.navigate('Login')}>
                         <TextComponent style={{ color: Colors.DDGREY }} text={'Skip'} />
                     </TouchableOpacity>
                 </View>
@@ -71,6 +71,7 @@ const IntroSlider = () => {
             data={slides}
             renderItem={renderItem}
             bottomButton={false}
+            activeDotStyle={{ backgroundColor: Colors.PRIMARY }}
             showNextButton={false}
             showSkipButton={false}
             showDoneButton={false}

@@ -24,7 +24,7 @@ const Support = () => {
         <View style={styles.container}>
             <Header title="Support" back />
 
-            <Image source={CALL} style={{ width: 160, height: 160 , alignSelf: 'center'}} />
+            <Image source={CALL} style={{ width: 200, height: 200 , alignSelf: 'center'}} />
 
             <TextComponent text={"Need any help ? You can contact to any hospital (regsitered on our app) for any inquiries or details."} style={styles.sub_heading} />
 

@@ -101,11 +101,11 @@ const styles = StyleSheet.create({
     },
     reviewText: {
         color: Colors.DGREY,
-        lineHeight: 20
+        lineHeight: 20,
+        fontSize: 12,
     },
     reviewAuthor: {
-        marginTop: 10,
-        fontSize: 13,
+        fontSize: 12,
         fontFamily: Fonts.ITALIC,
     },
 })

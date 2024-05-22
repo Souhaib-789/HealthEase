@@ -14,7 +14,7 @@ const persistConfig = {
 const AppReducers = combineReducers({
   GeneralReducer,
   AuthReducer,
-  HealthbotReducer: persistReducer(persistConfig, ProductReducer),
+  HealthbotReducer: persistReducer(persistConfig, HealthbotReducer),
 });
 
 const Reducer = (state, action) => {

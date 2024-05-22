@@ -16,10 +16,13 @@ import ListEmptyComponent from "../../../components/ListEmptyComponent";
 import Header from "../../../components/Header";
 import { Fonts } from "../../../utilities/Fonts";
 import Button from "../../../components/Button";
+import { useDispatch } from "react-redux";
+import { showAlert } from "../../../redux/actions/GeneralAction";
 
 
 const Records = () => {
     const navigation = useNavigation()
+    const dispatch = useDispatch()
     const [currDate, setcurrDate] = useState(new Date())
     const [dateModalopen, setdateModalOpen] = useState(false)
     const [openModal, setopenModal] = useState(false)
@@ -237,7 +240,7 @@ const styles = StyleSheet.create({
     button_text: {
         color: Colors.PRIMARY,
         fontSize: 13,
-        width: '80%'
+        
     },
     doc_card: {
         backgroundColor: Colors.WHITE,

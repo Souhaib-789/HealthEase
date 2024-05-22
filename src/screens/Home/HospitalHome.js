@@ -93,7 +93,10 @@ const HospitalHome = () => {
         <View style={styles.mainContainer}>
             <ScrollView showsVerticalScrollIndicator={false} >
                 <View style={styles.home_header}>
-                    <Icon name='hospital-o' type={IconTypes.FontAwesome} size={20} color={Colors.BLACK} />
+                <TouchableOpacity onPress={() => navigation.openDrawer()}>
+                        <Icon type={IconTypes.Feather} name='menu' size={23} color={Colors.BLACK} />
+                    </TouchableOpacity>
+                    {/* <Icon name='hospital-o' type={IconTypes.FontAwesome} size={20} color={Colors.BLACK} /> */}
                     <TextComponent style={styles.sub_heading} text={'The City Hospital'} />
                 </View>
 
@@ -188,8 +191,8 @@ const styles = StyleSheet.create({
     home_header: {
         alignItems: "center",
         flexDirection: "row",
-        gap: 10,
-        alignSelf: "center"
+        justifyContent: 'space-between',
+        // alignSelf: "center"
     },
     Appointment_card: {
         borderRadius: 15,

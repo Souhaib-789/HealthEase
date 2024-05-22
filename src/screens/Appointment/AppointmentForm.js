@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, ScrollView, Image, TouchableOpacity, Platform } from "react-native";
+import { View, StyleSheet, ScrollView, Platform } from "react-native";
 import Header from "../../components/Header";
 import { Colors } from "../../utilities/Colors";
 import Input from "../../components/Input";
@@ -12,39 +12,29 @@ import Icon, { IconTypes } from "../../components/Icon";
 import { Fonts } from "../../utilities/Fonts";
 import DoctorCard from "../../components/DoctorCard";
 import moment from "moment";
+import { useDispatch } from "react-redux";
+import { showAlert } from "../../redux/actions/GeneralAction";
 
 const AppointmentForm = (props) => {
 
     const routeData = props?.route?.params;
     const navigation = useNavigation();
+    const dispatch = useDispatch();
     const [patient, setpatient] = useState()
     const [contactNo, setcontactNo] = useState()
     const [detail, setdetail] = useState()
-    const [image, setimage] = useState()
     const [openModal, setopenModal] = useState(false)
 
-    const UploadImage = () => {
-        try {
-            ImagePicker.openPicker({
-                width: 300,
-                height: 400,
-                cropping: true,
-            }).then(image => {
-                let splitPath = image?.path?.split("/")
-                let filename = splitPath[splitPath?.length - 1]
-                setimage({
-                    uri: Platform.OS == 'ios' ? image?.path.replace("file://", "/") : image?.path,
-                    name: filename,
-                    size: image?.size,
-                    type: image?.mime,
-                });
-            }).catch(e => {
-                console.log('===>', e);
-            });
-        } catch (e) {
-            console.log('===>', e)
+    const onBookAppointment = () => {
+        if (!patient) {
+            dispatch(showAlert({ message: 'Please enter patient name' }))
         }
-    }
+        else if (!detail) {
+            dispatch(showAlert({ message: 'Please enter relationship with patient' }))
+        }
+        else {
+            setopenModal(true)
+        }}
 
     return (
         <View style={styles.Container}>
@@ -69,6 +59,7 @@ const AppointmentForm = (props) => {
                     label={'Patient Name'}
                     value={patient}
                     onChangeText={(e) => setpatient(e)}
+                    placeholder={'Enter Patient Name'}
                     mainStyle={styles.mainInput} parentStyle={styles.input_parent_style} />
 
                 <Input
@@ -76,6 +67,7 @@ const AppointmentForm = (props) => {
                     value={contactNo}
                     onChangeText={(e) => setcontactNo(e)}
                     keyboardType={'phone-pad'}
+                    placeholder={'Enter Contact Number'}
                     mainStyle={styles.mainInput} parentStyle={styles.input_parent_style} />
 
                 <Input
@@ -85,17 +77,8 @@ const AppointmentForm = (props) => {
                     onChangeText={(e) => setdetail(e)}
                     mainStyle={styles.mainInput} parentStyle={styles.input_parent_style} />
 
-                {/* {
-                    image ?
-                        <Image source={{ uri: image?.uri }} style={styles.uploaded_image} />
-                        :
-                        <TouchableOpacity style={styles.upload_image} onPress={UploadImage}>
-                            <Icon type={IconTypes.Feather} name={'plus'} size={30} color={Colors.PRIMARY} />
-                            <TextComponent style={{ color: Colors.PRIMARY, fontSize: 12 }} text={'Add Image'} />
-                        </TouchableOpacity>
-                } */}
 
-                <Button title={'Book Appointment'} onPress={() => setopenModal(true)} style={styles.button} />
+                <Button title={'Book Appointment'} onPress={onBookAppointment} style={styles.button} />
 
 
             </ScrollView>
@@ -140,33 +123,6 @@ const styles = StyleSheet.create({
         paddingVertical: 0,
         width: '90%',
         borderRadius: 10,
-    },
-    upload_image: {
-        backgroundColor: Colors?.LIGHT,
-        height: 120,
-        width: 120,
-        gap: 3,
-        borderRadius: 15,
-        justifyContent: "center",
-        alignItems: "center",
-        marginLeft: 5,
-        marginTop: 20,
-        marginLeft: 20
-    },
-    image_upload_view: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        marginVertical: 20
-    },
-    uploaded_image: {
-        width: 120,
-        height: 120,
-        borderRadius: 15,
-        resizeMode: 'cover',
-        marginLeft: 5,
-        marginTop: 20,
-        marginLeft: 20
-
     },
     button: {
         marginVertical: 20
