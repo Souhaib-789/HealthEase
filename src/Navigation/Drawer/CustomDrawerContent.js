@@ -16,7 +16,7 @@ import Button from '../../components/Button';
 
 function CustomDrawerContent(props) {
 
-    const USER = useSelector(state => state.AuthReducer?.user?.userRole);
+    const USER = useSelector(state => state.AuthReducer?.user);
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const [modalVisible, setModalVisible] = useState(false);
@@ -107,13 +107,13 @@ function CustomDrawerContent(props) {
 
             <View style={styles.profile_view}>
                 <Image source={profile} style={styles.image} />
-                <TextComponent style={styles.heading} text={'Andrew Ainsley'} />
+                <TextComponent style={styles.heading} text={USER?.user_name} />
             </View>
             <DrawerContentScrollView  {...props} showsVerticalScrollIndicator={false}>
 
                 <FlatList
                     data={
-                        USER == 'patient' ?
+                        USER?.user_role == 'patient' ?
                         screens : otherScreens}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={renderOptionItem}

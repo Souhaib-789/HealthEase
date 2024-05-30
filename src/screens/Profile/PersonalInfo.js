@@ -10,23 +10,23 @@ import { useSelector } from 'react-redux'
 
 const PersonalInfo = () => {
     const navigation = useNavigation()
-    const USER = useSelector(state => state.AuthReducer?.user?.userRole);
+    const USER = useSelector(state => state.AuthReducer?.user);
 
     const personalInfo = [
         {
             id: 2,
-            info: 'marvie@gmail.com',
+            info: USER?.email,
             icon: <Icon name={'envelope'} type={IconTypes.FontAwesome} size={15} color={Colors.PRIMARY} />
         },
         {
             id: 3,
             icon: <Icon name={'call-sharp'} type={IconTypes.Ionicons} size={15} color={Colors.PRIMARY} />,
-            info: '0300 000 000'
+            info: USER?.phone_number
         },
         {
             id: 4,
             icon: <Icon name={'location-pin'} type={IconTypes.Entypo} size={15} color={Colors.PRIMARY} />,
-            info: 'Los angeles , California'
+            info: USER?.address
         },
         {
             id: 5,
@@ -92,7 +92,7 @@ const PersonalInfo = () => {
             <ScrollView showsVerticalScrollIndicator={false}>
 
                 <FlatList
-                    data={USER == 'doctor' ? doctorInfo : personalInfo}
+                    data={USER?.user_role == 'doctor' ? doctorInfo : personalInfo}
                     renderItem={renderItem}
                     keyExtractor={(item, index) => index.toString()}
                     showsVerticalScrollIndicator={false}
@@ -101,7 +101,7 @@ const PersonalInfo = () => {
             </ScrollView>
 
             {
-                USER == 'doctor' ?
+                USER?.user_role == 'doctor' ?
                     null :
                     <Button title={'Edit Profile'} onPress={() => navigation.navigate('EditProfile')} style={{ marginBottom: 20 }} />
             }

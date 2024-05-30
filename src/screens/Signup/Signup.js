@@ -9,10 +9,15 @@ import Image from "../../components/Image";
 import Button from "../../components/Button";
 import { Fonts } from "../../utilities/Fonts";
 import Dropdown from "../../components/Dropdown";
+import { useDispatch } from "react-redux";
+import { AuthMiddleware } from "../../redux/middlewares/AuthMiddleware";
+import { showAlert } from "../../redux/actions/GeneralAction";
+import { validateEmail } from "../../utilities/Validators";
 
 const Signup = () => {
 
     const navigation = useNavigation();
+    const dispatch = useDispatch()
     const [name, setname] = useState()
     const [email, setemail] = useState()
     const [contact, setcontact] = useState()
@@ -23,14 +28,58 @@ const Signup = () => {
 
 
     const onPressSignup = () => {
-        navigation.navigate('Signup')
+        if (!name) {
+            dispatch(showAlert({ message: 'Please enter name' }))
+        }
+        else if (!email) {
+            dispatch(showAlert({ message: 'Please enter email' }))
+        }
+        else if(!validateEmail(email)){
+            dispatch(showAlert({ message: 'Please enter valid email' }))
+        }
+        else if (!userRole) {
+            dispatch(showAlert({ message: 'Please select user role' }))
+        }
+        else if (!contact) {
+            dispatch(showAlert({ message: 'Please enter contact' }))
+        }
+        else if (!address) {
+            dispatch(showAlert({ message: 'Please enter address' }))
+        }
+        else if (!password) {
+            dispatch(showAlert({ message: 'Please enter password' }))
+        }
+        else if (!confirmPassword) {
+            dispatch(showAlert({ message: 'Please enter confirm password' }))
+        }
+        else if (password !== confirmPassword) {
+            dispatch(showAlert({ message: 'Password does not match' }))
+        }
+        else {
+            let data = {
+                name: name,
+                email: email,
+                contact: contact,
+                address: address,
+                user_role: userRole?.name,
+                password: password,
+                confirm_password: confirmPassword
+            }
+            dispatch(AuthMiddleware.signUp(data))
+                .then(() => {
+                    navigation.navigate('Login')
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        }
     }
 
     return (
         <View style={styles.Container}>
             <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollview}>
 
-                {/* <Image source={logo} style={styles.logo} tintColor={Colors.PRIMARY} /> */}
+                <Image source={logo} style={styles.logo} tintColor={Colors.PRIMARY} />
                 <TextComponent style={styles.heading} text={'Create your account'} />
 
 

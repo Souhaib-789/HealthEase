@@ -12,7 +12,7 @@ import MedicalRecords from "./Medical Info/MedicalInfo";
 import { useSelector } from "react-redux";
 
 const Profile = () => {
-    const USER = useSelector(state => state.AuthReducer?.user?.userRole);
+    const USER = useSelector(state => state.AuthReducer?.user);
 
     const [activeComponent, setActiveComponent] = React.useState({ name: 'Personal Info' })
 
@@ -28,16 +28,16 @@ const Profile = () => {
 
     return (
         <View style={styles.Container}>
-            <Header title={'Profile'} back bell={USER != 'doctor'} style={{ backgroundColor: Colors.PRIMARY }}
-                titleStyle={{ color: Colors.WHITE }} iconColor={Colors.WHITE} logout={USER == 'doctor'} />
+            <Header title={'Profile'} back bell={USER?.user_role != 'doctor'} style={{ backgroundColor: Colors.PRIMARY }}
+                titleStyle={{ color: Colors.WHITE }} iconColor={Colors.WHITE} logout={USER?.user_role == 'doctor'} />
 
             <View style={styles.flex}>
                 <Image source={perfil ? perfil : Avatar} style={styles.profile_image} resizeMode={'cover'} />
-                <TextComponent text={'Andrew Ainsley'} style={styles.text} />
+                <TextComponent text={USER?.user_name} style={styles.text} />
             </View>
 
             {
-                USER == 'doctor' ?
+                USER?.user_role == 'doctor' ?
                     null :
                     (
                         <View style={styles.tab_container}>

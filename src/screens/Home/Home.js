@@ -17,6 +17,7 @@ import ListEmptyComponent from "../../components/ListEmptyComponent";
 import DoctorCard from "../../components/DoctorCard";
 import bellIcon from '../../assets/images/bell.png'
 import NO_DOC from '../../assets/images/noDoc.png'
+import { useSelector } from "react-redux";
 
 const Home = () => {
     const navigation = useNavigation();
@@ -56,6 +57,8 @@ const Home = () => {
             experience: 5,
         }
     ]
+    const USER = useSelector(state => state.AuthReducer.user)
+
 
     return (
         <View style={styles.mainContainer}>
@@ -73,7 +76,7 @@ const Home = () => {
 
                 <View style={styles.mV}>
                     <TextComponent style={styles.sub_heading} text={'Good Morning !'} />
-                    <TextComponent style={styles.heading} text={'Andrew Ainsley'} />
+                    <TextComponent style={styles.heading} text={USER?.user_name ? USER?.user_name : 'Mr. Patient'} />
                 </View>
 
                 <View style={styles.sub_container}>

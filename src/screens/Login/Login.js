@@ -15,6 +15,8 @@ import { Storage } from "../../utilities/AsyncStorage";
 import { login, userData } from "../../redux/actions/AuthAction";
 import { useDispatch } from "react-redux";
 import Dropdown from "../../components/Dropdown";
+import { validateEmail } from "../../utilities/Validators";
+import { AuthMiddleware } from "../../redux/middlewares/AuthMiddleware";
 
 const Login = () => {
 
@@ -25,19 +27,21 @@ const Login = () => {
     const [userRole, setuserRole] = useState()
 
     const onPressLogin = () => {
-        // if (!email) {
-        //   dispatch(showAlert({ message: 'Please enter email' }))
+        if (!email) {
+            dispatch(showAlert({ message: 'Please enter email' }))
+        }
+        if (!validateEmail(email)) {
+            dispatch(showAlert({ message: 'Please enter valid email' }))
+        }
+        else if (!password) {
+            dispatch(showAlert({ message: 'Please enter password' }))
+        }
+        // if (!userRole) {
+        //     dispatch(showAlert({ message: 'Please select user role' }))
         // }
-        // else if (!password) {
-        //   dispatch(showAlert({ message: 'Please enter password' }))
-        // }
-         if (!userRole) {
-              dispatch(showAlert({ message: 'Please select user role' }))
-            }
         else {
-        Storage.set('@user', JSON.stringify({ email: email ,  userRole: userRole?.name }));
-        dispatch(userData({ email: email, userRole: userRole?.name }));
-        dispatch(login(true));
+            let data = { email: email, password: password }
+            dispatch(AuthMiddleware.login(data))
         }
     };
 

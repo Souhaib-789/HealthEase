@@ -20,7 +20,7 @@ const Tab = createBottomTabNavigator();
 
 export default function BottomTabs() {
 
-  const USER = useSelector(state => state.AuthReducer?.user?.userRole);
+  const USER = useSelector(state => state.AuthReducer?.user?.user_role);
 
   return (
 

@@ -149,7 +149,7 @@ const DoctorDetails = (props) => {
 
                 <View style={styles.details_card}>
                     {
-                        USER?.userRole == 'hospital' ?
+                        USER?.user_role == 'hospital' ?
                             <TouchableOpacity style={styles.heart} onPress={()=> navigation.navigate('CreateDoctor' , {screenType: 'edit'})}>
                                 <Icon type={IconTypes.AntDesign} name={'edit'} color={Colors?.DGREY} size={22} />
                             </TouchableOpacity>
@@ -212,7 +212,7 @@ const DoctorDetails = (props) => {
                     }
 
                     {
-                        USER?.userRole == 'hospital' ?
+                        USER?.user_role == 'hospital' ?
                             null
                             :
                             <Button title={'Schedule appointment'}

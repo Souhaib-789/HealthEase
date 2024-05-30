@@ -32,7 +32,7 @@ const Input = props => {
                     editable={props?.editable}
                     multiline={props?.multiline}
                     numberOfLines={props?.numberOfLines}
-                    secureTextEntry={props?.isPassword ? props?.isPassword : props?.secureTextEntry}
+                    secureTextEntry={props?.isPassword ? isPassword : props?.secureTextEntry}
                     keyboardType={props?.keyboardType}
                 />
 
