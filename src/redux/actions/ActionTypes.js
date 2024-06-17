@@ -11,6 +11,11 @@ const ActionTypes = {
     // User
     USER_DATA: 'USER_DATA',
     LOGOUT: 'LOGOUT',
-    IS_LOGIN: 'IS_LOGIN'}
+    IS_LOGIN: 'IS_LOGIN',
+  
+    //Doctors
+    GET_ALL_DOCTORS: 'GET_ALL_DOCTORS',
+  
+  }
   
   export default ActionTypes;

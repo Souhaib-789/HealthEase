@@ -13,9 +13,11 @@ import { Fonts } from "../../utilities/Fonts";
 import ListEmptyComponent from "../../components/ListEmptyComponent";
 import HOSPITAL from '../../assets/images/hospital.jpg'
 import NO_DOC from '../../assets/images/noDoc.png'
+import { useSelector } from "react-redux";
 
 const HospitalHome = () => {
     const navigation = useNavigation();
+    const USER = useSelector(state => state.AuthReducer.user)
 
 
     const Featured = [
@@ -97,7 +99,7 @@ const HospitalHome = () => {
                         <Icon type={IconTypes.Feather} name='menu' size={23} color={Colors.BLACK} />
                     </TouchableOpacity>
                     {/* <Icon name='hospital-o' type={IconTypes.FontAwesome} size={20} color={Colors.BLACK} /> */}
-                    <TextComponent style={styles.sub_heading} text={'The City Hospital'} />
+                    <TextComponent style={styles.sub_heading} text={USER?.user_name} />
                 </View>
 
                 <Image source={HOSPITAL} resizeMode={'cover'} style={{width: '100%', marginTop: 20 , alignSelf: 'center', height: 130 , borderRadius: 10}} />

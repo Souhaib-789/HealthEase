@@ -4,6 +4,7 @@ import AuthReducer from './AuthReducer';
 import HealthbotReducer from './HealthbotReducer';
 import { persistReducer } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import DoctorsReducer from './DoctorsReducer';
 
 const persistConfig = {
   key: 'root',
@@ -15,6 +16,7 @@ const AppReducers = combineReducers({
   GeneralReducer,
   AuthReducer,
   HealthbotReducer: persistReducer(persistConfig, HealthbotReducer),
+  DoctorsReducer,
 });
 
 const Reducer = (state, action) => {

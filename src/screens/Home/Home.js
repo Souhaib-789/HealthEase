@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, TouchableOpacity, ScrollView, FlatList } from "react-native";
 import docC from "../../assets/images/doc3.png";
 import docF from "../../assets/images/doc9.jpg";
@@ -17,10 +17,12 @@ import ListEmptyComponent from "../../components/ListEmptyComponent";
 import DoctorCard from "../../components/DoctorCard";
 import bellIcon from '../../assets/images/bell.png'
 import NO_DOC from '../../assets/images/noDoc.png'
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { DoctorsMiddleware } from "../../redux/middlewares/DoctorsMiddleware";
 
 const Home = () => {
     const navigation = useNavigation();
+    const dispatch = useDispatch();
     const [search, setsearch] = useState();
     const Featured = [
         {
@@ -58,7 +60,16 @@ const Home = () => {
         }
     ]
     const USER = useSelector(state => state.AuthReducer.user)
+    const Doctors = useSelector(state => state.DoctorsReducer?.allDoctors)
 
+    // console.log('Doctors', JSON.stringify(Doctors , null ,8));
+    useEffect(() => {
+        fetchDoctorsData()
+    }, [])
+
+    const fetchDoctorsData = () => {
+        dispatch(DoctorsMiddleware.getAllDoctorsData())
+    }
 
     return (
         <View style={styles.mainContainer}>
@@ -70,8 +81,8 @@ const Home = () => {
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={() => navigation.navigate('Notifications')} >
-            <Image source={bellIcon} style={{width: 20 , height: 20}} tintColor={Colors.PRIMARY}  />
-          </TouchableOpacity>
+                        <Image source={bellIcon} style={{ width: 20, height: 20 }} tintColor={Colors.PRIMARY} />
+                    </TouchableOpacity>
                 </View>
 
                 <View style={styles.mV}>
@@ -97,7 +108,7 @@ const Home = () => {
                         </TouchableOpacity>
                     </View>
 
-                    <TouchableOpacity onPress={() => navigation.navigate('AppointmentDetails', { item: Featured[0] , screenType: 'upcoming' })}>
+                    <TouchableOpacity onPress={() => navigation.navigate('AppointmentDetails', { item: Featured[0], screenType: 'upcoming' })}>
                         <View style={styles.Appointment_card} >
                             <View style={styles.appointment_card_subview1}>
                                 <View style={styles.appointment_card_subview2}>
@@ -137,10 +148,10 @@ const Home = () => {
                             </TouchableOpacity>
                         </View>
                     )}
-                    data={Featured}
+                    data={Doctors}
                     decelerationRate={'fast'}
                     renderItem={({ item }) =>
-                    (<DoctorCard item={item}/>)}
+                        (<DoctorCard item={item} />)}
                     ListEmptyComponent={<ListEmptyComponent image={NO_DOC} text={'no doctors found'} />}
                     keyExtractor={(item, index) => index.toString()}
                 />
@@ -321,7 +332,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "space-between",
     },
-    bell_icon:{
+    bell_icon: {
         backgroundColor: Colors?.WHITE,
         elevation: 5,
         borderRadius: 50,

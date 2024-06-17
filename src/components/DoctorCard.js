@@ -7,6 +7,7 @@ import { Colors } from "../utilities/Colors";
 import Icon, { IconTypes } from "./Icon";
 import { Fonts } from "../utilities/Fonts";
 import Button from "./Button";
+import AVATAR from '../assets/images/avatar.png'
 
 const DoctorCard = ({ item, book, heart , style}) => {
     const navigation = useNavigation();
@@ -14,7 +15,7 @@ const DoctorCard = ({ item, book, heart , style}) => {
 
     return (
         <TouchableOpacity style={[styles.card , {...style}]} onPress={() => navigation.navigate('DoctorDetails', { item: item })}>
-            <Image source={item?.image} style={styles.image} resizeMode={'cover'} />
+            <Image source={item?.image_url  ? {uri: item?.image_url} : AVATAR} style={styles.image} resizeMode={'cover'} />
             <View style={styles.subview}>
                 <View style={styles.subview2}>
                     <TextComponent style={styles.text} text={item?.name} numberOfLines={1} />
@@ -23,17 +24,17 @@ const DoctorCard = ({ item, book, heart , style}) => {
                         <Icon type={IconTypes.Ionicons} name={'heart-sharp'} color={Colors?.PRIMARY} size={20} />
                     }
                 </View>
-                <TextComponent style={[styles.span , {color: Colors.BLACK}]} text={item?.category} />
+                <TextComponent style={[styles.span , {color: Colors.BLACK}]} text={item?.specialization ? item?.specialization : '--'} />
 
                 <View style={[styles.flex, { gap: 5 }]}>
                     <Icon name={'location'} type={IconTypes?.EvilIcons} size={16} color={Colors?.DDGREY} />
-                    <TextComponent style={styles.span} text={item?.hospital_name} />
+                    <TextComponent style={styles.span} text={item?.hospital?.user_name ? item?.hospital?.user_name : '--'} />
                 </View>
 
                 <View style={styles.subview2}>
                     <View style={styles.flex}>
                         <Image source={require('../assets/images/star.png')}  style={{ width: 18, height: 18, marginRight: 3 }} />
-                        <TextComponent style={styles.spanx} text={item?.rating + ' ( 50+ Reviews )'} />
+                        <TextComponent style={styles.spanx} text={item?.rating ? item?.rating : 0 + ' (Reviews )'} />
                     </View>
                     {
                         book &&

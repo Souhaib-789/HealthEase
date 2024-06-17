@@ -12,6 +12,7 @@ import { Calendar, LocaleConfig } from 'react-native-calendars';
 import FormModal from "../../components/FormModal";
 import { useDispatch, useSelector } from "react-redux";
 import { showAlert } from "../../redux/actions/GeneralAction";
+import AVATAR from '../../assets/images/avatar.png'
 
 const DoctorDetails = (props) => {
 
@@ -81,7 +82,7 @@ const DoctorDetails = (props) => {
     const details = [
         {
             name: 'Reviews',
-            no: '50 +',
+            no: `${routeData?.rating ? routeData?.rating : 0} `,
             icon_name: 'star',
             navigate: 'Reviews'
         },
@@ -92,12 +93,12 @@ const DoctorDetails = (props) => {
         },
         {
             name: 'per slot',
-            no: routeData?.fees ? routeData?.fees : 1000 + ' Rs',
+            no: routeData?.fee ? routeData?.fee : 1000 + ' Rs',
             icon_name: 'price-change'
         },
     ]
 
-    console.log(routeData);
+    // console.log(JSON.stringify(routeData , null , 8));
 
 
     const renderDetailsItem = (item, index) => {
@@ -145,7 +146,7 @@ const DoctorDetails = (props) => {
         <View style={styles.mainContainer}>
             <ScrollView>
                 <Header title={'Details'} back style={{ margin: 10 }} titleStyle={{ color: Colors?.WHITE }} iconColor={Colors.WHITE} />
-                <Image source={routeData?.image} style={styles.card_image} />
+                <Image source={routeData?.image_url ? {uri: routeData?.image_url} : AVATAR} style={styles.card_image} />
 
                 <View style={styles.details_card}>
                     {
@@ -163,7 +164,7 @@ const DoctorDetails = (props) => {
 
                     <View style={{ alignItems: 'center' }}>
                         <TextComponent style={styles.text} text={routeData?.name} />
-                        <TextComponent style={styles.textx} text={routeData?.category} />
+                        <TextComponent style={styles.textx} text={routeData?.specialization} />
                         <TextComponent style={styles.textx} text={routeData?.hospital_name} />
                     </View>
 
@@ -173,7 +174,7 @@ const DoctorDetails = (props) => {
                     </View>
 
                     <TextComponent style={styles.heading} text={'About'} />
-                    <TextComponent style={styles.textx} text={"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."} />
+                    <TextComponent style={styles.textx} text={routeData?.about ? routeData?.about : '--'} />
 
                     <TextComponent style={styles.heading} text={'Availability'} />
                     <View style={styles.flexA}>
