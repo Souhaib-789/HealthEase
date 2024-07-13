@@ -13,12 +13,16 @@ import FormModal from "../../components/FormModal";
 import { useDispatch, useSelector } from "react-redux";
 import { showAlert } from "../../redux/actions/GeneralAction";
 import AVATAR from '../../assets/images/avatar.png'
+import TopTab from "../../components/TopTabs";
+import Appointments from "../Appointment";
+import DoctorCurrAppointments from "../Appointment/DoctorCurrAppointments";
 
 const DoctorDetails = (props) => {
 
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const USER = useSelector(state => state.AuthReducer.user)
+    const [activeCompo, setactiveCompo] = useState({ name: 'Info' })
 
     const routeData = props?.route?.params?.item;
     const [confirmedSlot, setconfirmedSlot] = useState();
@@ -115,7 +119,7 @@ const DoctorDetails = (props) => {
         )
     }
 
-    const renderSlotCard = (item, index) => {
+    const renderSlotCard = ({ item, index }) => {
         return (
             <TouchableOpacity key={index}
                 style={[styles.slot_box,
@@ -146,12 +150,12 @@ const DoctorDetails = (props) => {
         <View style={styles.mainContainer}>
             <ScrollView>
                 <Header title={'Details'} back style={{ margin: 10 }} titleStyle={{ color: Colors?.WHITE }} iconColor={Colors.WHITE} />
-                <Image source={routeData?.image_url ? {uri: routeData?.image_url} : AVATAR} style={styles.card_image} />
+                <Image source={routeData?.image_url ? { uri: routeData?.image_url } : AVATAR} style={styles.card_image} />
 
                 <View style={styles.details_card}>
                     {
                         USER?.user_role == 'hospital' ?
-                            <TouchableOpacity style={styles.heart} onPress={()=> navigation.navigate('CreateDoctor' , {screenType: 'edit'})}>
+                            <TouchableOpacity style={styles.heart} onPress={() => navigation.navigate('CreateDoctor', { screenType: 'edit' })}>
                                 <Icon type={IconTypes.AntDesign} name={'edit'} color={Colors?.DGREY} size={22} />
                             </TouchableOpacity>
                             :
@@ -168,61 +172,95 @@ const DoctorDetails = (props) => {
                         <TextComponent style={styles.textx} text={routeData?.hospital_name} />
                     </View>
 
+                    <TopTab
+                        options={[{
+                            id: 1,
+                            name: 'Info'
+                        },
+                        {
+                            id: 2,
+                            name: 'Appointments'
+                        },
+                        ]}
 
-                    <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: 'space-around', marginVertical: 25 }}>
-                        {details.map(renderDetailsItem)}
-                    </View>
-
-                    <TextComponent style={styles.heading} text={'About'} />
-                    <TextComponent style={styles.textx} text={routeData?.about ? routeData?.about : '--'} />
-
-                    <TextComponent style={styles.heading} text={'Availability'} />
-                    <View style={styles.flexA}>
-                        <View style={{ width: '60%' }}>
-                            <View style={styles.flex}>
-                                <TextComponent text={'Days :  '} style={styles.short_heading} />
-                                <FlatList
-                                    data={AvaiableDays}
-                                    horizontal
-                                    renderItem={({ item }) => <TextComponent text={item} style={styles.texty} />}
-                                    keyExtractor={item => item?.id}
-                                />
-                            </View>
-
-                            <View style={styles.flex}>
-                                <TextComponent text={'Duration : '} style={styles.short_heading} />
-                                <TextComponent text={'30 Minutes'} style={styles.texty} />
-                            </View>
-                        </View>
-
-                        <TouchableOpacity style={styles.select_button} onPress={() => { setshowCalendar(true) }}>
-                            <Icon type={IconTypes?.AntDesign} name={'calendar'} size={18} color={Colors?.PRIMARY} />
-                            <TextComponent style={styles.select_text} text={selectedDate ? moment(selectedDate).format('ddd D MMM') : 'Select Day'} />
-                        </TouchableOpacity>
-                    </View>
-
-
-                    <TextComponent style={styles.heading} text={'Available Slots' + (selectedDate ? ` for ${moment(selectedDate).format('dddd')}` : ' ')} />
-                    {
-                        selectedDate ?
-                            <View style={styles.slots_view}>
-                                {Slots?.map(renderSlotCard)}
-                            </View>
-                            :
-                            <TextComponent style={styles.textx} text={'Select day first'} />
-                    }
+                        focused={activeCompo?.name}
+                        onActivePress={(e) => setactiveCompo(e)}
+                        style={{marginVertical: 10}}
+                    />
 
                     {
-                        USER?.user_role == 'hospital' ?
-                            null
-                            :
-                            <Button title={'Schedule appointment'}
-                                style={{ marginVertical: 15 }}
-                                onPress={onScheduleAppoitment} />
-                    }
+                        activeCompo?.name == 'Info' ?
 
+                            <>
+                                <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: 'space-around', marginVertical: 25 }}>
+                                    {details.map(renderDetailsItem)}
+                                </View>
+
+                                <TextComponent style={styles.heading} text={'About'} />
+                                <TextComponent style={styles.textx} text={routeData?.about ? routeData?.about : '--'} />
+
+                                <TextComponent style={styles.heading} text={'Availability'} />
+                                <View style={styles.flexA}>
+                                    <View style={{ width: '60%' }}>
+                                        <View style={styles.flex}>
+                                            <TextComponent text={'Days :  '} style={styles.short_heading} />
+                                            <FlatList
+                                                data={AvaiableDays}
+                                                horizontal
+                                                renderItem={({ item }) => <TextComponent text={item} style={styles.texty} />}
+                                                keyExtractor={item => item?.id}
+                                            />
+                                        </View>
+
+                                        <View style={styles.flex}>
+                                            <TextComponent text={'Duration : '} style={styles.short_heading} />
+                                            <TextComponent text={'30 Minutes'} style={styles.texty} />
+                                        </View>
+                                    </View>
+
+                                    <TouchableOpacity style={styles.select_button} onPress={() => { setshowCalendar(true) }}>
+                                        <Icon type={IconTypes?.AntDesign} name={'calendar'} size={18} color={Colors?.PRIMARY} />
+                                        <TextComponent style={styles.select_text} text={selectedDate ? moment(selectedDate).format('ddd D MMM') : 'Select Day'} />
+                                    </TouchableOpacity>
+                                </View>
+
+
+                                <TextComponent style={styles.heading} text={'Available Slots' + (selectedDate ? ` for ${moment(selectedDate).format('dddd')}` : ' ')} />
+                                {
+                                    selectedDate ?
+                                        // <View style={styles.slots_view}>
+                                        //     {Slots?.map(renderSlotCard)}
+                                        // </View>
+
+                                        <FlatList
+                                            data={Slots}
+                                            horizontal
+                                            renderItem={renderSlotCard}
+                                            keyExtractor={item => item?.id}
+                                        />
+                                        :
+                                        <TextComponent style={styles.textx} text={'Select day first'} />
+                                }
+
+                                {
+                                    USER?.user_role == 'hospital' ?
+                                        null
+                                        :
+                                        <Button title={'Schedule appointment'}
+                                            style={{ marginVertical: 15 }}
+                                            onPress={onScheduleAppoitment} />
+                                }
+
+                            </>
+                            :
+
+                            <DoctorCurrAppointments />
+                    }
 
                 </View>
+
+
+
                 <FormModal
                     visible={showCalendar}
                     onClose={() => setshowCalendar(false)}
@@ -244,6 +282,8 @@ const DoctorDetails = (props) => {
                         theme={calendarTheme}
                     />
                 </FormModal>
+
+
             </ScrollView>
         </View>
     )
@@ -334,6 +374,7 @@ const styles = StyleSheet.create({
     },
     details_card: {
         width: '100%',
+        minHeight: 600,
         borderTopEndRadius: 30,
         borderTopLeftRadius: 30,
         backgroundColor: Colors.WHITE,
@@ -385,7 +426,7 @@ const styles = StyleSheet.create({
     },
     slot_box: {
         width: 70,
-        paddingVertical: 8,
+        paddingVertical: 5,
         borderRadius: 15,
         alignItems: "center",
         justifyContent: "center",

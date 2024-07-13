@@ -33,7 +33,16 @@ const AppointmentForm = (props) => {
             dispatch(showAlert({ message: 'Please enter relationship with patient' }))
         }
         else {
-            setopenModal(true)
+            const data = {
+                doctorId: routeData?.item?.id,
+                appointmentDate: routeData?.date,
+                appointmentTime: routeData?.timeSlot?.time,
+                patientName: patient,
+                relationship: detail,
+                contactNo: contactNo
+            }
+            console.log(data);
+            // setopenModal(true)
         }}
 
     return (

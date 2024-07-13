@@ -18,7 +18,7 @@ export const AuthMiddleware = {
             // device_id: userdata.deviceID,
           };
           const data = await Axios.post(Apis.login, formData);
-          // console.log(JSON.stringify(data, null, 8))
+          console.log(JSON.stringify(data, null, 8))
           if (data?.status == 200) {
             await Storage.setToken(data?.data?.token);
             await Storage.set('@user', JSON.stringify(data?.data?.user));
@@ -27,10 +27,11 @@ export const AuthMiddleware = {
           }
         } catch (error) {
           reject(error);
+          console.log('=========' , error);
           dispatch(
             showAlert({
               title: 'login',
-              message: error?.response?.data?.message,
+              message: error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong',
               type: 'Error',
               status: error?.response?.status,
             }),

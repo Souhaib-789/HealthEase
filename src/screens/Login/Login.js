@@ -66,12 +66,12 @@ const Login = () => {
                     onChangeText={(e) => setpassword(e)}
                     mainStyle={styles.mainInput} />
 
-                <Dropdown
+                {/* <Dropdown
                     placeholder={'Select User Role'}
                     state={userRole}
                     array={[{ id: 1, name: 'doctor' }, { id: 2, name: 'patient' }, { id: 3, name: 'hospital' }]}
                     setState={(e) => setuserRole(e)}
-                />
+                /> */}
 
                 <Button title={'Login'} onPress={onPressLogin} style={styles.button} />
                 {/* <TextComponent style={styles.link_text} text={'Forgot Passsword?'} /> */}

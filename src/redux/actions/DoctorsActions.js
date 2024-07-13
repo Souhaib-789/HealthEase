@@ -7,6 +7,14 @@ const getAllDoctors = (payload) => {
         payload,
     };
     }
+
+    
+const getHospitalDoctors = (payload) => {
+    return {
+        type: ActionTypes.GET_HOSPITAL_DOCTORS,
+        payload,
+    };
+    }
     
 
-export { getAllDoctors };
+export { getAllDoctors , getHospitalDoctors};

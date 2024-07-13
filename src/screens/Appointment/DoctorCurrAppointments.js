@@ -16,7 +16,7 @@ import CalendarStrip from 'react-native-slideable-calendar-strip';
 import PROFILE from '../../assets/images/profile.png'
 import NO_DOC from '../../assets/images/noDoc.png'
 
-const DoctorHome = () => {
+const DoctorCurrAppointments = () => {
     const navigation = useNavigation();
     const [search, setsearch] = useState();
     const [state, setState] = useState();
@@ -60,7 +60,7 @@ const DoctorHome = () => {
 
     const renderItem = ({ item }) => {
         return (
-            <TouchableOpacity style={styles.Appointment_card} onPress={() => navigation.navigate('PatientDetails' , {screenType: 'doctor'})} >
+            <TouchableOpacity style={styles.Appointment_card} onPress={() => navigation.navigate('PatientDetails' , {screenType: 'hospital'})} >
                 <View style={styles.appointment_card_subview1}>
                     <View style={styles.appointment_card_subview2}>
                         <Image source={docF} style={styles.Appointment_image} />
@@ -89,50 +89,9 @@ const DoctorHome = () => {
     return (
         <View style={styles.mainContainer}>
             <ScrollView showsVerticalScrollIndicator={false} >
-                <View style={styles.sub_container}>
-                    <View style={styles.wide_row}>
-                        <View style={styles.home_header}>
-                    <TouchableOpacity onPress={() => navigation.openDrawer()}>
-                        <Icon type={IconTypes.Feather} name='menu' size={23} color={Colors.WHITE} />
-                    </TouchableOpacity>
-                        <View>
-                            <TextComponent style={styles.sub_heading} text={'Hey Doctor !'} />
-                            <TextComponent style={styles.heading} text={'Sam Will'} />
-                        </View>
-                        </View>
-                        <TouchableOpacity onPress={() => navigation.navigate('Profile')} >
-                            <Image source={PROFILE} style={{ width: 35, height: 35 }} />
-                        </TouchableOpacity>
-                    </View>
-
-                    <View style={styles.wide_row}>
-                        <TextComponent style={styles.sub_container_heading} text={"Lets explore patient's Appointments!"} />
-
-                        {/* <TouchableOpacity style={{ backgroundColor: Colors.WHITE, padding: 10, borderRadius: 40, elevation: 5 }}>
-                            <Icon type={IconTypes.Ionicons} name={'filter-outline'} size={20} color={Colors.PRIMARY} />
-                        </TouchableOpacity> */}
-                    </View>
-
-                    <View style={{ alignSelf: 'center' }}>
-                        <CalendarStrip
-                            selectedDate={state?.selectedDate}
-                            onPressDate={(date) => {
-                                setState({ selectedDate: date });
-                            }}
-                            onPressGoToday={(today) => {
-                                setState({ selectedDate: today });
-                            }}
-                            onSwipeDown={() => {
-                                alert('onSwipeDown');
-                            }}
-                            markedDate={['2024-04-26', '2024-04-27', '2024-04-28', '2024-04-29']}
-                            weekStartsOn={1}
-                        />
-                    </View>
-                </View>
 
                 <FlatList
-                    key={'Featured Doctors'}
+                    key={'Appointments'}
                     showsHorizontalScrollIndicator={false}
                     data={Featured}
                     decelerationRate={'fast'}
@@ -145,7 +104,7 @@ const DoctorHome = () => {
     )
 }
 
-export default DoctorHome;
+export default DoctorCurrAppointments;
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -207,7 +166,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
-        width: '90%',
+        width: '97%',
         alignSelf: "center",
         paddingHorizontal: 15,
         paddingVertical: 13,

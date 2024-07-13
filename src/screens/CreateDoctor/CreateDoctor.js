@@ -16,6 +16,10 @@ import FormModal from "../../components/FormModal";
 import { useDispatch } from "react-redux";
 import ListEmptyComponent from "../../components/ListEmptyComponent";
 import DatePicker from "react-native-date-picker";
+import { showAlert } from "../../redux/actions/GeneralAction";
+import { validateEmail } from "../../utilities/Validators";
+import { doctorCategories } from "../../utilities/Utilities";
+import { DoctorsMiddleware } from "../../redux/middlewares/DoctorsMiddleware";
 
 const CreateDoctor = (props) => {
 
@@ -23,6 +27,8 @@ const CreateDoctor = (props) => {
     const navigation = useNavigation();
     const dispatch = useDispatch()
     const [docName, setdocName] = useState()
+    const [email, setemail] = useState()
+    const [password, setpassword] = useState()
     const [fees, setfees] = useState()
     const [experience, setexperience] = useState()
     const [image, setimage] = useState()
@@ -76,25 +82,7 @@ const CreateDoctor = (props) => {
             name: 'Sun'
         }]
 
-    const specializationsList = [
-        {
-            id: 1,
-            name: 'Cardiologist',
-            value: 'Cardiologist'
-        },
-        {
-            id: 2,
-            name: 'Dentist',
-            value: 'Dentist'
-        },
-        {
-            id: 3,
-            name: 'Dermatologist',
-            value: 'Dermatologist'
-        },
-    ]
 
-    console.log(TimeSlots);
     const UploadImage = () => {
         try {
             ImagePicker.openPicker({
@@ -117,6 +105,9 @@ const CreateDoctor = (props) => {
             console.log('===>', e)
         }
     }
+
+
+
 
     const renderDaysCard = ({ item, index }) => {
         let isExits = selectedDay?.id == item?.id
@@ -169,7 +160,7 @@ const CreateDoctor = (props) => {
             //     slots.push(`${slotStartTime} - ${slotEndTime}`);
             // }
             let finalSlot = [];
-            finalSlot.push({ day: selectedDay, startTime: startTime, endTime: endTime })
+            finalSlot.push({ day: selectedDay, startTime: moment(startTime, 'hh:mm').format('LT'), endTime: moment(endTime, 'hh:mm').format('LT') })
             setTimeSlots(TimeSlots ? [...TimeSlots, ...finalSlot] : finalSlot)
 
             console.log(finalSlot);
@@ -178,6 +169,61 @@ const CreateDoctor = (props) => {
             setselectedDay(null)
         }
     };
+
+
+    const onPressCreateDoctor = () => {
+        if (!docName) {
+            dispatch(showAlert({ message: 'Please enter doctor name' }))
+        }
+        else if (!email) {
+            dispatch(showAlert({ message: 'Please enter doctor email' }))
+        }
+        else if (!validateEmail(email)) {
+            dispatch(showAlert({ message: 'Please enter valid email' }))
+        }
+        else if (!password) {
+            dispatch(showAlert({ message: 'Please enter password' }))
+        }
+        else if (!image) {
+            dispatch(showAlert({ message: 'Please upload doctor image' }))
+        }
+        else if (!specialization) {
+            dispatch(showAlert({ message: 'Please select specialization' }))
+        }
+        else if (!fees) {
+            dispatch(showAlert({ message: 'Please enter fees' }))
+        }
+        else if (!experience) {
+            dispatch(showAlert({ message: 'Please enter experience' }))
+        }
+        else if (!about) {
+            dispatch(showAlert({ message: 'Please enter about' }))
+        }
+        else if (!TimeSlots) {
+            dispatch(showAlert({ message: 'Please set availability' }))
+        }
+        else {
+            const data = {
+                name: docName,
+                email: email,
+                password: password,
+                image: image,
+                specialization: specialization,
+                fee: fees,
+                experience: experience,
+                about: about,
+                availability: TimeSlots
+            }
+            // console.log(JSON.stringify(data, null, 8));
+            dispatch(DoctorsMiddleware.createDoctor(data))
+                .then(() => { setopenModal(true) })
+                .catch((err) => { console.log(err) })
+        }
+    }
+
+
+
+
 
     return (
         <View style={styles.Container}>
@@ -203,12 +249,35 @@ const CreateDoctor = (props) => {
                     onChangeText={(e) => setdocName(e)}
                     mainStyle={styles.mainInput} parentStyle={styles.input_parent_style} />
 
+                {
+                    routeData?.screenType == 'edit' ? null :
+                        <>
+
+                            <Input
+                                label={'Doctor Email'}
+                                placeholder={'Enter doctor email'}
+                                value={email}
+                                onChangeText={(e) => setemail(e)}
+                                mainStyle={styles.mainInput} parentStyle={styles.input_parent_style} />
+
+
+                            <Input
+                                label={'Password'}
+                                placeholder={'*************'}
+                                isPassword
+                                value={password}
+                                onChangeText={(e) => setpassword(e)}
+                                mainStyle={styles.mainInput} parentStyle={styles.input_parent_style} />
+                        </>
+                }
+
+
                 <View style={styles.wide_row}>
                     <TextComponent text={'Specialization'} style={styles.label} />
                 </View>
                 <Dropdown
                     placeholder={'Select specialization'}
-                    array={specializationsList}
+                    array={doctorCategories}
                     state={specialization}
                     setState={(e) => setspecialization(e)}
                     style={{ width: '90%', marginBottom: 10 }} />
@@ -242,7 +311,8 @@ const CreateDoctor = (props) => {
 
                 <View style={styles.wide_row}>
                     <TextComponent text={'Set Availability'} style={styles.label} />
-                    <TouchableOpacity onPress={() => setopenAvailabilityModal(true)}>
+                    <TouchableOpacity onPress={() => setopenAvailabilityModal(true)} style={{ flexDirection: 'row', alignItems: 'center', gap: 3, padding: 5, borderRadius: 5, backgroundColor: Colors.LIGHT_GREY }}>
+                        <Icon name={'add'} type={IconTypes.Ionicons} size={15} color={Colors.PRIMARY} />
                         <Icon name={'calendar'} type={IconTypes.Ionicons} size={20} color={Colors.PRIMARY} />
                     </TouchableOpacity>
                 </View>
@@ -257,7 +327,7 @@ const CreateDoctor = (props) => {
                                 <TextComponent text={item?.day?.name} style={styles.text} />
                             </View>
                             <View key={index} style={[styles.slot_box, { width: 130 }]} >
-                                <TextComponent style={styles.textx} text={moment(item?.startTime, 'hh:mm').format('LT') + ' - ' + moment(item?.endTime, 'hh:mm').format('LT')} />
+                                <TextComponent style={styles.textx} text={item?.startTime + ' - ' + item?.endTime} />
                             </View>
                             <TouchableOpacity onPress={() => {
                                 let temp = TimeSlots;
@@ -274,7 +344,7 @@ const CreateDoctor = (props) => {
                     ListEmptyComponent={<ListEmptyComponent short text={'no availability found'} />}
                 />
 
-                <Button title={routeData?.screenType == 'edit' ? 'Save' : 'Create'} onPress={() => setopenModal(true)} style={styles.button} />
+                <Button title={routeData?.screenType == 'edit' ? 'Save' : 'Create'} onPress={onPressCreateDoctor} style={styles.button} />
             </ScrollView>
 
 
@@ -309,7 +379,7 @@ const CreateDoctor = (props) => {
                             if (!selectedDay || !!error) {
                                 seterror('Please select a day first')
                             }
-                             else {
+                            else {
                                 setopenStartTimeModal(true)
                             }
                         }}>

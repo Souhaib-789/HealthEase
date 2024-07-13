@@ -1,9 +1,5 @@
-import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity, ScrollView, FlatList } from "react-native";
-import docC from "../../assets/images/doc3.png";
-import docF from "../../assets/images/doc9.jpg";
-import docD from "../../assets/images/doc4.png";
-import docE from "../../assets/images/doc5.png";
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, TouchableOpacity, ScrollView, FlatList, RefreshControl } from "react-native";
 import { Colors } from "../../utilities/Colors";
 import { useNavigation } from "@react-navigation/native";
 import TextComponent from "../../components/TextComponent";
@@ -13,48 +9,28 @@ import { Fonts } from "../../utilities/Fonts";
 import ListEmptyComponent from "../../components/ListEmptyComponent";
 import NO_DOC from '../../assets/images/noDoc.png'
 import CustomCategoryIcon from "../../components/CustomCategoryIcon";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { DoctorsMiddleware } from "../../redux/middlewares/DoctorsMiddleware";
+import AVATAR from '../../assets/images/avatar.png';
+import Skeleton from "../../components/Skeleton";
+
 
 const HospitalDoctors = () => {
     const navigation = useNavigation();
+    const dispatch = useDispatch();
+    const DoctorsList = useSelector(state => state.DoctorsReducer?.hospitalDoctors);
     const [currCategory, setcurrCategory] = useState({ id: 1 });
+    const [loading, setLoading] = useState(true)
 
+    useEffect(() => {
+        fetchDoctorsData()
+    }, [])
 
-    const Featured = [
-        {
-            id: 1,
-            image: docC,
-            name: 'Dr. Crick',
-            fees: '2500',
-            rating: 5,
-            hearted: false,
-            category: 'Medicine Specialist',
-            hospital_name: 'City Hospital',
-            experience: 5,
-        },
-        {
-            id: 2,
-            image: docD,
-            name: 'Dr. Strain',
-            fees: '2200',
-            rating: 3,
-            hearted: true,
-            category: 'Dentist ',
-            hospital_name: 'City Hospital',
-            experience: 3,
-        },
-        {
-            id: 3,
-            image: docE,
-            name: 'Dr. Lachinet',
-            fees: '2900',
-            rating: 2,
-            hearted: false,
-            category: 'Physio Therapy Specialist',
-            hospital_name: 'City Hospital',
-            experience: 5,
-        }
-    ]
+    const fetchDoctorsData = () => {
+        dispatch(DoctorsMiddleware.getHospitalDoctorsData())
+            .then(() => setLoading(false))
+            .catch(() => setLoading(false))
+    }
 
     const Categories = [
         {
@@ -99,52 +75,71 @@ const HospitalDoctors = () => {
 
     const renderItem = ({ item }) => {
         return (
-            <TouchableOpacity style={styles.Appointment_card} onPress={() => navigation.navigate('DoctorDetails', { item: item })} >
-                <View style={styles.appointment_card_subview1}>
+
+            loading ?
+                <View style={styles.Appointment_card}>
                     <View style={styles.appointment_card_subview2}>
-                        <Image source={docF} style={styles.Appointment_image} />
+                        <Skeleton styles={{ width: '20%' }} style={{ width: '90%', height: 45, borderRadius: 100 }} />
                         <View>
-                            <TextComponent style={[styles.appointment_card_text, { fontFamily: Fonts?.SEMIBOLD }]} text={'Mr. Fernendes'} />
-                            <TextComponent style={styles.appointment_card_span} text={item?.category} />
+                            <Skeleton styles={{ width: '90%' }} style={{ width: '80%', height: 20, borderRadius: 5 }} />
+                            <Skeleton styles={{ width: '90%' }} style={{ width: '60%', height: 10, borderRadius: 5 }} />
                         </View>
                     </View>
-                    <Icon type={IconTypes.MaterialIcons} name={'keyboard-arrow-right'} size={25} color={Colors.PRIMARY} />
+
                 </View>
-            </TouchableOpacity>
+                :
+                <TouchableOpacity style={styles.Appointment_card} onPress={() => navigation.navigate('DoctorDetails', { item: item })} >
+                    <View style={styles.appointment_card_subview1}>
+                        <View style={styles.appointment_card_subview2}>
+                            <Image source={item?.image ? { uri: item?.image } : AVATAR} style={styles.Appointment_image} />
+                            <View>
+                                <TextComponent style={[styles.appointment_card_text, { fontFamily: Fonts?.SEMIBOLD }]} text={item?.name ? item?.name : '--'} />
+                                <TextComponent style={styles.appointment_card_span} text={item?.specialization ? item?.specialization : '--'} />
+                            </View>
+                        </View>
+                        <Icon type={IconTypes.MaterialIcons} name={'keyboard-arrow-right'} size={25} color={Colors.PRIMARY} />
+                    </View>
+                </TouchableOpacity>
         )
     }
 
     return (
         <View style={styles.mainContainer}>
-                <View style={styles.sub_container}>
-                    <TextComponent style={styles.sub_container_heading} text={"Your Doctors"} />
-
-                    <FlatList
-                        key={"CategoriesList"}
-                        showsHorizontalScrollIndicator={false}
-                        data={Categories}
-                        horizontal
-                        renderItem={renderCategoryItem}
-                        keyExtractor={item => item?.id}
-                        style={{ width: '100%', marginTop: 10, alignSelf: 'center' }}
-                    />
-                </View>
+            <View style={styles.sub_container}>
+                <TextComponent style={styles.sub_container_heading} text={"Your Doctors"} />
 
                 <FlatList
-                    key={'Featured Doctors'}
+                    key={"CategoriesList"}
                     showsHorizontalScrollIndicator={false}
-                    data={Featured}
-                    decelerationRate={'fast'}
-                    renderItem={renderItem}
-                    ListEmptyComponent={<ListEmptyComponent image={NO_DOC} text={'no doctors found'} />}
-                    keyExtractor={(item, index) => index.toString()}
+                    data={Categories}
+                    horizontal
+                    renderItem={renderCategoryItem}
+                    keyExtractor={item => item?.id}
+                    style={{ width: '100%', marginTop: 10, alignSelf: 'center' }}
                 />
+            </View>
 
-             
+            <FlatList
+                key={'Doctors'}
+                showsHorizontalScrollIndicator={false}
+                data={DoctorsList}
+                decelerationRate={'fast'}
+                renderItem={renderItem}
+                ListEmptyComponent={<ListEmptyComponent image={NO_DOC} text={'no doctors found'} />}
+                keyExtractor={(item, index) => index.toString()}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={false}
+                        onRefresh={() => {setLoading(true) ,  fetchDoctorsData()}}
+                    />
+                }
+            />
 
-            <TouchableOpacity onPress={()=> navigation.navigate('CreateDoctor')} style={{position: "absolute" , bottom: 15 , right: 20 , backgroundColor: Colors.PRIMARY, padding: 10, borderRadius: 40, elevation: 5 }}>
-                    <Icon type={IconTypes.Ionicons} name={'add'} size={20} color={Colors.WHITE} />
-                </TouchableOpacity>
+
+
+            <TouchableOpacity onPress={() => navigation.navigate('CreateDoctor')} style={{ position: "absolute", bottom: 15, right: 20, backgroundColor: Colors.PRIMARY, padding: 10, borderRadius: 40, elevation: 5 }}>
+                <Icon type={IconTypes.Ionicons} name={'add'} size={20} color={Colors.WHITE} />
+            </TouchableOpacity>
         </View>
     )
 }

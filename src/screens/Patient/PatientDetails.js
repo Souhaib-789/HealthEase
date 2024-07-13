@@ -14,28 +14,11 @@ import { useNavigation } from "@react-navigation/native";
 
 const PatientDetails = (props) => {
 
-    const routeData = props?.route?.params?.item;
-        const [openModal, setopenModal] = useState(false)
-        const [prescription, setprescription] = useState(null)
-        const navigation = useNavigation()
+    const screenType = props?.route?.params?.screenType;
+    const [openModal, setopenModal] = useState(false)
+    const [prescription, setprescription] = useState(null)
+    const navigation = useNavigation()
 
-    const details = [
-        {
-            name: 'Reviews',
-            no: '50 +',
-            icon_name: 'star'
-        },
-        {
-            name: 'Experience',
-            no: `${routeData?.experience} Years`,
-            icon_name: 'tips-and-updates'
-        },
-        {
-            name: 'per slot',
-            no: routeData?.fees ? routeData?.fees : 1000 + ' Rs',
-            icon_name: 'price-change'
-        },
-    ]
 
     const renderDetailsItem = (item, index) => {
         return (
@@ -111,8 +94,16 @@ const PatientDetails = (props) => {
                         </View>
                     </View>
 
-                    <Button onPress={()=> setopenModal(true)} icon={<Icon name='clipboard' type={IconTypes.Feather} size={20} color={Colors?.PRIMARY} />} title={'Write a prescription'} light style={{ marginTop: 15 }} />
-                    <Button onPress={()=> navigation.goBack()}  icon={<Icon name='checkmark-done-circle-outline' type={IconTypes.Ionicons} size={20} color={Colors?.WHITE} />} title={'Make it completed'} style={styles.button} />
+                    {
+                        screenType == 'doctor' ?
+                            (
+                                <>
+                                    <Button onPress={() => setopenModal(true)} icon={<Icon name='clipboard' type={IconTypes.Feather} size={20} color={Colors?.PRIMARY} />} title={'Write a prescription'} light style={{ marginTop: 15 }} />
+                                    <Button onPress={() => navigation.goBack()} icon={<Icon name='checkmark-done-circle-outline' type={IconTypes.Ionicons} size={20} color={Colors?.WHITE} />} title={'Make it completed'} style={styles.button} />
+                                </>
+                            )
+                            : null
+                    }
                 </View>
             </ScrollView>
 
@@ -121,7 +112,7 @@ const PatientDetails = (props) => {
                 setOpen={setopenModal}
                 onClose={() => setopenModal(false)}
             >
-                <TextComponent text={'Write Prescription'} style={[styles.heading , { alignSelf: 'center'}]} />
+                <TextComponent text={'Write Prescription'} style={[styles.heading, { alignSelf: 'center' }]} />
 
                 <Input
                     placeholder={'Enter prescription here ...'}
@@ -132,11 +123,11 @@ const PatientDetails = (props) => {
                     mainStyle={{
                         width: '90%',
                         marginTop: 10
-                    }}/>
+                    }} />
 
-                    <Button title={'Submit'} onPress={() => setopenModal(false)} style={{marginTop: 20}} />
+                <Button title={'Submit'} onPress={() => setopenModal(false)} style={{ marginTop: 20 }} />
 
-                </FormModal>
+            </FormModal>
         </View>
     )
 }

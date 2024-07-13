@@ -15,6 +15,11 @@ const ActionTypes = {
   
     //Doctors
     GET_ALL_DOCTORS: 'GET_ALL_DOCTORS',
+    GET_HOSPITAL_DOCTORS: 'GET_HOSPITAL_DOCTORS',
+
+
+    //Appointments
+    GET_APPOINTMENTS: 'GET_APPOINTMENTS',
   
   }
   
