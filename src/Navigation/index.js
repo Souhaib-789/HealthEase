@@ -1,5 +1,5 @@
 import { NavigationContainer } from '@react-navigation/native';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import AuthStack from './AuthStack';
 import SplashScreen from 'react-native-splash-screen';
 import { Text, View, Modal as RNModal, ActivityIndicator, Platform, SafeAreaView } from 'react-native';
@@ -19,6 +19,8 @@ const AppNavigation = () => {
   const showAlert = useSelector(state => state.GeneralReducer.showAlert);
   const alert = useSelector(state => state.GeneralReducer.alertOptions);
   const dispatch = useDispatch();
+  const [GetStarted, setGetStarted] = useState(false);
+
 
   // useEffect(() => {
   //   checkPermission()
@@ -44,8 +46,8 @@ const AppNavigation = () => {
 
   // const onMessageReceived = async (message) => {
   //   let channelId = await notifee.createChannel({
-  //     id: 'BestDayEver_app',
-  //     name: 'BestDayEver Channel',
+  //     id: 'app_name',
+  //     name: 'app_name Channel',
   //     sound: "default",
   //     vibration: true,
   //     badge: true,
@@ -84,7 +86,10 @@ const AppNavigation = () => {
   useEffect(() => {
     isAuthentication();
   }, [islogin]);
-
+  
+  useEffect(() => {
+    fetchStarted();
+  }, [islogin, GetStarted]);
 
   const isAuthentication = async () => {
     let user_data = await Storage.get('@user');
@@ -99,6 +104,12 @@ const AppNavigation = () => {
   };
 
 
+  const fetchStarted = async () => {
+    let response = await Storage.get('@getstarted');
+    setGetStarted(response);
+  };
+
+
   return (
     <NavigationContainer>
 
@@ -110,7 +121,7 @@ const AppNavigation = () => {
           ) : islogin ? (
             <AppStack />
           ) : (
-            <AuthStack />
+            <AuthStack getstarted={GetStarted} />
           )}
         </SafeAreaView>
       ) : islogin == undefined ? (
@@ -118,7 +129,7 @@ const AppNavigation = () => {
       ) : islogin ? (
         <AppStack />
       ) : (
-        <AuthStack />
+        <AuthStack getstarted={GetStarted} />
       )}
 
       <RNModal visible={loading} transparent>

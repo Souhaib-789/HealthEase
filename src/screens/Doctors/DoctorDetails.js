@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, TouchableOpacity, ScrollView, Image, FlatList, Pressable, LayoutAnimation } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Header from "../../components/Header";
@@ -16,12 +16,16 @@ import AVATAR from '../../assets/images/avatar.png'
 import TopTab from "../../components/TopTabs";
 import Appointments from "../Appointment";
 import DoctorCurrAppointments from "../Appointment/DoctorCurrAppointments";
+import { clearDoctorDetails } from "../../redux/actions/DoctorsActions";
 
 const DoctorDetails = (props) => {
 
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const USER = useSelector(state => state.AuthReducer.user)
+    const DETAILS = useSelector(state => state.DoctorsReducer?.doctorDetails)
+    console.log('----------', JSON.stringify(DETAILS , null ,8));
+
     const [activeCompo, setactiveCompo] = useState({ name: 'Info' })
 
     const routeData = props?.route?.params?.item;
@@ -86,23 +90,29 @@ const DoctorDetails = (props) => {
     const details = [
         {
             name: 'Reviews',
-            no: `${routeData?.rating ? routeData?.rating : 0} `,
+            no: `${DETAILS?.rating ? DETAILS?.rating : 0} `,
             icon_name: 'star',
             navigate: 'Reviews'
         },
         {
             name: 'Experience',
-            no: `${routeData?.experience} Years`,
+            no: `${DETAILS?.experience ? DETAILS?.experience : 1} Years`,
             icon_name: 'tips-and-updates'
         },
         {
             name: 'per slot',
-            no: routeData?.fee ? routeData?.fee : 1000 + ' Rs',
+            no: DETAILS?.fee ? DETAILS?.fee : 0.00 + ' Rs',
             icon_name: 'price-change'
         },
     ]
 
     // console.log(JSON.stringify(routeData , null , 8));
+
+    useEffect(() => {
+        return () => {
+            dispatch(clearDoctorDetails())
+        }
+    }, [])
 
 
     const renderDetailsItem = (item, index) => {
@@ -150,7 +160,7 @@ const DoctorDetails = (props) => {
         <View style={styles.mainContainer}>
             <ScrollView>
                 <Header title={'Details'} back style={{ margin: 10 }} titleStyle={{ color: Colors?.WHITE }} iconColor={Colors.WHITE} />
-                <Image source={routeData?.image_url ? { uri: routeData?.image_url } : AVATAR} style={styles.card_image} />
+                <Image source={DETAILS?.image_url ? { uri: DETAILS?.image_url } : AVATAR} style={styles.card_image} />
 
                 <View style={styles.details_card}>
                     {
@@ -167,10 +177,13 @@ const DoctorDetails = (props) => {
 
 
                     <View style={{ alignItems: 'center' }}>
-                        <TextComponent style={styles.text} text={routeData?.name} />
-                        <TextComponent style={styles.textx} text={routeData?.specialization} />
-                        <TextComponent style={styles.textx} text={routeData?.hospital_name} />
+                        <TextComponent style={styles.text} text={DETAILS?.name ? DETAILS?.name : '--'} />
+                        <TextComponent style={styles.textx} text={DETAILS?.specialization ? DETAILS?.specialization : '--'} />
+                        <TextComponent style={styles.textx} text={DETAILS?.hospital?.user_name ? DETAILS?.hospital?.user_name  : '--'} />
                     </View>
+
+
+{                        USER?.user_role == 'hospital' &&
 
                     <TopTab
                         options={[{
@@ -187,6 +200,7 @@ const DoctorDetails = (props) => {
                         onActivePress={(e) => setactiveCompo(e)}
                         style={{marginVertical: 10}}
                     />
+}
 
                     {
                         activeCompo?.name == 'Info' ?
@@ -197,7 +211,7 @@ const DoctorDetails = (props) => {
                                 </View>
 
                                 <TextComponent style={styles.heading} text={'About'} />
-                                <TextComponent style={styles.textx} text={routeData?.about ? routeData?.about : '--'} />
+                                <TextComponent style={styles.textx} text={DETAILS?.about ? DETAILS?.about : '--'} />
 
                                 <TextComponent style={styles.heading} text={'Availability'} />
                                 <View style={styles.flexA}>

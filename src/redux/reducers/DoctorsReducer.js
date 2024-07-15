@@ -2,18 +2,31 @@ import ActionTypes from "../actions/ActionTypes";
 
 let initialState = {
   allDoctors: [],
+  dashboardDoctors: [],
+  doctorDetails: {},
   hospitalDoctors: [],
 };
 
 const DoctorsReducer = (state = initialState, action) => {
   switch (action.type) {
     case ActionTypes.GET_ALL_DOCTORS:
-      state = { ...state, allDoctors: action.payload };
+      state = {
+        ...state, allDoctors: action.payload,
+        dashboardDoctors: action.payload.filter((item, index) => index < 3)
+      };
       break;
 
-      case ActionTypes.GET_HOSPITAL_DOCTORS:
-        state = { ...state, hospitalDoctors: action.payload };
-        break;
+    case ActionTypes.GET_DOCTOR_DETAILS:
+      state = { ...state, doctorDetails: action.payload };
+      break;
+
+    case ActionTypes.CLEAR_DOCTOR_DETAILS:
+      state = { ...state, doctorDetails: {} };
+      break;
+
+    case ActionTypes.GET_HOSPITAL_DOCTORS:
+      state = { ...state, hospitalDoctors: action.payload };
+      break;
 
     default:
       break;

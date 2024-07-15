@@ -8,40 +8,65 @@ import Icon, { IconTypes } from "./Icon";
 import { Fonts } from "../utilities/Fonts";
 import Button from "./Button";
 import AVATAR from '../assets/images/avatar.png'
+import { useDispatch } from "react-redux";
+import { getDoctorDetails } from "../redux/actions/DoctorsActions";
+import Skeleton from "./Skeleton";
 
-const DoctorCard = ({ item, book, heart , style}) => {
+const DoctorCard = ({ item, book, heart, style, loading }) => {
     const navigation = useNavigation();
+    const dispatch = useDispatch();
 
 
     return (
-        <TouchableOpacity style={[styles.card , {...style}]} onPress={() => navigation.navigate('DoctorDetails', { item: item })}>
-            <Image source={item?.image_url  ? {uri: item?.image_url} : AVATAR} style={styles.image} resizeMode={'cover'} />
-            <View style={styles.subview}>
-                <View style={styles.subview2}>
-                    <TextComponent style={styles.text} text={item?.name} numberOfLines={1} />
-                    {
-                    heart &&
-                        <Icon type={IconTypes.Ionicons} name={'heart-sharp'} color={Colors?.PRIMARY} size={20} />
-                    }
-                </View>
-                <TextComponent style={[styles.span , {color: Colors.BLACK}]} text={item?.specialization ? item?.specialization : '--'} />
+        <TouchableOpacity disabled={loading} style={[styles.card, { ...style }]} onPress={() => {
+            dispatch(getDoctorDetails(item))
+            navigation.navigate('DoctorDetails')
+        }}>
+            {
+                loading ?
+                    <Skeleton style={styles.image} styles={{ width: '22%' }} />
+                    :
+                    <Image source={item?.image_url ? { uri: item?.image_url } : AVATAR} style={styles.image} resizeMode={'cover'} />
+            }
 
-                <View style={[styles.flex, { gap: 5 }]}>
-                    <Icon name={'location'} type={IconTypes?.EvilIcons} size={16} color={Colors?.DDGREY} />
-                    <TextComponent style={styles.span} text={item?.hospital?.user_name ? item?.hospital?.user_name : '--'} />
-                </View>
-
-                <View style={styles.subview2}>
-                    <View style={styles.flex}>
-                        <Image source={require('../assets/images/star.png')}  style={{ width: 18, height: 18, marginRight: 3 }} />
-                        <TextComponent style={styles.spanx} text={item?.rating ? item?.rating : 0 + ' (Reviews )'} />
+            {
+                loading ?
+                    <View>
+                        <Skeleton style={{ width: '60%', height: 18, borderRadius: 5 }} />
+                        <Skeleton style={{ width: '40%', height: 10, borderRadius: 3 }} />
+                        <Skeleton style={{ width: '50%', height: 6, borderRadius: 3 }} />
+                        <Skeleton style={{ width: '40%', height: 6, borderRadius: 3 }} />
                     </View>
-                    {
-                        book &&
-                        <Button title={'Book Now'} onPress={() => navigation.navigate('DoctorDetails', { item: item })} style={styles.button} light text_style={{ fontSize: 10 }} />
-                    }
-                </View>
-            </View>
+                    :
+                    <View style={styles.subview}>
+                        <View style={styles.subview2}>
+
+                            <TextComponent style={styles.text} text={item?.name} numberOfLines={1} />
+
+                            {
+                                heart &&
+                                <Icon type={IconTypes.Ionicons} name={'heart-sharp'} color={Colors?.PRIMARY} size={20} />
+                            }
+                        </View>
+                        <TextComponent style={[styles.span, { color: Colors.BLACK }]} text={item?.specialization ? item?.specialization : '--'} />
+
+                        <View style={[styles.flex, { gap: 5 }]}>
+                            <Icon name={'location'} type={IconTypes?.EvilIcons} size={16} color={Colors?.DDGREY} />
+                            <TextComponent style={styles.span} text={item?.hospital?.user_name ? item?.hospital?.user_name : '--'} />
+                        </View>
+
+                        <View style={styles.subview2}>
+                            <View style={styles.flex}>
+                                <Image source={require('../assets/images/star.png')} style={{ width: 18, height: 18, marginRight: 3 }} />
+                                <TextComponent style={styles.spanx} text={item?.rating ? item?.rating : 0 + ' (Reviews )'} />
+                            </View>
+                            {
+                                book &&
+                                <Button title={'Book Now'} onPress={() => navigation.navigate('DoctorDetails', { item: item })} style={styles.button} light text_style={{ fontSize: 10 }} />
+                            }
+                        </View>
+                    </View>
+            }
         </TouchableOpacity>
     )
 }
@@ -64,7 +89,7 @@ const styles = StyleSheet.create({
         marginVertical: 13,
     },
     text: {
-        width: '55%',
+        width: '60%',
         fontFamily: Fonts?.SEMIBOLD,
         fontSize: 14
     },

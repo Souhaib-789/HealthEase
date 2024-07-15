@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, TouchableOpacity, ScrollView, FlatList } from "react-native";
+import { View, StyleSheet, TouchableOpacity, ScrollView, FlatList, RefreshControl } from "react-native";
 import docC from "../../assets/images/doc3.png";
 import docF from "../../assets/images/doc9.jpg";
 import docD from "../../assets/images/doc4.png";
@@ -24,6 +24,7 @@ const Home = () => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const [search, setsearch] = useState();
+    const [loading, setloading] = useState(true)
     const Featured = [
         {
             id: 1,
@@ -60,20 +61,27 @@ const Home = () => {
         }
     ]
     const USER = useSelector(state => state.AuthReducer.user)
-    const Doctors = useSelector(state => state.DoctorsReducer?.allDoctors)
+    const Doctors = useSelector(state => state.DoctorsReducer?.dashboardDoctors)
 
-    // console.log('Doctors', JSON.stringify(Doctors , null ,8));
+    console.log('Doctors', JSON.stringify(Doctors, null, 8));
     useEffect(() => {
         fetchDoctorsData()
     }, [])
 
     const fetchDoctorsData = () => {
         dispatch(DoctorsMiddleware.getAllDoctorsData())
+            .then(() => setloading(false))
+            .catch(() => setloading(false))
     }
 
     return (
         <View style={styles.mainContainer}>
-            <ScrollView showsVerticalScrollIndicator={false} >
+            <ScrollView showsVerticalScrollIndicator={false}  refreshControl={
+                        <RefreshControl
+                            refreshing={false}
+                            onRefresh={() => { setloading(true), fetchDoctorsData() }}
+                        />
+                    } >
 
                 <View style={styles.home_header}>
                     <TouchableOpacity onPress={() => navigation.openDrawer()}>
@@ -151,9 +159,10 @@ const Home = () => {
                     data={Doctors}
                     decelerationRate={'fast'}
                     renderItem={({ item }) =>
-                        (<DoctorCard item={item} />)}
+                        (<DoctorCard item={item} loading={loading} />)}
                     ListEmptyComponent={<ListEmptyComponent image={NO_DOC} text={'no doctors found'} />}
                     keyExtractor={(item, index) => index.toString()}
+                   
                 />
             </ScrollView>
         </View>

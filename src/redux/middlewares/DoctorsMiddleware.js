@@ -14,6 +14,7 @@ export const DoctorsMiddleware = {
           const data = await Axios.get(Apis.getDoctors, await headers.config());
           if (data?.status == 200) {
             dispatch(getAllDoctors(data?.data?.data));
+            resolve(true);
           }
         } catch (error) {
           reject(error);
@@ -42,40 +43,37 @@ export const DoctorsMiddleware = {
           }
         } catch (error) {
           reject(error);
-          dispatch( showAlert({title: 'Get Hospital Doctors', message: error?.response?.data?.message, type: 'Error', status: error?.response?.status }));
+          dispatch(showAlert({ title: 'Get Hospital Doctors', message: error?.response?.data?.message, type: 'Error', status: error?.response?.status }));
         }
       });
     };
   },
 
   // create doctor by hospital
-  createDoctor: params => {
+  onCreateDoctor: params => {
     return dispatch => {
       dispatch(showLoading());
       return new Promise(async (resolve, reject) => {
         try {
           const formData = new FormData();
           formData.append('docter_name', params?.name);
-          formData.append('specialization', params?.specialization);
+          formData.append('specialization', params?.specialization?.name);
           formData.append('experience', params?.experience);
-          formData.append('specialization', params?.speciality);
-          formData.append('email', params?.email);
-          formData.append('password', params?.password);
-          formData.append('about', params?.about);
           formData.append('fee', params?.fee);
+          formData.append('about', params?.about);
+          // formData.append('image', params?.image);
           for (const [index, item] of params?.availability?.entries()) {
             formData.append(`slots[${index}][day]`, item?.day?.name);
             formData.append(`slots[${index}][shift_start_Time]`, item?.startTime);
             formData.append(`slots[${index}][shift_end_Time]`, item?.endTime);
           }
+          formData.append('email', params?.email);
+          formData.append('password', params?.password);
 
-          console.log('formData', JSON.stringify(formData, null, 8));
-
-          const data = await Axios.post(Apis.createDocter, formData , await headers.config());
+          const data = await Axios.post(Apis.createDocter, formData, await headers.multiPart());
           console.log(JSON.stringify(data, null, 8))
           if (data?.status == 200) {
             resolve(true);
-            console.log('data', data);
             dispatch(
               showAlert({
                 title: 'create doctor',

@@ -5,11 +5,12 @@ import CircleOne from '../../assets/images/circleone.png'
 import One from '../../assets/images/splash1.jpg'
 import Two from '../../assets/images/healthbot.png'
 import Three from '../../assets/images/capturing.jpg'
-import { View,StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Colors } from "../../utilities/Colors";
 import Image from '../../components/Image';
 import TextComponent from '../../components/TextComponent';
 import { Fonts } from '../../utilities/Fonts';
+import { Storage } from '../../utilities/AsyncStorage';
 
 const IntroSlider = () => {
 
@@ -25,7 +26,7 @@ const IntroSlider = () => {
         {
             key: 2,
             heading: 'HealthBot: AI Diet Assistant',
-            text: "Get meal suggestions customized to your health needs with our HealthBot." ,
+            text: "Get meal suggestions customized to your health needs with our HealthBot.",
             image: Two,
         },
         {
@@ -49,6 +50,7 @@ const IntroSlider = () => {
 
                     <TouchableOpacity style={styles.button} onPress={() => {
                         if (item?.key == 3) {
+                            Storage.getStarted('true');
                             navigation.navigate('Login')
                         } else {
                             SliderRef.goToSlide(index + 1);
@@ -57,8 +59,11 @@ const IntroSlider = () => {
                         <TextComponent style={styles.button_text} text={'Next'} />
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={{ marginTop: 15 }} onPress={() => navigation.navigate('Login')}>
-                        <TextComponent style={{ color: Colors.DDGREY }} text={'Skip'} />
+                    <TouchableOpacity style={{ marginTop: 15 , marginBottom: 20 }} onPress={() => {
+                        Storage.getStarted('true');
+                        navigation.navigate('Login')
+                    }}>
+                        <TextComponent style={{ color: Colors.DDGREY  }} text={'Skip'} />
                     </TouchableOpacity>
                 </View>
             </View>
@@ -97,7 +102,7 @@ const styles = StyleSheet.create({
         lineHeight: 20,
         fontSize: 13
     },
-    side_image:{
+    side_image: {
         width: 300,
         height: 300,
         position: 'absolute',

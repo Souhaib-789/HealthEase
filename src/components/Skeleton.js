@@ -10,7 +10,7 @@ const Skeleton = props => {
         <View
             style={{
                 backgroundColor: '#fff',
-                padding: 5,
+                padding: 3,
                 width: '98%',
                 borderRadius: props?.radius ? props?.radius : 0,
                 ...props.styles

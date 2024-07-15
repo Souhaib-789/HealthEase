@@ -106,9 +106,6 @@ const CreateDoctor = (props) => {
         }
     }
 
-
-
-
     const renderDaysCard = ({ item, index }) => {
         let isExits = selectedDay?.id == item?.id
         let isAlreadyBooked = TimeSlots?.find(e => e?.day?.id == item?.id)
@@ -170,7 +167,6 @@ const CreateDoctor = (props) => {
         }
     };
 
-
     const onPressCreateDoctor = () => {
         if (!docName) {
             dispatch(showAlert({ message: 'Please enter doctor name' }))
@@ -214,15 +210,11 @@ const CreateDoctor = (props) => {
                 about: about,
                 availability: TimeSlots
             }
-            // console.log(JSON.stringify(data, null, 8));
-            dispatch(DoctorsMiddleware.createDoctor(data))
+            dispatch(DoctorsMiddleware.onCreateDoctor(data))
                 .then(() => { setopenModal(true) })
                 .catch((err) => { console.log(err) })
         }
     }
-
-
-
 
 
     return (

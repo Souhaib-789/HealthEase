@@ -8,14 +8,17 @@ import IntroSlider from '../screens/IntroSlider/IntroSlider';
 
 const Stack = createNativeStackNavigator();
 
-const AuthStack = () =>{
+const AuthStack = (props) => {
   return (
-      <Stack.Navigator initialRouteName='IntroSlider'>
-        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-        <Stack.Screen name="Signup" component={Signup} options={{ headerShown: false }} />
+    <Stack.Navigator initialRouteName={!props?.getstarted ? 'IntroSlider' : 'Login'}>
+      <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+      <Stack.Screen name="Signup" component={Signup} options={{ headerShown: false }} />
+      {
+        !props?.getstarted &&
         <Stack.Screen name="IntroSlider" component={IntroSlider} options={{ headerShown: false }} />
+      }
 
-      </Stack.Navigator>
+    </Stack.Navigator>
   );
 }
 

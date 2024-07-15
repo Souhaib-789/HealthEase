@@ -10,7 +10,17 @@ export const headers = {
         Authorization: `Bearer ${token}`,
       },
     };
-  }
+  },
+  multiPart: async () => {
+    let token = await Storage.getToken();
+    return {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+      },
+    };
+  },
 }
 
 export const doctorCategories = [

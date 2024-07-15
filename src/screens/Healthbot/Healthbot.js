@@ -1,11 +1,12 @@
 import React from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView, ImageBackground } from "react-native";
 import { Colors } from "../../utilities/Colors";
 import TextComponent from "../../components/TextComponent";
 import { Fonts } from "../../utilities/Fonts";
 import Button from "../../components/Button";
 import { useNavigation } from "@react-navigation/native";
 import Lottie from 'lottie-react-native';
+import Image from "../../components/Image";
 
 const Healthbot = () => {
     const navigation = useNavigation();
@@ -13,6 +14,7 @@ const Healthbot = () => {
     return (
         <View style={styles.Container}>
             <ScrollView>
+                <Image source={require('../../assets/images/BG2.png')} style={{position: 'absolute', bottom: 15 , width: '100%', height: '100%' }} />
                 <View style={styles.heading_container}>
                     <TextComponent style={styles.heading} text={"Hello ! I'm "} />
                     <TextComponent style={styles.headingx} text={"Healthbot"} />
