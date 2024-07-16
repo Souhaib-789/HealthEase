@@ -63,7 +63,7 @@ const Home = () => {
     const USER = useSelector(state => state.AuthReducer.user)
     const Doctors = useSelector(state => state.DoctorsReducer?.dashboardDoctors)
 
-    console.log('Doctors', JSON.stringify(Doctors, null, 8));
+    // console.log('Doctors', JSON.stringify(Doctors, null, 8));
     useEffect(() => {
         fetchDoctorsData()
     }, [])

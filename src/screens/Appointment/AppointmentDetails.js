@@ -12,27 +12,30 @@ import { AirbnbRating, Rating } from "react-native-ratings";
 import STAR from '../../assets/images/star.png';
 import Input from "../../components/Input";
 import { useNavigation } from "@react-navigation/native";
+import AVATAR from '../../assets/images/avatar.png';
 
 const AppointmentDetails = (props) => {
 
     const routeData = props?.route?.params?.item;
     const screenType = props?.route?.params?.screenType;
 
+    console.log('--------', JSON.stringify(routeData, null, 8));
 
     const details = [
         {
             name: 'Reviews',
-            no: '50 +',
-            icon_name: 'star'
+            no: `${routeData?.docter?.rating ? routeData?.docter?.rating : 0} `,
+            icon_name: 'star',
+            navigate: 'Reviews'
         },
         {
             name: 'Experience',
-            no: `${routeData?.experience} Years`,
+            no: `${routeData?.docter?.experience ? routeData?.docter?.experience : 1} Years`,
             icon_name: 'tips-and-updates'
         },
         {
             name: 'per slot',
-            no: routeData?.fees ? routeData?.fees : 1000 + ' Rs',
+            no: routeData?.docter?.fee ? routeData?.docter?.fee : 0.00 + ' Rs',
             icon_name: 'price-change'
         },
     ]
@@ -62,14 +65,14 @@ const AppointmentDetails = (props) => {
         <View style={styles.mainContainer}>
             <ScrollView>
                 <Header title={'Details'} back />
-                <Image source={routeData?.image} style={styles.card_image} />
+                <Image source={routeData?.docter?.image_url ? { uri: routeData?.docter?.image_url } : AVATAR} style={styles.card_image} />
 
                 <View style={styles.details_card}>
 
                     <View style={{ alignItems: 'center' }}>
-                        <TextComponent style={styles.text} text={routeData?.name} />
-                        <TextComponent style={styles.textx} text={routeData?.category} />
-                        <TextComponent style={styles.textx} text={routeData?.hospital_name} />
+                        <TextComponent style={styles.text} text={routeData?.docter?.name ? routeData?.docter?.name : '--'} />
+                        <TextComponent style={styles.textx} text={routeData?.docter?.specialization ? routeData?.docter?.specialization : '--'} />
+                        <TextComponent style={styles.textx} text={routeData?.docter?.hospital?.user_name ? routeData?.docter?.hospital?.user_name : '--'} />
                     </View>
 
 
@@ -86,7 +89,7 @@ const AppointmentDetails = (props) => {
                                 <Icon name='calendar-clear-outline' type={IconTypes.Ionicons} size={18} color={Colors?.BLACK} />
                                 <TextComponent text={'Day :  '} style={styles.short_heading} />
                             </View>
-                            <TextComponent text={'Monday , 23 Oct'} style={styles.texty} />
+                            <TextComponent text={routeData?.date ? moment(routeData?.date).format('dddd , DD MMMM') : '--'} style={styles.texty} />
                         </View>
 
                         <View style={styles.wide_row}>
@@ -94,7 +97,7 @@ const AppointmentDetails = (props) => {
                                 <Icon name='clockcircleo' type={IconTypes.AntDesign} size={18} color={Colors?.BLACK} />
                                 <TextComponent text={'Time :  '} style={styles.short_heading} />
                             </View>
-                            <TextComponent text={'5:00 PM'} style={styles.texty} />
+                            <TextComponent text={routeData?.time ? routeData?.time : '--'} style={styles.texty} />
                         </View>
 
                         <View style={styles.wide_row}>
@@ -112,17 +115,17 @@ const AppointmentDetails = (props) => {
 
                         <View style={styles.wide_row}>
                             <TextComponent text={'Name :  '} style={styles.short_heading} />
-                            <TextComponent text={'Stefen Jhon'} style={styles.textx} />
+                            <TextComponent text={routeData?.name ? routeData?.name : '--'} style={styles.textx} />
                         </View>
 
                         <View style={styles.wide_row}>
                             <TextComponent text={'Relationship :  '} style={styles.short_heading} />
-                            <TextComponent text={'My Son'} style={styles.textx} />
+                            <TextComponent text={routeData?.relation ? routeData?.relation : '--' } style={styles.textx} />
                         </View>
 
                         <View style={styles.wide_row}>
                             <TextComponent text={'Contact No :  '} style={styles.short_heading} />
-                            <TextComponent text={'123 456 789'} style={styles.textx} />
+                            <TextComponent text={routeData?.contact ? routeData?.contact : '--'} style={styles.textx} />
                         </View>
                     </View>
 
@@ -308,5 +311,10 @@ const styles = StyleSheet.create({
     calendar: {
         borderRadius: 10,
         margin: 15
-    }
+    },
+    text: {
+        fontSize: 18,
+        color: Colors.BLACK,
+        fontFamily: Fonts?.SEMIBOLD
+    },
 })

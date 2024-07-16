@@ -10,7 +10,8 @@ const Apis = {
 
     getDoctors: `${BASE_URL}/user/api/getDocters`,
 
-    scheduleAppointment: `${BASE_URL}/user/api/scheduleAppointment`,
+    bookAppointment: `${BASE_URL}/user/api/book-Appointment`,
+    get_my_appointments: `${BASE_URL}/user/api/getAppointment`,
 
     //Hospital
     createDocter: `${BASE_URL}/hospital/api/createDocter`,

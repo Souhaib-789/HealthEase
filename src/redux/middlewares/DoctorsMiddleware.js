@@ -74,14 +74,14 @@ export const DoctorsMiddleware = {
           console.log(JSON.stringify(data, null, 8))
           if (data?.status == 200) {
             resolve(true);
-            dispatch(
-              showAlert({
-                title: 'create doctor',
-                message: data?.data?.message,
-                type: 'Success',
-                status: data?.status,
-              }),
-            );
+            // dispatch(
+            //   showAlert({
+            //     title: 'create doctor',
+            //     message: data?.data?.message,
+            //     type: 'Success',
+            //     status: data?.status,
+            //   }),
+            // );
           }
         } catch (error) {
           reject(error);

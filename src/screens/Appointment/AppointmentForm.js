@@ -12,8 +12,9 @@ import Icon, { IconTypes } from "../../components/Icon";
 import { Fonts } from "../../utilities/Fonts";
 import DoctorCard from "../../components/DoctorCard";
 import moment from "moment";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { showAlert } from "../../redux/actions/GeneralAction";
+import { AppointmentsMiddleware } from "../../redux/middlewares/AppointmentsMiddleware";
 
 const AppointmentForm = (props) => {
 
@@ -24,33 +25,42 @@ const AppointmentForm = (props) => {
     const [contactNo, setcontactNo] = useState()
     const [detail, setdetail] = useState()
     const [openModal, setopenModal] = useState(false)
+    const DETAILS = useSelector(state => state.DoctorsReducer?.doctorDetails)
+
+    console.log('routeData ---->>>>>', JSON.stringify(routeData, null, 8));
+    console.log('Data ---->>>>>', JSON.stringify(DETAILS, null, 8));
 
     const onBookAppointment = () => {
         if (!patient) {
             dispatch(showAlert({ message: 'Please enter patient name' }))
+        }
+        else if (!contactNo) {
+            dispatch(showAlert({ message: 'Please enter contact number' }))
         }
         else if (!detail) {
             dispatch(showAlert({ message: 'Please enter relationship with patient' }))
         }
         else {
             const data = {
-                doctorId: routeData?.item?.id,
+                doctorId: DETAILS?.user_id,
                 appointmentDate: routeData?.date,
-                appointmentTime: routeData?.timeSlot?.time,
+                appointmentTime: '12:00 PM',
                 patientName: patient,
                 relationship: detail,
                 contactNo: contactNo
             }
-            console.log(data);
-            // setopenModal(true)
-        }}
+            dispatch(AppointmentsMiddleware.onBookAppointment(data))
+                .then((res) => { setopenModal(true) })
+                .catch((err) => { console.log('error', err) })
+        }
+    }
 
     return (
         <View style={styles.Container}>
-            <Header title={'Appointment'} back/>
+            <Header title={'Appointment'} back />
             <ScrollView style={{ flex: 1 }}>
 
-                <DoctorCard item={routeData?.item} style={{width: '90%'}} />
+                <DoctorCard item={DETAILS} style={{ width: '90%' }} />
 
                 <View style={styles.summary}>
                     <View style={styles.flexA}>

@@ -1,66 +1,14 @@
 import React, { useState } from "react";
 import {View, StyleSheet, ScrollView, FlatList} from "react-native";
-import Header from "../../components/Header";
 import Input from "../../components/Input";
 import { Colors } from "../../utilities/Colors";
-import docC from "../../assets/images/doc3.png";
-import docD from "../../assets/images/doc4.png";
-import docE from "../../assets/images/doc5.png";
-import DoctorCard from "../../components/DoctorCard";
 import ListEmptyComponent from "../../components/ListEmptyComponent";
 import Icon, { IconTypes } from "../../components/Icon";
 import AppointCard from "../../components/AppointCard";
 
-const Upcoming = () => {
+const Upcoming = (props) => {
 
     const [search, setsearch] = useState(null)
-    const FavoriteDoctors = [
-        {
-            id: 1,
-            image: docC,
-            name: 'Dr. Crick',
-            fees: '2500',
-            rating: 3,
-            hearted: false,
-            category: 'Medicine Specialist',
-            hospital_name: 'City Hospital',
-            experience: 5,
-        },
-        {
-            id: 2,
-            image: docD,
-            name: 'Dr. Strain',
-            fees: '2200',
-            rating: 3,
-            hearted: true,
-            category: 'Dentist ',
-            experience: 3,
-            hospital_name: 'City Hospital',
-        },
-        {
-            id: 3,
-            image: docE,
-            name: 'Dr. Lachinet',
-            fees: '2900',
-            rating: 2,
-            hearted: false,
-            category: 'Physio Therapy Specialist',
-            experience: 5,
-            hospital_name: 'City Hospital',
-        },
-        {
-            id: 4,
-            image: docC,
-            name: 'Dr. Crick',
-            fees: '2500',
-            rating: 3,
-            hearted: true,
-            category: 'Cardiologist',
-            experience: 9,
-            hospital_name: 'City Hospital',
-
-        },
-    ]
 
     return (
         <View style={styles.mainContainer}>
@@ -76,11 +24,12 @@ const Upcoming = () => {
 
                     <FlatList
                         showsVerticalScrollIndicator={false}
-                        data={FavoriteDoctors}
+                        data={props?.data}
                         renderItem={({ item }) =>
-                            (<AppointCard item={item} screenType={'upcoming'}  />)}
+                            (<AppointCard loading={props?.loading} item={item} screenType={'upcoming'}  />)}
                         keyExtractor={(_ , index) => index.toString()}
                         ListEmptyComponent={<ListEmptyComponent text={'no doctors found'} />}
+                     
                     />
             </ScrollView>
         </View>

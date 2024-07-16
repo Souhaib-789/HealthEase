@@ -17,6 +17,7 @@ import TopTab from "../../components/TopTabs";
 import Appointments from "../Appointment";
 import DoctorCurrAppointments from "../Appointment/DoctorCurrAppointments";
 import { clearDoctorDetails } from "../../redux/actions/DoctorsActions";
+import dayjs from "dayjs";
 
 const DoctorDetails = (props) => {
 
@@ -24,7 +25,7 @@ const DoctorDetails = (props) => {
     const dispatch = useDispatch();
     const USER = useSelector(state => state.AuthReducer.user)
     const DETAILS = useSelector(state => state.DoctorsReducer?.doctorDetails)
-    console.log('----------', JSON.stringify(DETAILS , null ,8));
+    // console.log('----------', JSON.stringify(DETAILS, null, 8));
 
     const [activeCompo, setactiveCompo] = useState({ name: 'Info' })
 
@@ -32,43 +33,7 @@ const DoctorDetails = (props) => {
     const [confirmedSlot, setconfirmedSlot] = useState();
     const [selectedDate, setSelectedDate] = useState();
     const [showCalendar, setshowCalendar] = useState(false);
-    const AvaiableDays = ['Mon', 'Wed', 'Fri']
-    const Slots = [
-        {
-            id: 1,
-            time: '4:00 PM'
-        },
-        {
-            id: 2,
-            time: '4:30 PM'
-        },
-        {
-            id: 3,
-            time: '5:00 PM'
-        },
-        {
-            id: 4,
-            time: '5:30 PM'
-        },
-
-        {
-            id: 5,
-            time: '6:00 PM'
-        },
-
-        {
-            id: 6,
-            time: '6:30 PM'
-        },
-
-        {
-            id: 7,
-            time: '7:00 PM'
-        },
-        {
-            id: 8,
-            time: '7:30 PM'
-        }]
+    const [timeSlots, setTimeSlots] = useState([]);
 
     const calendarTheme = {
         selectedDayBackgroundColor: Colors?.PRIMARY,
@@ -105,8 +70,7 @@ const DoctorDetails = (props) => {
             icon_name: 'price-change'
         },
     ]
-
-    // console.log(JSON.stringify(routeData , null , 8));
+    console.log('-----------------', timeSlots);
 
     useEffect(() => {
         return () => {
@@ -150,11 +114,17 @@ const DoctorDetails = (props) => {
         console.log(date.toString().substr(0, 15));
     }
 
-    const onScheduleAppoitment = () => {
+    const onProceed = () => {
         if (!selectedDate) return dispatch(showAlert({ message: 'Please select a day' }));
-        else if (!confirmedSlot) return dispatch(showAlert({ message: 'Please select any timeslot for ' + moment(selectedDate).format('dddd') }));
-        navigation.navigate('Appointment', { item: routeData, timeSlot: confirmedSlot, date: selectedDate })
+        // else if (!confirmedSlot) return dispatch(showAlert({ message: 'Please select any timeslot for ' + moment(selectedDate).format('dddd') }));
+        navigation.navigate('Appointment', { timeSlot: confirmedSlot, date: selectedDate })
     }
+
+    const generateTimeSlots = (date) => {
+        const sortedSlots = DETAILS?.slots?.find(item => item?.day.toLowerCase() == moment(date).format('ddd').toLowerCase())
+    };
+
+
 
     return (
         <View style={styles.mainContainer}>
@@ -179,28 +149,28 @@ const DoctorDetails = (props) => {
                     <View style={{ alignItems: 'center' }}>
                         <TextComponent style={styles.text} text={DETAILS?.name ? DETAILS?.name : '--'} />
                         <TextComponent style={styles.textx} text={DETAILS?.specialization ? DETAILS?.specialization : '--'} />
-                        <TextComponent style={styles.textx} text={DETAILS?.hospital?.user_name ? DETAILS?.hospital?.user_name  : '--'} />
+                        <TextComponent style={styles.textx} text={DETAILS?.hospital?.user_name ? DETAILS?.hospital?.user_name : '--'} />
                     </View>
 
 
-{                        USER?.user_role == 'hospital' &&
+                    {USER?.user_role == 'hospital' &&
 
-                    <TopTab
-                        options={[{
-                            id: 1,
-                            name: 'Info'
-                        },
-                        {
-                            id: 2,
-                            name: 'Appointments'
-                        },
-                        ]}
+                        <TopTab
+                            options={[{
+                                id: 1,
+                                name: 'Info'
+                            },
+                            {
+                                id: 2,
+                                name: 'Appointments'
+                            },
+                            ]}
 
-                        focused={activeCompo?.name}
-                        onActivePress={(e) => setactiveCompo(e)}
-                        style={{marginVertical: 10}}
-                    />
-}
+                            focused={activeCompo?.name}
+                            onActivePress={(e) => setactiveCompo(e)}
+                            style={{ marginVertical: 10 }}
+                        />
+                    }
 
                     {
                         activeCompo?.name == 'Info' ?
@@ -219,9 +189,9 @@ const DoctorDetails = (props) => {
                                         <View style={styles.flex}>
                                             <TextComponent text={'Days :  '} style={styles.short_heading} />
                                             <FlatList
-                                                data={AvaiableDays}
+                                                data={DETAILS?.slots}
                                                 horizontal
-                                                renderItem={({ item }) => <TextComponent text={item} style={styles.texty} />}
+                                                renderItem={({ item }) => <TextComponent text={item?.day} style={styles.texty} />}
                                                 keyExtractor={item => item?.id}
                                             />
                                         </View>
@@ -240,21 +210,18 @@ const DoctorDetails = (props) => {
 
 
                                 <TextComponent style={styles.heading} text={'Available Slots' + (selectedDate ? ` for ${moment(selectedDate).format('dddd')}` : ' ')} />
-                                {
+                                {/* {
                                     selectedDate ?
-                                        // <View style={styles.slots_view}>
-                                        //     {Slots?.map(renderSlotCard)}
-                                        // </View>
 
-                                        <FlatList
-                                            data={Slots}
-                                            horizontal
-                                            renderItem={renderSlotCard}
-                                            keyExtractor={item => item?.id}
-                                        />
+                                        // <FlatList
+                                        //     data={sortedSlots}
+                                        //     horizontal
+                                        //     renderItem={renderSlotCard}
+                                        //     keyExtractor={item => item?.id}
+                                        // />
                                         :
                                         <TextComponent style={styles.textx} text={'Select day first'} />
-                                }
+                                } */}
 
                                 {
                                     USER?.user_role == 'hospital' ?
@@ -262,7 +229,7 @@ const DoctorDetails = (props) => {
                                         :
                                         <Button title={'Schedule appointment'}
                                             style={{ marginVertical: 15 }}
-                                            onPress={onScheduleAppoitment} />
+                                            onPress={onProceed} />
                                 }
 
                             </>
@@ -274,7 +241,6 @@ const DoctorDetails = (props) => {
                 </View>
 
 
-
                 <FormModal
                     visible={showCalendar}
                     onClose={() => setshowCalendar(false)}
@@ -282,9 +248,11 @@ const DoctorDetails = (props) => {
                     <Calendar
                         onDayPress={e => {
                             let day = moment(e.dateString).format('ddd')
-                            if (AvaiableDays.includes(day)) {
+                            let allDays = DETAILS?.slots?.map(item => item?.day)
+                            if (allDays?.includes(day)) {
                                 setshowCalendar(false)
                                 setSelectedDate(e.dateString)
+                                generateTimeSlots(e.dateString)
                             } else {
                                 alert('Doctor is not available on this day')
                             }
@@ -321,7 +289,7 @@ const styles = StyleSheet.create({
         color: Colors.BLACK
     },
     text: {
-        fontSize: 20,
+        fontSize: 18,
         color: Colors.BLACK,
         fontFamily: Fonts?.SEMIBOLD
     },

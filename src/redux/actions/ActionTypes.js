@@ -22,6 +22,7 @@ const ActionTypes = {
 
     //Appointments
     GET_APPOINTMENTS: 'GET_APPOINTMENTS',
+    GET_MY_APPOINTMENTS: 'GET_MY_APPOINTMENTS',
   
   }
   

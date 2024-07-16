@@ -1,13 +1,13 @@
 import ActionTypes from "../actions/ActionTypes";
 
 let initialState = {
-  appList: [],
+  myAppointmentList: [],
 };
 
 const AppointmentsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case ActionTypes.GET_APPOINTMENTS:
-      state = { ...state, appList: action.payload };
+    case ActionTypes.GET_MY_APPOINTMENTS:
+      state = { ...state, myAppointmentList: action.payload };
       break;
 
     default:

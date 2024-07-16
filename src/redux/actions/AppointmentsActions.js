@@ -7,4 +7,11 @@ const getAppointments = payload => {
     };
 }
 
-export { getAppointments };
+const getMyAppointments = payload => {
+    return {
+        type: ActionTypes.GET_MY_APPOINTMENTS,
+        payload,
+    };
+}
+
+export { getAppointments , getMyAppointments };

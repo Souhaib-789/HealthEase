@@ -29,13 +29,27 @@ const CustomCategoryIcon = props => {
             : props?.category == 'physio therapist' || props?.category == 'physiotherapist' ? (
               <Icon type={IconTypes?.Ionicons} name="body" size={Size} color={color} />
             )
+            : props?.category == 'gynecologist' ? (
+              <Icon type={IconTypes?.Ionicons} name="woman-sharp" size={Size} color={color} />
+            )
+            : props?.category == 'orthopedic' ? (
+              <Icon type={IconTypes?.MaterialCommunityIcons} name="bone" size={Size} color={color} />
+            )
+            : props?.category == 'pediatrician' ? (
+              <Icon type={IconTypes?.MaterialIcons} name="baby-changing-station" size={Size} color={color} />
+            )
+            : props?.category == 'ophthalmologist' ? (
+              <Icon type={IconTypes?.FontAwesome5} name="eye" size={Size} color={color} />
+            )
+            : props?.category == 'psychiatrist' ? (
+              <Icon type={IconTypes?.FontAwesome5} name="brain" size={Size} color={color} />
+            )
               : props?.category == 'all' ? (
                 <Icon type={IconTypes?.Entypo} name="list" size={Size} color={color} />
               )
                 : (
-                  <Image source={require('../assets/images/doc.png')}
-                    tintColor={Colors?.PRIMARY}
-                    style={{ height: Size, width: Size }} />
+                  <Icon type={IconTypes?.FontAwesome6} name="user-doctor" size={Size} color={color} />
+
                 )}
     </View>
   );
