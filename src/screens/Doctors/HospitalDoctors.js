@@ -122,7 +122,7 @@ const HospitalDoctors = () => {
             <FlatList
                 key={'Doctors'}
                 showsHorizontalScrollIndicator={false}
-                data={DoctorsList}
+                data={loading ? [ 1 ,2 ,3,4,5,6] : DoctorsList}
                 decelerationRate={'fast'}
                 renderItem={renderItem}
                 ListEmptyComponent={<ListEmptyComponent image={NO_DOC} text={'no doctors found'} />}

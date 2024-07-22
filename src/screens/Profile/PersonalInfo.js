@@ -11,7 +11,6 @@ import { useSelector } from 'react-redux'
 const PersonalInfo = () => {
     const navigation = useNavigation()
     const USER = useSelector(state => state.AuthReducer?.user);
-
     const personalInfo = [
         {
             id: 2,
@@ -49,28 +48,38 @@ const PersonalInfo = () => {
     const doctorInfo = [
         {
             id: 2,
-            info: 'doctor@gmail.com',
+            info: USER?.email ? USER?.email : '--',
             icon: <Icon name={'envelope'} type={IconTypes.FontAwesome} size={15} color={Colors.PRIMARY} />
         },
         {
             id: 4,
             icon: <Icon name={'location-pin'} type={IconTypes.Entypo} size={15} color={Colors.PRIMARY} />,
-            info: 'City Hospital , California'
+            info: USER?.hospital?.user_name ? USER?.hospital?.user_name : '--'
         },
         {
             id: 5,
             icon: <Icon name={'user-doctor'} type={IconTypes.FontAwesome6} size={15} color={Colors.PRIMARY} />,
-            info: 'Cardiologist'
+            info: USER?.specialization ? USER?.specialization : '--'
         },
         {
             id: 6,
             icon: <Icon name={'tips-and-updates'} type={IconTypes.MaterialIcons} size={15} color={Colors.PRIMARY} />,
-            info: '5 Years Experience'
+            info: USER?.experience ? USER?.experience + ' years experience' : '--'
         },
         {
             id: 7,
-            info: '2500 per slot',
+            info: USER?.fee ? USER?.fee + ' per slot' : '--',
             icon: <Icon name={'price-change'} type={IconTypes.MaterialIcons} size={15} color={Colors.PRIMARY} />,
+        },
+        {
+            id: 8,
+            info: USER?.about ? USER?.about + ' per slot' : '--',
+            icon: <Icon name={'info'} type={IconTypes.MaterialIcons} size={15} color={Colors.PRIMARY} />,
+        },
+        {
+            id: 9,
+            slots: true,
+            icon: <Icon name={'clockcircle'} type={IconTypes.AntDesign} size={15} color={Colors.PRIMARY} />,
         }
 
     ]
@@ -81,7 +90,24 @@ const PersonalInfo = () => {
                 <View style={{ borderRadius: 100, width: 38, height: 38, justifyContent: "center", alignItems: 'center', backgroundColor: Colors?.LIGHT_GREY }}>
                     {item?.icon}
                 </View>
-                <TextComponent text={item?.info} style={{ fontSize: 12, color: Colors.DGREY }} />
+                {
+                    item?.slots ?
+                        <FlatList
+                            data={USER?.slots}
+                            renderItem={({ item, index }) => {
+                                return (
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginVertical: 10, width: '70%' }}>
+                                        <TextComponent text={item?.day} style={{ fontSize: 12, }} />
+                                        <TextComponent text={item?.shift_start_Time + ' - ' + item?.shift_end_Time} style={{ fontSize: 12 }} />
+                                    </View>
+                                )
+                            }}
+                            keyExtractor={(item, index) => index.toString()}
+                            showsVerticalScrollIndicator={false}
+                        />
+                        :
+                        <TextComponent text={item?.info} style={{ fontSize: 12, color: Colors.DGREY, width: '80%' }} />
+                }
             </TouchableOpacity>
         )
     }

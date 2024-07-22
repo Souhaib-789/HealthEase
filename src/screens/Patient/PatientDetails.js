@@ -15,10 +15,12 @@ import { useNavigation } from "@react-navigation/native";
 const PatientDetails = (props) => {
 
     const screenType = props?.route?.params?.screenType;
+    const item = props?.route?.params?.item;
     const [openModal, setopenModal] = useState(false)
     const [prescription, setprescription] = useState(null)
     const navigation = useNavigation()
 
+    console.log('item', JSON.stringify(item , null ,8))
 
     const renderDetailsItem = (item, index) => {
         return (
@@ -49,7 +51,7 @@ const PatientDetails = (props) => {
                                 <Icon name='calendar-clear-outline' type={IconTypes.Ionicons} size={18} color={Colors?.BLACK} />
                                 <TextComponent text={'Day :  '} style={styles.short_heading} />
                             </View>
-                            <TextComponent text={'Monday , 23 Oct'} style={styles.texty} />
+                            <TextComponent text={item?.date ? moment(item?.date).format("dddd MM ' YYYY") : '--'} style={styles.texty} />
                         </View>
 
                         <View style={styles.wide_row}>
@@ -57,7 +59,7 @@ const PatientDetails = (props) => {
                                 <Icon name='clockcircleo' type={IconTypes.AntDesign} size={18} color={Colors?.BLACK} />
                                 <TextComponent text={'Time :  '} style={styles.short_heading} />
                             </View>
-                            <TextComponent text={'5:00 PM'} style={styles.texty} />
+                            <TextComponent text={item?.time ? item?.time : '--'} style={styles.texty} />
                         </View>
 
                         <View style={styles.wide_row}>
@@ -75,22 +77,22 @@ const PatientDetails = (props) => {
 
                         <View style={styles.wide_row}>
                             <TextComponent text={'Name :  '} style={styles.short_heading} />
-                            <TextComponent text={'Stefen Jhon'} style={styles.textx} />
+                            <TextComponent text={item?.name ? item?.name : '--'} style={styles.textx} />
                         </View>
 
                         <View style={styles.wide_row}>
                             <TextComponent text={'Booked By :  '} style={styles.short_heading} />
-                            <TextComponent text={'Stefen Jhon'} style={styles.textx} />
+                            <TextComponent text={item?.patient?.user_name ? item?.patient?.user_name : '--'} style={styles.textx} />
                         </View>
 
                         <View style={styles.wide_row}>
                             <TextComponent text={'Relationship :  '} style={styles.short_heading} />
-                            <TextComponent text={'Myself'} style={styles.textx} />
+                            <TextComponent text={item?.relation ? item?.relation : '--'} style={styles.textx} />
                         </View>
 
                         <View style={styles.wide_row}>
                             <TextComponent text={'Contact No :  '} style={styles.short_heading} />
-                            <TextComponent text={'123 456 789'} style={styles.textx} />
+                            <TextComponent text={item?.contact ? item?.contact : '--'} style={styles.textx} />
                         </View>
                     </View>
 

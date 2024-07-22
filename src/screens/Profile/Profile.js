@@ -32,7 +32,7 @@ const Profile = () => {
                 titleStyle={{ color: Colors.WHITE }} iconColor={Colors.WHITE} logout={USER?.user_role == 'doctor'} />
 
             <View style={styles.flex}>
-                <Image source={perfil ? perfil : Avatar} style={styles.profile_image} resizeMode={'cover'} />
+                <Image source={USER?.image_url ? { uri: USER?.image_url } : Avatar} style={styles.profile_image} resizeMode={'cover'} />
                 <TextComponent text={USER?.user_name} style={styles.text} />
             </View>
 
@@ -70,9 +70,9 @@ const styles = StyleSheet.create({
     },
 
     profile_image: {
-        width: 80,
+        width: 70,
         borderRadius: 100,
-        height: 80,
+        height: 70,
     },
     flex: {
         flexDirection: "row",

@@ -21,7 +21,7 @@ export const DoctorsMiddleware = {
           dispatch(
             showAlert({
               title: 'Get All Doctors',
-              message: error?.response?.data?.message,
+              message: error?.response?.data?.message ? error?.response?.data?.message : error?.message,
               type: 'Error',
               status: error?.response?.status,
             }),

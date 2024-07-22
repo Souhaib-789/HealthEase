@@ -4,6 +4,7 @@ import Apis from '../../apis/apis';
 import { hideLoading, showAlert, showLoading } from '../actions/GeneralAction';
 import { Storage } from '../../utilities/AsyncStorage';
 import { login, userData } from '../actions/AuthAction';
+import { getDoctorPersonalData } from '../actions/DoctorsActions';
 
 export const AuthMiddleware = {
 
@@ -21,13 +22,18 @@ export const AuthMiddleware = {
           console.log(JSON.stringify(data, null, 8))
           if (data?.status == 200) {
             await Storage.setToken(data?.data?.token);
-            await Storage.set('@user', JSON.stringify(data?.data?.user));
-            dispatch(userData(data?.data?.user));
             dispatch(login(true));
+            if (data?.data?.user?.user_role == 'doctor') {
+              await Storage.set('@user', JSON.stringify({...data?.data?.user , ...data?.data?.details}));
+              dispatch(userData({...data?.data?.user , ...data?.data?.details}));
+            } else {
+              await Storage.set('@user', JSON.stringify(data?.data?.user));
+              dispatch(userData(data?.data?.user));
+            }
           }
         } catch (error) {
           reject(error);
-          console.log('=========' , error);
+          console.log('=========', error);
           dispatch(
             showAlert({
               title: 'login',

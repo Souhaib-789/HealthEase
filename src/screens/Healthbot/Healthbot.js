@@ -13,7 +13,6 @@ const Healthbot = () => {
 
     return (
         <View style={styles.Container}>
-            <ScrollView>
                 <Image source={require('../../assets/images/BG2.png')} style={{position: 'absolute', bottom: 15 , width: '100%', height: '100%' }} />
                 <View style={styles.heading_container}>
                     <TextComponent style={styles.heading} text={"Hello ! I'm "} />
@@ -29,8 +28,6 @@ const Healthbot = () => {
 
                 <TextComponent style={styles.headingy} text={"Do you want any healthy food advice ?"} />
                 <Button onPress={() => navigation.navigate('HealthbotChat')} title={"Ask me"} style={styles.button} />
-            </ScrollView>
-
         </View>
     )
 }

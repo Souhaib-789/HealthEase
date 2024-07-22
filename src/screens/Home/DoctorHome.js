@@ -1,9 +1,6 @@
-import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity, ScrollView, FlatList } from "react-native";
-import docC from "../../assets/images/doc3.png";
-import docF from "../../assets/images/doc9.jpg";
-import docD from "../../assets/images/doc4.png";
-import docE from "../../assets/images/doc5.png";
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, TouchableOpacity, ScrollView, FlatList, RefreshControl } from "react-native";
+
 import { Colors } from "../../utilities/Colors";
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { useNavigation } from "@react-navigation/native";
@@ -13,76 +10,84 @@ import Image from "../../components/Image";
 import { Fonts } from "../../utilities/Fonts";
 import ListEmptyComponent from "../../components/ListEmptyComponent";
 import CalendarStrip from 'react-native-slideable-calendar-strip';
-import PROFILE from '../../assets/images/profile.png'
-import NO_DOC from '../../assets/images/noDoc.png'
+
+import { useDispatch, useSelector } from "react-redux";
+import { AppointmentsMiddleware } from "../../redux/middlewares/AppointmentsMiddleware";
+import AVATAR from '../../assets/images/avatar.png'
+import moment from "moment";
+import Skeleton from "../../components/Skeleton";
 
 const DoctorHome = () => {
     const navigation = useNavigation();
+    const dispatch = useDispatch();
     const [search, setsearch] = useState();
     const [state, setState] = useState();
+    const [loading, setLoading] = useState(true);
+    const USER_DATA = useSelector(state => state.AuthReducer.user)
+    const APPOINTMENTS = useSelector(state => state.AppointmentsReducer?.doctorAppointmentList)
+
+    console.log('USER_DATA ------->>>>', JSON.stringify(state, null, 8));
 
 
-    const Featured = [
-        {
-            id: 1,
-            image: docC,
-            name: 'Dr. Crick',
-            fees: '2500',
-            rating: 5,
-            hearted: false,
-            category: 'Medicine Specialist',
-            hospital_name: 'City Hospital',
-            experience: 5,
-        },
-        {
-            id: 2,
-            image: docD,
-            name: 'Dr. Strain',
-            fees: '2200',
-            rating: 3,
-            hearted: true,
-            category: 'Dentist ',
-            hospital_name: 'City Hospital',
-            experience: 3,
-        },
-        {
-            id: 3,
-            image: docE,
-            name: 'Dr. Lachinet',
-            fees: '2900',
-            rating: 2,
-            hearted: false,
-            category: 'Physio Therapy Specialist',
-            hospital_name: 'City Hospital',
-            experience: 5,
+    useEffect(() => {
+        fetchAppointmentsData({ doctorId: USER_DATA?.user_id })
+    }, [USER_DATA])
+
+    const fetchAppointmentsData = (data = null) => {
+        dispatch(AppointmentsMiddleware.getDoctorAppointmentsData(data))
+            .then(() => setLoading(false))
+            .catch(() => setLoading(false))
+    }
+
+    const onFilterByDate = (date) => {
+        setState({ selectedDate: date });
+        setLoading(true)
+        const data = {
+            doctorId: USER_DATA?.user_id,
+            date: date
         }
-    ]
+        fetchAppointmentsData(data)
+    }
 
     const renderItem = ({ item }) => {
         return (
-            <TouchableOpacity style={styles.Appointment_card} onPress={() => navigation.navigate('PatientDetails' , {screenType: 'doctor'})} >
-                <View style={styles.appointment_card_subview1}>
-                    <View style={styles.appointment_card_subview2}>
-                        <Image source={docF} style={styles.Appointment_image} />
-                        <View>
-                            <TextComponent style={[styles.appointment_card_text, { fontFamily: Fonts?.SEMIBOLD }]} text={'Mr. Fernendes'} />
-                            <TextComponent style={styles.appointment_card_span} text={'for Himself'} />
+            loading ?
+                <View style={styles.Appointment_card}  >
+                    <View style={styles.appointment_card_subview1}>
+                        <View style={styles.appointment_card_subview2}>
+                            <Skeleton style={styles.Appointment_image} styles={{ width: '18%' }} />
+                            <View>
+                                <Skeleton style={{ width: '45%', height: 15, borderRadius: 3 }} />
+                                <Skeleton style={{ width: '50%', height: 10, borderRadius: 3 }} />
+                            </View>
                         </View>
                     </View>
-                    <Icon type={IconTypes.MaterialIcons} name={'keyboard-arrow-right'} size={25} color={Colors.PRIMARY} />
+                    <Skeleton style={{ width: '100%', height: 33, borderRadius: 10 }} />
                 </View>
+                :
+                <TouchableOpacity style={styles.Appointment_card} onPress={() => navigation.navigate('PatientDetails', { item: item, screenType: 'doctor' })} >
+                    <View style={styles.appointment_card_subview1}>
+                        <View style={styles.appointment_card_subview2}>
+                            <Image source={item?.patient?.image_url ? { uri: item?.patient?.image_url } : AVATAR} style={styles.Appointment_image} />
+                            <View>
+                                <TextComponent style={[styles.appointment_card_text, { fontFamily: Fonts?.SEMIBOLD }]} text={item?.patient?.user_name ? item?.patient?.user_name : '--'} />
+                                <TextComponent style={styles.appointment_card_span} text={'for ' + (item?.name ? item?.name : '--')} />
+                            </View>
+                        </View>
+                        <Icon type={IconTypes.MaterialIcons} name={'keyboard-arrow-right'} size={25} color={Colors.PRIMARY} />
+                    </View>
 
-                <View style={styles.appointment_card_subview3}>
-                    <View style={styles.appointment_card_subview4}>
-                        <Icon type={IconTypes.Feather} name={'calendar'} size={15} color={Colors.PRIMARY} />
-                        <TextComponent style={styles.appointment_card_span} text={'23 Oct 2023'} />
+                    <View style={styles.appointment_card_subview3}>
+                        <View style={styles.appointment_card_subview4}>
+                            <Icon type={IconTypes.Feather} name={'calendar'} size={15} color={Colors.PRIMARY} />
+                            <TextComponent style={styles.appointment_card_span} text={item?.date ? moment(item?.date).format('DD MMM YYYY') : '--'} />
+                        </View>
+                        <View style={styles.appointment_card_subview4}>
+                            <Ionicons name='time-outline' color={Colors.PRIMARY} size={15} />
+                            <TextComponent style={styles.appointment_card_span} text={item?.time ? item?.time : '--'} />
+                        </View>
                     </View>
-                    <View style={styles.appointment_card_subview4}>
-                        <Ionicons name='time-outline' color={Colors.PRIMARY} size={15} />
-                        <TextComponent style={styles.appointment_card_span} text={'12:00 AM'} />
-                    </View>
-                </View>
-            </TouchableOpacity>
+                </TouchableOpacity>
         )
     }
 
@@ -92,53 +97,74 @@ const DoctorHome = () => {
                 <View style={styles.sub_container}>
                     <View style={styles.wide_row}>
                         <View style={styles.home_header}>
-                    <TouchableOpacity onPress={() => navigation.openDrawer()}>
-                        <Icon type={IconTypes.Feather} name='menu' size={23} color={Colors.WHITE} />
-                    </TouchableOpacity>
-                        <View>
-                            <TextComponent style={styles.sub_heading} text={'Hey Doctor !'} />
-                            <TextComponent style={styles.heading} text={'Sam Will'} />
-                        </View>
+                            <TouchableOpacity onPress={() => navigation.openDrawer()}>
+                                <Icon type={IconTypes.Feather} name='menu' size={23} color={Colors.WHITE} />
+                            </TouchableOpacity>
+                            <View>
+                                <TextComponent style={styles.sub_heading} text={'Hey Doctor !'} />
+                                <TextComponent style={styles.heading} text={USER_DATA?.user_name} />
+                            </View>
                         </View>
                         <TouchableOpacity onPress={() => navigation.navigate('Profile')} >
-                            <Image source={PROFILE} style={{ width: 35, height: 35 }} />
+                            <Image source={USER_DATA?.image_url ? { uri: USER_DATA?.image_url } : AVATAR} style={{ width: 35, height: 35 }} />
                         </TouchableOpacity>
                     </View>
 
                     <View style={styles.wide_row}>
                         <TextComponent style={styles.sub_container_heading} text={"Lets explore patient's Appointments!"} />
 
-                        {/* <TouchableOpacity style={{ backgroundColor: Colors.WHITE, padding: 10, borderRadius: 40, elevation: 5 }}>
-                            <Icon type={IconTypes.Ionicons} name={'filter-outline'} size={20} color={Colors.PRIMARY} />
-                        </TouchableOpacity> */}
+                        <TouchableOpacity style={{ backgroundColor: Colors.PRIMARY, padding: 10, borderRadius: 40, elevation: 5 }}>
+                            <Icon type={IconTypes.Ionicons} name={'filter-outline'} size={20} color={Colors.WHITE} />
+                        </TouchableOpacity>
                     </View>
-
-                    <View style={{ alignSelf: 'center' }}>
-                        <CalendarStrip
-                            selectedDate={state?.selectedDate}
-                            onPressDate={(date) => {
-                                setState({ selectedDate: date });
-                            }}
-                            onPressGoToday={(today) => {
-                                setState({ selectedDate: today });
-                            }}
-                            onSwipeDown={() => {
-                                alert('onSwipeDown');
-                            }}
-                            markedDate={['2024-04-26', '2024-04-27', '2024-04-28', '2024-04-29']}
-                            weekStartsOn={1}
-                        />
-                    </View>
+                    {
+                        loading ?
+                            <FlatList
+                                showsHorizontalScrollIndicator={false}
+                                data={[1, 2, 3, 4, 5, 6]}
+                                horizontal
+                                renderItem={({ item, index }) => {
+                                    return (
+                                        <View style={{bottom: 3}} >
+                                            <Skeleton styles={{ backgroundColor: Colors.PRIMARY, width: '5%' }} style={{ marginLeft: 17, width: 13, height: 5, borderRadius: 10 }} />
+                                            <Skeleton styles={{ backgroundColor: Colors.PRIMARY, width: '35%' }} style={{ width: 45, height: 45, borderRadius: 50 }} />
+                                        </View>
+                                    )
+                                }}
+                                keyExtractor={(item, index) => index.toString()}
+                            />
+                            :
+                            <View style={{ alignSelf: 'center' }}>
+                                <CalendarStrip
+                                    selectedDate={state?.selectedDate ? state?.selectedDate : new Date()}
+                                    onPressDate={(date) => onFilterByDate(date)}
+                                    onPressGoToday={(today) => {
+                                        setState({ selectedDate: today });
+                                    }}
+                                    onSwipeDown={() => {
+                                        alert('onSwipeDown');
+                                    }}
+                                    markedDate={['2024-04-26', '2024-04-27', '2024-04-28', '2024-04-29']}
+                                    weekStartsOn={1}
+                                    showWeekNumber={true}
+                                />
+                            </View>
+                    }
                 </View>
 
                 <FlatList
-                    key={'Featured Doctors'}
                     showsHorizontalScrollIndicator={false}
-                    data={Featured}
+                    data={loading ? [1, 2, 3, 4, 5, 6] : APPOINTMENTS}
                     decelerationRate={'fast'}
                     renderItem={renderItem}
-                    ListEmptyComponent={<ListEmptyComponent image={NO_DOC} text={'no doctors found'} />}
+                    ListEmptyComponent={<ListEmptyComponent text={'no appointments for you'} />}
                     keyExtractor={(item, index) => index.toString()}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={false}
+                            onRefresh={() => { setLoading(true), setState(new Date()), fetchAppointmentsData({ doctorId: USER_DATA?.user_id }) }}
+                        />
+                    }
                 />
             </ScrollView>
         </View>

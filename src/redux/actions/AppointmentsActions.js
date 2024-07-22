@@ -2,7 +2,7 @@ import ActionTypes from "./ActionTypes";
 
 const getAppointments = payload => {
     return {
-        type: ActionTypes.GET_APPOINTMENTS,
+        type: ActionTypes.GET_DOCTOR_APPOINTMENTS,
         payload,
     };
 }

@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import TextComponent from './TextComponent';
 import { Colors } from '../utilities/Colors';
 import { Fonts } from '../utilities/Fonts';
-import DOC from '../assets/images/noData.png'
+import DOC from '../assets/images/noData2.png'
 import Image from './Image';
 
 const ListEmptyComponent = (props) => {

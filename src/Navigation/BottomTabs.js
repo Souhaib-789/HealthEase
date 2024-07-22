@@ -70,7 +70,7 @@ export default function BottomTabs() {
         <>
           <Tab.Screen name="FavDoctors" component={FavDoctors} options={{ headerShown: false }} />
           <Tab.Screen name="Scanner" component={Scanner} options={{ headerShown: false }} />
-          <Tab.Screen name="Healthbot" component={Healthbot} options={{ headerShown: false }} />
+          {/* <Tab.Screen name="Healthbot" component={Healthbot} options={{ headerShown: false }} /> */}
           <Tab.Screen name="Appointments" component={Appointments} options={{ headerShown: false }} />
         </>
       }

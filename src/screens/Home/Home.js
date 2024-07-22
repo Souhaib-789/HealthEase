@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, TouchableOpacity, ScrollView, FlatList, RefreshControl } from "react-native";
-import docC from "../../assets/images/doc3.png";
-import docF from "../../assets/images/doc9.jpg";
-import docD from "../../assets/images/doc4.png";
-import docE from "../../assets/images/doc5.png";
+import { View, StyleSheet, TouchableOpacity, ScrollView, FlatList, RefreshControl, Modal } from "react-native";
 import { Colors } from "../../utilities/Colors";
 import Feather from 'react-native-vector-icons/Feather'
-import Ionicons from 'react-native-vector-icons/Ionicons'
 import { useNavigation } from "@react-navigation/native";
 import Input from "../../components/Input";
 import TextComponent from "../../components/TextComponent";
@@ -19,53 +14,26 @@ import bellIcon from '../../assets/images/bell.png'
 import NO_DOC from '../../assets/images/noDoc.png'
 import { useDispatch, useSelector } from "react-redux";
 import { DoctorsMiddleware } from "../../redux/middlewares/DoctorsMiddleware";
+import BOT_ICON from '../../assets/images/botIcon.png'
+import Lottie from 'lottie-react-native';
+import Button from "../../components/Button";
+import { Storage } from "../../utilities/AsyncStorage";
 
 const Home = () => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const [search, setsearch] = useState();
     const [loading, setloading] = useState(true)
-    const Featured = [
-        {
-            id: 1,
-            image: docC,
-            name: 'Dr. Crick',
-            fees: '2500',
-            rating: 5,
-            hearted: false,
-            category: 'Medicine Specialist',
-            hospital_name: 'City Hospital',
-            experience: 5,
-        },
-        {
-            id: 2,
-            image: docD,
-            name: 'Dr. Strain',
-            fees: '2200',
-            rating: 3,
-            hearted: true,
-            category: 'Dentist ',
-            hospital_name: 'City Hospital',
-            experience: 3,
-        },
-        {
-            id: 3,
-            image: docE,
-            name: 'Dr. Lachinet',
-            fees: '2900',
-            rating: 2,
-            hearted: false,
-            category: 'Physio Therapy Specialist',
-            hospital_name: 'City Hospital',
-            experience: 5,
-        }
-    ]
-    const USER = useSelector(state => state.AuthReducer.user)
+    const [introModal, setIntroModal] = useState(false)
+    const [introModalStatus, setIntroModalStatus] = useState(false)
+
+    const USER = useSelector(state => state.AuthReducer?.user)
     const Doctors = useSelector(state => state.DoctorsReducer?.dashboardDoctors)
 
     // console.log('Doctors', JSON.stringify(Doctors, null, 8));
     useEffect(() => {
         fetchDoctorsData()
+        checkIntroModalStatus()
     }, [])
 
     const fetchDoctorsData = () => {
@@ -74,14 +42,19 @@ const Home = () => {
             .catch(() => setloading(false))
     }
 
+    const checkIntroModalStatus = async () => {
+        let response = await Storage.get('@introModal');
+        setIntroModalStatus(response);
+    };
+
     return (
         <View style={styles.mainContainer}>
-            <ScrollView showsVerticalScrollIndicator={false}  refreshControl={
-                        <RefreshControl
-                            refreshing={false}
-                            onRefresh={() => { setloading(true), fetchDoctorsData() }}
-                        />
-                    } >
+            <ScrollView showsVerticalScrollIndicator={false} refreshControl={
+                <RefreshControl
+                    refreshing={false}
+                    onRefresh={() => { setloading(true), fetchDoctorsData() }}
+                />
+            } >
 
                 <View style={styles.home_header}>
                     <TouchableOpacity onPress={() => navigation.openDrawer()}>
@@ -116,8 +89,10 @@ const Home = () => {
                         </TouchableOpacity>
                     </View>
 
-                    <TouchableOpacity onPress={() => navigation.navigate('AppointmentDetails', { item: Featured[0], screenType: 'upcoming' })}>
-                        <View style={styles.Appointment_card} >
+                    <ListEmptyComponent short text={'not booked yet !'} />
+
+                    {/* <TouchableOpacity onPress={() => navigation.navigate('AppointmentDetails', { screenType: 'upcoming' })}>
+                         <View style={styles.Appointment_card} >
                             <View style={styles.appointment_card_subview1}>
                                 <View style={styles.appointment_card_subview2}>
                                     <Image source={docF} style={styles.Appointment_image} />
@@ -139,8 +114,8 @@ const Home = () => {
                                     <TextComponent style={styles.appointment_card_span} text={'12:00 AM'} />
                                 </View>
                             </View>
-                        </View>
-                    </TouchableOpacity>
+                        </View> 
+                    </TouchableOpacity> */}
 
 
                 </View>
@@ -156,15 +131,50 @@ const Home = () => {
                             </TouchableOpacity>
                         </View>
                     )}
-                    data={Doctors}
+                    data={loading ? [1, 2, 3] : Doctors}
                     decelerationRate={'fast'}
                     renderItem={({ item }) =>
                         (<DoctorCard item={item} loading={loading} />)}
                     ListEmptyComponent={<ListEmptyComponent image={NO_DOC} text={'no doctors found'} />}
                     keyExtractor={(item, index) => index.toString()}
-                   
+
                 />
             </ScrollView>
+
+            <TouchableOpacity onPress={() => introModalStatus ? navigation.navigate('HealthbotChat') : setIntroModal(true)} style={styles.healthbot_icon}>
+                <Image source={BOT_ICON} style={{ width: 40, height: 40 }} tintColor={'white'} />
+            </TouchableOpacity>
+
+            <Modal
+                animationType={'fade'}
+                transparent={true} visible={introModal}>
+                <View style={styles.modal_parent}>
+
+                    <View style={{ backgroundColor: Colors.WHITE, width: '90%', borderRadius: 20, paddingVertical: 25 }}>
+                        <TouchableOpacity onPress={() => setIntroModal(false)} style={{ position: 'absolute', height: 20, zIndex: 1, top: 12, right: 15, bottom: 0 }}>
+                            <Icon name='close' type={IconTypes.AntDesign} size={15} color={Colors.DGREY} />
+                        </TouchableOpacity>
+                        <Image source={require('../../assets/images/BG2.png')} style={{ position: 'absolute', bottom: 150, width: '100%', height: '80%' }} />
+                        <View style={styles.heading_container}>
+                            <TextComponent style={styles.heading} text={"Hello ! I'm "} />
+                            <TextComponent style={styles.headingx} text={"Healthbot"} />
+                        </View>
+
+                        <Lottie source={require('../../assets/animations/bot.json')}
+                            autoPlay
+                            loop
+                            style={{ width: 170, height: 180, alignSelf: 'center', marginVertical: 100 }}
+                        />
+
+                        <TextComponent style={styles.headingy} text={"Do you want any healthy food advice ?"} />
+                        <Button onPress={() => {
+                            Storage.set('@introModal', 'true')
+                            setIntroModal(false)
+                            navigation.navigate('HealthbotChat')
+                        }} title={"Ask me"} style={styles.button} />
+                    </View>
+                </View>
+            </Modal>
         </View>
     )
 }
@@ -347,5 +357,31 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         padding: 5,
         margin: 2
+    },
+    healthbot_icon: {
+        position: 'absolute', bottom: 20, right: 20, alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.PRIMARY, borderRadius: 100, elevation: 5, padding: 5, borderColor: Colors.PRIMARY, borderWidth: 0
+    },
+    modal_parent: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0,0,0,0.5)',
+    },
+    heading_container: {
+        flexDirection: "row",
+        alignItems: "center",
+        alignSelf: "center",
+    },
+    headingy: {
+        fontSize: 16,
+        width: '70%',
+        alignSelf: "center",
+        textAlign: "center",
+    },
+    button: {
+        marginTop: 20,
+        alignSelf: "center",
+        width: '40%',
+        borderRadius: 60,
     }
 })

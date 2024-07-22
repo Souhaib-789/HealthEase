@@ -46,7 +46,7 @@ const Appointments = () => {
             <ScrollView
                 refreshControl={
                     <RefreshControl
-                        refreshing={loading}
+                        refreshing={false}
                         onRefresh={ () => {setLoading(true) , fetchAppointmentsData() }}
                     />
                 }>
@@ -54,7 +54,7 @@ const Appointments = () => {
                 {
                     activeCompo?.name == 'Upcoming' ?
                         (
-                            <Upcoming data={appointmentsData} loading={loading} />
+                            <Upcoming data={loading ? [1 ,2 ,3 ,4 ,5 ,6] :appointmentsData} loading={loading} />
                         ) : (
                             <Completed />
                         )

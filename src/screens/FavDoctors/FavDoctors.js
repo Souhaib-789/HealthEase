@@ -1,87 +1,39 @@
 import React, { useState } from "react";
-import {View, StyleSheet, ScrollView, FlatList} from "react-native";
+import { View, StyleSheet, ScrollView, FlatList } from "react-native";
 import Header from "../../components/Header";
 import Input from "../../components/Input";
 import { Colors } from "../../utilities/Colors";
-import docC from "../../assets/images/doc3.png";
-import docD from "../../assets/images/doc4.png";
-import docE from "../../assets/images/doc5.png";
 import DoctorCard from "../../components/DoctorCard";
 import ListEmptyComponent from "../../components/ListEmptyComponent";
 import Icon, { IconTypes } from "../../components/Icon";
+import NO_DOC from '../../assets/images/noDoc.png'
 
 const FavDoctors = () => {
 
     const [search, setsearch] = useState(null)
-    const FavoriteDoctors = [
-        {
-            id: 1,
-            image: docC,
-            name: 'Dr. Crick',
-            fees: '2500',
-            rating: 3,
-            hearted: false,
-            category: 'Medicine Specialist',
-            hospital_name: 'City Hospital',
-            experience: 5,
-        },
-        {
-            id: 2,
-            image: docD,
-            name: 'Dr. Strain',
-            fees: '2200',
-            rating: 3,
-            hearted: true,
-            category: 'Dentist ',
-            experience: 3,
-            hospital_name: 'City Hospital',
-        },
-        {
-            id: 3,
-            image: docE,
-            name: 'Dr. Lachinet',
-            fees: '2900',
-            rating: 2,
-            hearted: false,
-            category: 'Physio Therapy Specialist',
-            experience: 5,
-            hospital_name: 'City Hospital',
-        },
-        {
-            id: 4,
-            image: docC,
-            name: 'Dr. Crick',
-            fees: '2500',
-            rating: 3,
-            hearted: true,
-            category: 'Cardiologist',
-            experience: 9,
-            hospital_name: 'City Hospital',
 
-        },
-    ]
 
     return (
         <View style={styles.mainContainer}>
-            <Header title={'Favorite Doctors'} back bell/>
+            <Header title={'Favorite Doctors'} back bell />
             <ScrollView>
-                    <Input
-                        search
-                        value={search}
-                        onChangeText={(e) => setsearch(e)}
-                        placeholder={'Search'}
-                        rightIcon={search && <Icon type={IconTypes.Entypo} name={'cross'} size={18} />}
-                        onPressRightIcon={() => setsearch(null)}
-                        mainStyle={{ marginBottom: 13 , width: '90%', marginTop: 10 }} />
+                <Input
+                    search
+                    value={search}
+                    onChangeText={(e) => setsearch(e)}
+                    placeholder={'Search'}
+                    rightIcon={search && <Icon type={IconTypes.Entypo} name={'cross'} size={18} />}
+                    onPressRightIcon={() => setsearch(null)}
+                    mainStyle={{ marginBottom: 13, width: '90%', marginTop: 10 }} />
 
-                    <FlatList
-                        showsVerticalScrollIndicator={false}
-                        data={FavoriteDoctors}
-                        renderItem={({ item }) =>
-                            (<DoctorCard item={item} book={true} heart={true} style={{width: '90%'}} />)}
-                        keyExtractor={(_ , index) => index.toString()}
-                        ListEmptyComponent={<ListEmptyComponent text={'no doctors found'} />}
-                    />
+                <FlatList
+                    showsVerticalScrollIndicator={false}
+                    data={[]}
+                    renderItem={({ item }) =>
+                        (<DoctorCard item={item} book={true} heart={true} style={{ width: '90%' }} />)}
+                    keyExtractor={(_, index) => index.toString()}
+                    ListEmptyComponent={<ListEmptyComponent image={NO_DOC} text={'no fav. doctor yet'} />}
+                />
             </ScrollView>
         </View>
     )
