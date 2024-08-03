@@ -3,6 +3,7 @@ import Apis from '../../apis/apis';
 import { hideLoading, showAlert, showLoading } from '../actions/GeneralAction';
 import { headers } from '../../utilities/Utilities';
 import { getAllDoctors, getHospitalDoctors } from '../actions/DoctorsActions';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 export const DoctorsMiddleware = {
 
@@ -43,7 +44,7 @@ export const DoctorsMiddleware = {
           }
         } catch (error) {
           reject(error);
-          dispatch(showAlert({ title: 'Get Hospital Doctors', message: error?.response?.data?.message, type: 'Error', status: error?.response?.status }));
+             dispatch(showAlert({ title: 'Get Hospital Doctors', message: 'Something went wrong'  , type: 'Error',  }));
         }
       });
     };
@@ -61,7 +62,6 @@ export const DoctorsMiddleware = {
           formData.append('experience', params?.experience);
           formData.append('fee', params?.fee);
           formData.append('about', params?.about);
-          // formData.append('image', params?.image);
           for (const [index, item] of params?.availability?.entries()) {
             formData.append(`slots[${index}][day]`, item?.day?.name);
             formData.append(`slots[${index}][shift_start_Time]`, item?.startTime);
@@ -69,22 +69,26 @@ export const DoctorsMiddleware = {
           }
           formData.append('email', params?.email);
           formData.append('password', params?.password);
+          formData.append('image', params?.image);
+          // console.log('data ->>>>>>>>>>>>>>>' , JSON.stringify(formData, null, 8));
 
           const data = await Axios.post(Apis.createDocter, formData, await headers.multiPart());
-          console.log(JSON.stringify(data, null, 8))
           if (data?.status == 200) {
             resolve(true);
-            // dispatch(
-            //   showAlert({
-            //     title: 'create doctor',
-            //     message: data?.data?.message,
-            //     type: 'Success',
-            //     status: data?.status,
-            //   }),
-            // );
+            console.log('data ->>>>>>>>>>>>>>>' , JSON.stringify(data, null, 8));
+            dispatch(
+              showAlert({
+                title: 'create doctor',
+                message: data?.data?.message,
+                type: 'Success',
+                status: data?.status,
+              }),
+            );
           }
+          
         } catch (error) {
           reject(error);
+          console.log(JSON.stringify(error, null, 8));
           dispatch(
             showAlert({
               title: 'create doctor',
@@ -95,6 +99,38 @@ export const DoctorsMiddleware = {
           );
         } finally {
           dispatch(hideLoading());
+        }
+      });
+    };
+  },
+
+
+  getTimeSlots: params => {
+    return dispatch => {
+      return new Promise(async (resolve, reject) => {
+        try {
+          const rawData = {
+            doctor_id: params?.id,
+            date: params?.date,
+            startTime: params?.startTime,
+            endTime: params?.endTime
+          }
+      
+          const data = await Axios.post(Apis.getDocterSlots, rawData, await headers.config());
+          if (data?.status == 200) {
+            resolve(data?.data?.data);
+          }
+        } catch (error) {
+          reject(error);
+          dispatch(hideLoading());
+          dispatch(
+            showAlert({
+              title: 'get Time Slots',
+              message: error?.response?.data?.message ? error?.response?.data?.message : error?.message,
+              type: 'Error',
+              status: error?.response?.status,
+            }),
+          );
         }
       });
     };

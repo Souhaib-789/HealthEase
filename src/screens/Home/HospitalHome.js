@@ -11,7 +11,7 @@ import Icon, { IconTypes } from "../../components/Icon";
 import Image from "../../components/Image";
 import { Fonts } from "../../utilities/Fonts";
 import ListEmptyComponent from "../../components/ListEmptyComponent";
-import HOSPITAL from '../../assets/images/hospital.jpg'
+import HOSPITAL from '../../assets/images/hospital.png'
 import NO_DOC from '../../assets/images/noDoc.png'
 import { useSelector } from "react-redux";
 
@@ -102,7 +102,7 @@ const HospitalHome = () => {
                     <TextComponent style={styles.sub_heading} text={USER?.user_name} />
                 </View>
 
-                <Image source={HOSPITAL} resizeMode={'cover'} style={{width: '100%', marginTop: 20 , alignSelf: 'center', height: 130 , borderRadius: 10}} />
+                <Image source={USER?.image ? {uri: USER?.image } : HOSPITAL} resizeMode={USER?.image ? 'cover' : 'contain'} style={{width: '100%', marginTop: 20 , alignSelf: 'center', height: 130 , borderRadius: 10}} />
 
 
                 <View style={styles.wrap_row}>

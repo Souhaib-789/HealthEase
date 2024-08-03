@@ -17,9 +17,16 @@ import TopTab from "../../components/TopTabs";
 import Appointments from "../Appointment";
 import DoctorCurrAppointments from "../Appointment/DoctorCurrAppointments";
 import { clearDoctorDetails } from "../../redux/actions/DoctorsActions";
-import dayjs from "dayjs";
+import { DoctorsMiddleware } from "../../redux/middlewares/DoctorsMiddleware";
+import Skeleton from "../../components/Skeleton";
 
 const DoctorDetails = (props) => {
+
+    useEffect(() => {
+        return () => {
+            dispatch(clearDoctorDetails())
+        }
+    }, [])
 
     const navigation = useNavigation();
     const dispatch = useDispatch();
@@ -28,12 +35,11 @@ const DoctorDetails = (props) => {
     // console.log('----------', JSON.stringify(DETAILS, null, 8));
 
     const [activeCompo, setactiveCompo] = useState({ name: 'Info' })
-
-    const routeData = props?.route?.params?.item;
     const [confirmedSlot, setconfirmedSlot] = useState();
     const [selectedDate, setSelectedDate] = useState();
     const [showCalendar, setshowCalendar] = useState(false);
     const [timeSlots, setTimeSlots] = useState([]);
+    const [loading, setLoading] = useState(true)
 
     const calendarTheme = {
         selectedDayBackgroundColor: Colors?.PRIMARY,
@@ -70,14 +76,33 @@ const DoctorDetails = (props) => {
             icon_name: 'price-change'
         },
     ]
-    console.log('-----------------', timeSlots);
 
-    useEffect(() => {
-        return () => {
-            dispatch(clearDoctorDetails())
+    
+
+    const getSlotsForDay = (date) => {
+        setLoading(true)
+        setshowCalendar(false)
+        setSelectedDate(date)
+        let findDay = DETAILS?.slots?.find(item => item?.day == moment(date).format('ddd'))
+        console.log('findDay', findDay.shift_start_Time, findDay.shift_end_Time);
+        const data = {
+            id: DETAILS?.user_id,
+            date: date,
+            startTime: findDay?.shift_start_Time,
+            endTime: findDay?.shift_end_Time
         }
-    }, [])
+        dispatch(DoctorsMiddleware.getTimeSlots(data))
+            .then(res => {
+                console.log(JSON.stringify(timeSlots, null, 8));
 
+                setLoading(false)
+                setTimeSlots(res)
+            })
+            .catch(err => {
+                console.log('err', err);
+                setLoading(false)
+            })
+    }
 
     const renderDetailsItem = (item, index) => {
         return (
@@ -94,37 +119,30 @@ const DoctorDetails = (props) => {
     }
 
     const renderSlotCard = ({ item, index }) => {
+        const formattedTime = moment(item).utc().format('h:mm A');
+        const toTime = moment(item).add(30, 'minutes').utc().format('h:mm A');
+        const checkIsLastIndex = timeSlots.length - 1 == index;
         return (
+            checkIsLastIndex ? null :
             <TouchableOpacity key={index}
                 style={[styles.slot_box,
                 {
-                    backgroundColor: item?.time == confirmedSlot?.time
+                    backgroundColor: item == confirmedSlot
                         ? Colors.PRIMARY : Colors?.LIGHT
                 }]}
                 onPress={() => setconfirmedSlot(item)}>
                 <TextComponent
-                    style={{ color: item?.time == confirmedSlot?.time ? Colors.WHITE : Colors.PRIMARY, fontSize: 10 }}
-                    text={item?.time} />
+                    style={{ color: item == confirmedSlot ? Colors.WHITE : Colors.PRIMARY, fontSize: 10, textAlign: 'center' }}
+                    text={formattedTime + '\n to \n' + toTime } />
             </TouchableOpacity>
         )
     }
 
-    const onDateChange = (date) => {
-        setSelectedDate({ date });
-        console.log(date.toString().substr(0, 15));
-    }
-
     const onProceed = () => {
         if (!selectedDate) return dispatch(showAlert({ message: 'Please select a day' }));
-        // else if (!confirmedSlot) return dispatch(showAlert({ message: 'Please select any timeslot for ' + moment(selectedDate).format('dddd') }));
+        else if (!confirmedSlot) return dispatch(showAlert({ message: 'Please select any timeslot for ' + moment(selectedDate).format('dddd') }));
         navigation.navigate('Appointment', { timeSlot: confirmedSlot, date: selectedDate })
     }
-
-    const generateTimeSlots = (date) => {
-        const sortedSlots = DETAILS?.slots?.find(item => item?.day.toLowerCase() == moment(date).format('ddd').toLowerCase())
-    };
-
-
 
     return (
         <View style={styles.mainContainer}>
@@ -154,7 +172,6 @@ const DoctorDetails = (props) => {
 
 
                     {USER?.user_role == 'hospital' &&
-
                         <TopTab
                             options={[{
                                 id: 1,
@@ -210,18 +227,27 @@ const DoctorDetails = (props) => {
 
 
                                 <TextComponent style={styles.heading} text={'Available Slots' + (selectedDate ? ` for ${moment(selectedDate).format('dddd')}` : ' ')} />
-                                {/* {
+                                {
                                     selectedDate ?
-
-                                        // <FlatList
-                                        //     data={sortedSlots}
-                                        //     horizontal
-                                        //     renderItem={renderSlotCard}
-                                        //     keyExtractor={item => item?.id}
-                                        // />
+                                        (loading ?
+                                            <View style={styles.flex}>
+                                                <Skeleton radius={10} styles={{ width: '23%', marginRight: 10 }} style={{ height: 60 }} />
+                                                <Skeleton radius={10} styles={{ width: '23%', marginRight: 10 }} style={{ height: 60 }} />
+                                                <Skeleton radius={10} styles={{ width: '23%', marginRight: 10 }} style={{ height: 60 }} />
+                                                <Skeleton radius={10} styles={{ width: '23%', marginRight: 10 }} style={{ height: 60 }} />
+                                            </View>
+                                            :
+                                            <FlatList
+                                                data={timeSlots}
+                                                horizontal
+                                                renderItem={renderSlotCard}
+                                                keyExtractor={item => item?.id}
+                                                ListEmptyComponent={<TextComponent text={'No slots available'} style={styles.textx} />}
+                                            />
+                                        )
                                         :
                                         <TextComponent style={styles.textx} text={'Select day first'} />
-                                } */}
+                                }
 
                                 {
                                     USER?.user_role == 'hospital' ?
@@ -235,7 +261,7 @@ const DoctorDetails = (props) => {
                             </>
                             :
 
-                            <DoctorCurrAppointments />
+                            <DoctorCurrAppointments docID={DETAILS?.user_id?.id} />
                     }
 
                 </View>
@@ -250,9 +276,7 @@ const DoctorDetails = (props) => {
                             let day = moment(e.dateString).format('ddd')
                             let allDays = DETAILS?.slots?.map(item => item?.day)
                             if (allDays?.includes(day)) {
-                                setshowCalendar(false)
-                                setSelectedDate(e.dateString)
-                                generateTimeSlots(e.dateString)
+                                getSlotsForDay(e.dateString)
                             } else {
                                 alert('Doctor is not available on this day')
                             }
@@ -407,6 +431,7 @@ const styles = StyleSheet.create({
         fontWeight: 500
     },
     slot_box: {
+        paddingHorizontal: 10,
         width: 70,
         paddingVertical: 5,
         borderRadius: 15,

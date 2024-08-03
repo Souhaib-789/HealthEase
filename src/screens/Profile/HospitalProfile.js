@@ -6,33 +6,35 @@ import Button from '../../components/Button'
 import { useNavigation } from '@react-navigation/native'
 import TextComponent from '../../components/TextComponent'
 import { Fonts } from '../../utilities/Fonts'
-import HOSPITAL from '../../assets/images/hospital.jpg'
+import AVATAR from '../../assets/images/hospital.png'
 import Image from '../../components/Image'
 import Header from '../../components/Header'
+import { useSelector } from 'react-redux'
 
 const HospitalProfile = () => {
     const navigation = useNavigation()
+    const USER = useSelector(state => state.AuthReducer?.user);
 
-    const doctorInfo = [
+    const INFO = [
         {
             id: 2,
-            info: 'cityhospital@gmail.com',
+            info: USER?.email ? USER?.email : '--',
             icon: <Icon name={'envelope'} type={IconTypes.FontAwesome} size={15} color={Colors.PRIMARY} />
         },
         {
             id: 4,
             icon: <Icon name={'location-pin'} type={IconTypes.Entypo} size={15} color={Colors.PRIMARY} />,
-            info: 'City Hospital , California'
+            info: USER?.address ? USER?.address : '--'
         },
         {
             id: 5,
             icon: <Icon name={'call-sharp'} type={IconTypes.Ionicons} size={15} color={Colors.PRIMARY} />,
-            info: '03300 000 333'
+            info: USER?.phone_number ? USER?.phone_number : '--'
         },
         {
             id: 6,
             icon: <Icon name={'orcid'} type={IconTypes.FontAwesome5Brands} size={15} color={Colors.PRIMARY} />,
-            info: 'HEHSP10'
+            info: USER?._id ? USER?._id.substring(0, 6).toUpperCase() : '--'
         }
     ]
 
@@ -51,12 +53,12 @@ const HospitalProfile = () => {
         <View style={styles.container}>
             <Header title={'Profile'} />
             <ScrollView showsVerticalScrollIndicator={false} style={{width: '90%' , alignSelf: 'center'}}>
-            <TextComponent style={styles.heading} text={'The City Hospital'} />
-            <Image source={HOSPITAL} resizeMode={'cover'} style={{width: '100%', marginVertical: 20 , alignSelf: 'center', height: 130 , borderRadius: 10}} />
+            <TextComponent style={styles.heading} text={USER?.user_name} />
+            <Image source={USER?.image ? {uri: USER?.image } : AVATAR} resizeMode={USER?.image ? 'cover' : 'contain'} style={{width: '100%', marginVertical: 20 , alignSelf: 'center', height: 130 , borderRadius: 10}} />
 
 
                 <FlatList
-                    data={doctorInfo}
+                    data={INFO}
                     renderItem={renderItem}
                     keyExtractor={(item, index) => index.toString()}
                     showsVerticalScrollIndicator={false}

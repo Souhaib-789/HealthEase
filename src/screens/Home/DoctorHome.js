@@ -26,7 +26,7 @@ const DoctorHome = () => {
     const USER_DATA = useSelector(state => state.AuthReducer.user)
     const APPOINTMENTS = useSelector(state => state.AppointmentsReducer?.doctorAppointmentList)
 
-    console.log('USER_DATA ------->>>>', JSON.stringify(state, null, 8));
+    console.log('USER_DATA ------->>>>', JSON.stringify(USER_DATA, null, 8));
 
 
     useEffect(() => {
@@ -113,9 +113,9 @@ const DoctorHome = () => {
                     <View style={styles.wide_row}>
                         <TextComponent style={styles.sub_container_heading} text={"Lets explore patient's Appointments!"} />
 
-                        <TouchableOpacity style={{ backgroundColor: Colors.PRIMARY, padding: 10, borderRadius: 40, elevation: 5 }}>
+                        {/* <TouchableOpacity style={{ backgroundColor: Colors.PRIMARY, padding: 10, borderRadius: 40, elevation: 5 }}>
                             <Icon type={IconTypes.Ionicons} name={'filter-outline'} size={20} color={Colors.WHITE} />
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
                     {
                         loading ?
@@ -157,7 +157,7 @@ const DoctorHome = () => {
                     data={loading ? [1, 2, 3, 4, 5, 6] : APPOINTMENTS}
                     decelerationRate={'fast'}
                     renderItem={renderItem}
-                    ListEmptyComponent={<ListEmptyComponent text={'no appointments for you'} />}
+                    ListEmptyComponent={<ListEmptyComponent text={'no appointments found'} />}
                     keyExtractor={(item, index) => index.toString()}
                     refreshControl={
                         <RefreshControl

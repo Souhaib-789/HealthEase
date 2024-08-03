@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, TouchableOpacity, ScrollView, FlatList } from "react-native";
 import docC from "../../assets/images/doc3.png";
 import docF from "../../assets/images/doc9.jpg";
@@ -15,12 +15,29 @@ import ListEmptyComponent from "../../components/ListEmptyComponent";
 import CalendarStrip from 'react-native-slideable-calendar-strip';
 import PROFILE from '../../assets/images/profile.png'
 import NO_DOC from '../../assets/images/noDoc.png'
+import { AppointmentsMiddleware } from "../../redux/middlewares/AppointmentsMiddleware";
+import { useDispatch, useSelector } from "react-redux";
 
-const DoctorCurrAppointments = () => {
+const DoctorCurrAppointments = (props) => {
     const navigation = useNavigation();
     const [search, setsearch] = useState();
     const [state, setState] = useState();
+    const [loading, setLoading] = useState(true)
+    const dispatch = useDispatch()
+    const APPOINTMENTS = useSelector(state => state.AppointmentsReducer?.doctorAppointmentList)
 
+        console.log('-----------------', JSON.stringify(APPOINTMENTS, null, 8));
+
+    useEffect(() => {
+        const data = { doctorId: props?.docID }
+        fetchAppointmentsData(data)
+    }, [])
+
+    const fetchAppointmentsData = (data = null) => {
+        dispatch(AppointmentsMiddleware.getDoctorAppointmentsData(data))
+            .then(() => setLoading(false))
+            .catch(() => setLoading(false))
+    }
 
     const Featured = [
         {
@@ -60,7 +77,7 @@ const DoctorCurrAppointments = () => {
 
     const renderItem = ({ item }) => {
         return (
-            <TouchableOpacity style={styles.Appointment_card} onPress={() => navigation.navigate('PatientDetails' , {screenType: 'hospital'})} >
+            <TouchableOpacity style={styles.Appointment_card} onPress={() => navigation.navigate('PatientDetails', { screenType: 'hospital' })} >
                 <View style={styles.appointment_card_subview1}>
                     <View style={styles.appointment_card_subview2}>
                         <Image source={docF} style={styles.Appointment_image} />

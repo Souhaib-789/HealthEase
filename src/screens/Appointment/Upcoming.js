@@ -28,7 +28,7 @@ const Upcoming = (props) => {
                         renderItem={({ item }) =>
                             (<AppointCard loading={props?.loading} item={item} screenType={'upcoming'}  />)}
                         keyExtractor={(_ , index) => index.toString()}
-                        ListEmptyComponent={<ListEmptyComponent text={'no doctors found'} />}
+                        ListEmptyComponent={<ListEmptyComponent short text={'no appointments found'} />}
                      
                     />
             </ScrollView>

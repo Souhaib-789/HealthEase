@@ -59,7 +59,7 @@ export default function BottomTabs() {
         tabBarInactiveTintColor: 'black',
         tabBarActiveBackgroundColor: Colors.PRIMARY,
         tabBarInactiveTintColor: Colors.DDGREY,
-        tabBarItemStyle: { borderRadius: 100, marginHorizontal: USER == 'patient' ? 10 : 35, marginVertical: 4 },
+        tabBarItemStyle: { borderRadius: 100, marginHorizontal: USER == 'patient' ? 20 : 35, marginVertical: 4 },
         tabBarStyle: { paddingTop: 2, backgroundColor: 'white', height: 58, borderTopWidth: 0, borderTopEndRadius: 20, borderTopLeftRadius: 20 },
 
       })}

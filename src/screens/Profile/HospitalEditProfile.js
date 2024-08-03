@@ -2,23 +2,22 @@ import React, { useState } from "react";
 import { View, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import { Colors } from "../../utilities/Colors";
 import Header from "../../components/Header";
-import HOSPITAL from '../../assets/images/hospital.jpg'
+import HOSPITAL from '../../assets/images/hospital.png'
 import Image from "../../components/Image";
 import Icon, { IconTypes } from "../../components/Icon";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
-import Avatar from '../../assets/images/avatar.png'
 import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux";
 
 const HospitalEditProfile = () => {
 const navigation = useNavigation()
+const USER = useSelector(state => state.AuthReducer?.user);
+
      const [formData , setFormData] = useState({
-        name: '',
-        contact: '',
-        address: '',
-        weight: '',
-        height: '',
-        bloodGroup: ''
+        name: USER?.user_name,
+        contact: USER?.phone_number,
+        address: USER?.address,
     })
 
 
@@ -27,7 +26,7 @@ const navigation = useNavigation()
             <ScrollView showsVerticalScrollIndicator={false}>
                 <Header title={'Edit Profile'} back />
 
-                <Image source={HOSPITAL} resizeMode={'cover'} style={{width: '90%', marginVertical: 20 , alignSelf: 'center', height: 130 , borderRadius: 10}} />
+                <Image source={USER?.image ? {uri: USER?.image } : HOSPITAL} resizeMode={USER?.image ? 'cover' : 'contain'}  style={{width: '90%', marginVertical: 20 , alignSelf: 'center', height: 130 , borderRadius: 10}} />
 
                 <TouchableOpacity style={styles.picker}>
                     <Icon name={'pencil'} type={IconTypes.Ionicons} size={15} color={Colors.PRIMARY} />

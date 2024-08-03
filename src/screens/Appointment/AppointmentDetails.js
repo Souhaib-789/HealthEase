@@ -18,8 +18,9 @@ const AppointmentDetails = (props) => {
 
     const routeData = props?.route?.params?.item;
     const screenType = props?.route?.params?.screenType;
-
-    console.log('--------', JSON.stringify(routeData, null, 8));
+    const startTime = moment(routeData?.startTime).utc().format('hh:mm A')
+    const endTime = moment(routeData?.endTime).utc().format('hh:mm A')
+    // console.log('--------', JSON.stringify(routeData, null, 8));
 
     const details = [
         {
@@ -97,7 +98,7 @@ const AppointmentDetails = (props) => {
                                 <Icon name='clockcircleo' type={IconTypes.AntDesign} size={18} color={Colors?.BLACK} />
                                 <TextComponent text={'Time :  '} style={styles.short_heading} />
                             </View>
-                            <TextComponent text={routeData?.time ? routeData?.time : '--'} style={styles.texty} />
+                            <TextComponent text={startTime ? startTime + ' - ' + endTime : '--'} style={styles.texty} />
                         </View>
 
                         <View style={styles.wide_row}>
@@ -132,7 +133,7 @@ const AppointmentDetails = (props) => {
                     {
                         screenType === 'upcoming' ?
 
-                            <Button icon={<Icon name='map-location' type={IconTypes.FontAwesome6} size={20} color={Colors?.PRIMARY} />} title={`Get Directions to ${routeData.hospital_name ? routeData.hospital_name : 'hopital'}`} light style={styles.button} />
+                            <Button icon={<Icon name='map-location' type={IconTypes.FontAwesome6} size={20} color={Colors?.PRIMARY} />} title={`Get Directions to ${routeData?.hospital_name ? routeData?.hospital_name : 'hospital'}`} light style={styles.button} />
                             :
                             <Button onPress={() => setShowReviewModal(true)} icon={<Icon name='star' type={IconTypes.AntDesign} size={20} color={Colors?.PRIMARY} />} title={'Add Review'} light style={styles.button} />
                     }

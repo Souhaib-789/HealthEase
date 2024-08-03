@@ -83,7 +83,8 @@ const PersonalInfo = () => {
         }
 
     ]
-
+    
+    
     const renderItem = ({ item, index }) => {
         return (
             <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', gap: 15, marginVertical: 10, }}>
@@ -91,6 +92,7 @@ const PersonalInfo = () => {
                     {item?.icon}
                 </View>
                 {
+                    
                     item?.slots ?
                         <FlatList
                             data={USER?.slots}
@@ -98,7 +100,7 @@ const PersonalInfo = () => {
                                 return (
                                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginVertical: 10, width: '70%' }}>
                                         <TextComponent text={item?.day} style={{ fontSize: 12, }} />
-                                        <TextComponent text={item?.shift_start_Time + ' - ' + item?.shift_end_Time} style={{ fontSize: 12 }} />
+                                        <TextComponent text={item?.startTime ? item?.startTime : '--' + ' - ' + item?.shift_end_Time ? item?.shift_end_Time : '--'} style={{ fontSize: 12 }} />
                                     </View>
                                 )
                             }}

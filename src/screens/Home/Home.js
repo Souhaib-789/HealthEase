@@ -18,6 +18,8 @@ import BOT_ICON from '../../assets/images/botIcon.png'
 import Lottie from 'lottie-react-native';
 import Button from "../../components/Button";
 import { Storage } from "../../utilities/AsyncStorage";
+import { AppointmentsMiddleware } from "../../redux/middlewares/AppointmentsMiddleware";
+import moment from "moment";
 
 const Home = () => {
     const navigation = useNavigation();
@@ -29,12 +31,16 @@ const Home = () => {
 
     const USER = useSelector(state => state.AuthReducer?.user)
     const Doctors = useSelector(state => state.DoctorsReducer?.dashboardDoctors)
+    const UPAppointment = useSelector(state => state.AppointmentsReducer?.myAppointmentList[0])
 
-    // console.log('Doctors', JSON.stringify(Doctors, null, 8));
+    console.log('Data ->>>>', JSON.stringify(UPAppointment, null, 8));
+
     useEffect(() => {
-        fetchDoctorsData()
-        checkIntroModalStatus()
+        fetchDoctorsData();
+        fetchAppointmentsData();
+        checkIntroModalStatus();
     }, [])
+
 
     const fetchDoctorsData = () => {
         dispatch(DoctorsMiddleware.getAllDoctorsData())
@@ -46,6 +52,11 @@ const Home = () => {
         let response = await Storage.get('@introModal');
         setIntroModalStatus(response);
     };
+
+
+    const fetchAppointmentsData = () => {
+        dispatch(AppointmentsMiddleware.getAppointmentsData())
+    }
 
     return (
         <View style={styles.mainContainer}>
@@ -73,15 +84,20 @@ const Home = () => {
 
                 <View style={styles.sub_container}>
                     <TextComponent style={styles.sub_container_heading} text={'Keep Healthy !'} />
+                    <View>
+                        <View style={styles.input_caption}>
+                            <TextComponent style={styles.caption_text} text={'AI Chatbot'} />
+                        </View>
+                        <Input
+                            placeholder={'Ask to healthbot ...'}
+                            value={search}
+                            leftIcon={
+                                <Image source={BOT_ICON} style={{ width: 35, height: 35 }} />
+                            }
+                            onFocus={() => introModalStatus ? navigation.navigate('HealthbotChat') : setIntroModal(true)}
+                            mainStyle={styles.search_input} />
 
-                    <Input
-                        placeholder={'Search'}
-                        value={search}
-                        search
-                        onChangeText={(e) => setsearch(e)}
-                        mainStyle={styles.search_input} />
-
-
+                    </View>
                     <View style={styles.flex}>
                         <TextComponent style={styles.headingx} text={'Upcoming Appointments'} />
                         <TouchableOpacity onPress={() => navigation.navigate('Appointments')}>
@@ -89,33 +105,39 @@ const Home = () => {
                         </TouchableOpacity>
                     </View>
 
-                    <ListEmptyComponent short text={'not booked yet !'} />
 
-                    {/* <TouchableOpacity onPress={() => navigation.navigate('AppointmentDetails', { screenType: 'upcoming' })}>
-                         <View style={styles.Appointment_card} >
-                            <View style={styles.appointment_card_subview1}>
-                                <View style={styles.appointment_card_subview2}>
-                                    <Image source={docF} style={styles.Appointment_image} />
-                                    <View>
-                                        <TextComponent style={[styles.appointment_card_text, { fontFamily: Fonts?.SEMIBOLD }]} text={'Dr. Kelvin Oswald'} />
-                                        <TextComponent style={styles.appointment_card_span} text={'Dentist'} />
+                    {UPAppointment ?
+
+                        <TouchableOpacity onPress={() => navigation.navigate('AppointmentDetails', { screenType: 'upcoming' , item: UPAppointment })}>
+                            <View style={styles.Appointment_card} >
+                                <View style={styles.appointment_card_subview1}>
+                                    <View style={styles.appointment_card_subview2}>
+                                        <Image source={UPAppointment?.doctor?.image ?
+                                            { uri: UPAppointment?.doctor?.image } : require('../../assets/images/avatar.png')
+                                        } style={styles.Appointment_image} />
+                                        <View>
+                                            <TextComponent style={[styles.appointment_card_text, { fontFamily: Fonts?.SEMIBOLD }]}
+                                                text={UPAppointment?.doctor?.user_name ? UPAppointment?.doctor?.user_name : '--'} />
+                                            <TextComponent style={styles.appointment_card_span} text={UPAppointment?.doctor?.specialization ? UPAppointment?.doctor?.specialization : '--'} />
+                                        </View>
+                                    </View>
+                                    <Icon type={IconTypes.MaterialIcons} name={'keyboard-arrow-right'} size={25} color={Colors.WHITE} />
+                                </View>
+
+                                <View style={styles.appointment_card_subview3}>
+                                    <View style={styles.appointment_card_subview4}>
+                                        <Icon type={IconTypes.Feather} name={'calendar'} size={15} color={Colors.WHITE} />
+                                        <TextComponent style={styles.appointment_card_span} text={UPAppointment?.date ? moment(UPAppointment?.date).utc().format('DD MMM YYYY') : '--'} />
+                                    </View>
+                                    <View style={styles.appointment_card_subview4}>
+                                        <Icon type={IconTypes.Ionicons} name={'time-outline'} size={15} color={Colors.WHITE} />
+                                        <TextComponent style={styles.appointment_card_span} text={UPAppointment?.startTime ? moment(UPAppointment?.startTime).utc().format('hh : mm A') : '--'} />
                                     </View>
                                 </View>
-                                <Icon type={IconTypes.MaterialIcons} name={'keyboard-arrow-right'} size={25} color={Colors.WHITE} />
                             </View>
-
-                            <View style={styles.appointment_card_subview3}>
-                                <View style={styles.appointment_card_subview4}>
-                                    <Icon type={IconTypes.Feather} name={'calendar'} size={15} color={Colors.WHITE} />
-                                    <TextComponent style={styles.appointment_card_span} text={'23 Oct 2023'} />
-                                </View>
-                                <View style={styles.appointment_card_subview4}>
-                                    <Ionicons name='time-outline' color={Colors.WHITE} size={15} />
-                                    <TextComponent style={styles.appointment_card_span} text={'12:00 AM'} />
-                                </View>
-                            </View>
-                        </View> 
-                    </TouchableOpacity> */}
+                        </TouchableOpacity>
+                        : <ListEmptyComponent short text={'not booked yet !'} />
+                    }
 
 
                 </View>
@@ -141,9 +163,9 @@ const Home = () => {
                 />
             </ScrollView>
 
-            <TouchableOpacity onPress={() => introModalStatus ? navigation.navigate('HealthbotChat') : setIntroModal(true)} style={styles.healthbot_icon}>
+            {/* <TouchableOpacity onPress={() => introModalStatus ? navigation.navigate('HealthbotChat') : setIntroModal(true)} style={styles.healthbot_icon}>
                 <Image source={BOT_ICON} style={{ width: 40, height: 40 }} tintColor={'white'} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <Modal
                 animationType={'fade'}
@@ -194,6 +216,7 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     search_input: {
+        paddingVertical: 5,
         marginTop: 10,
         elevation: 2,
         borderRadius: 25,
@@ -383,5 +406,7 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         width: '40%',
         borderRadius: 60,
-    }
+    },
+    input_caption: { position: 'absolute', right: 5, elevation: 3, zIndex: 999, backgroundColor: Colors.RGBA, width: 65, padding: 3, alignItems: 'center', justifyContent: 'center', borderRadius: 10 },
+    caption_text: { fontSize: 8, textShadow: 3, color: Colors.WHITE }
 })

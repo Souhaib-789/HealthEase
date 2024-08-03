@@ -23,7 +23,15 @@ const Input = props => {
                     <AntDesign name={'search1'} color={'#C8C8C8'} size={23} />
                 }
 
+{
+                    props?.leftIcon &&
+                    <TouchableOpacity onPress={props?.onPressleftIcon}>
+                        {props?.leftIcon}
+                    </TouchableOpacity>
+                }
+
                 <TextInput
+                onFocus={props?.onFocus}
                     style={[styles.input, {  width: props?.search ? '80%' : props?.rightIcon || props?.isPassword ? '90%' : '100%' }, { ...props?.style }]}
                     placeholder={props?.placeholder}
                     placeholderTextColor={Colors.DGREY}

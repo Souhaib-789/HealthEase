@@ -48,7 +48,7 @@ const AppointCard = ({ item, screenType, loading }) => {
                     </View>
                     <View style={[styles.flex, { gap: 5 }]}>
                         <Icon type={IconTypes.SimpleLineIcons} name={'clock'} size={12} color={Colors.GREY} />
-                        <TextComponent style={styles.span} text={item?.time ? moment(item?.time, 'hh : mm A').format('LT') : '--'} />
+                        <TextComponent style={styles.span} text={item?.startTime ? moment(item?.startTime).utc().format('hh : mm A') : '--'} />
                     </View>
                 </View>
 

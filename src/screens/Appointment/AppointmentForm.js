@@ -3,7 +3,6 @@ import { View, StyleSheet, ScrollView, Platform } from "react-native";
 import Header from "../../components/Header";
 import { Colors } from "../../utilities/Colors";
 import Input from "../../components/Input";
-import ImagePicker from 'react-native-image-crop-picker';
 import SuccessModal from "../../components/SuccessModal";
 import { useNavigation } from "@react-navigation/native";
 import TextComponent from "../../components/TextComponent";
@@ -27,8 +26,18 @@ const AppointmentForm = (props) => {
     const [openModal, setopenModal] = useState(false)
     const DETAILS = useSelector(state => state.DoctorsReducer?.doctorDetails)
 
-    console.log('routeData ---->>>>>', JSON.stringify(routeData, null, 8));
-    console.log('Data ---->>>>>', JSON.stringify(DETAILS, null, 8));
+    const formattedDate = moment(routeData?.date)
+        .utc()
+        .set({
+            hour: 14,
+            minute: 51,
+            second: 10,
+            millisecond: 927
+        })
+        .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+
+    // console.log('Data ---->>>>>', JSON.stringify(formattedDate, null, 8));
+
 
     const onBookAppointment = () => {
         if (!patient) {
@@ -43,12 +52,14 @@ const AppointmentForm = (props) => {
         else {
             const data = {
                 doctorId: DETAILS?.user_id,
-                appointmentDate: routeData?.date,
-                appointmentTime: '12:00 PM',
+                appointmentDate: formattedDate,
+                startTime: moment(routeData?.timeSlot).utc(),
+                endTime: moment(routeData?.timeSlot).utc().add(15, 'minutes'),
                 patientName: patient,
                 relationship: detail,
                 contactNo: contactNo
             }
+
             dispatch(AppointmentsMiddleware.onBookAppointment(data))
                 .then((res) => { setopenModal(true) })
                 .catch((err) => { console.log('error', err) })
@@ -65,12 +76,12 @@ const AppointmentForm = (props) => {
                 <View style={styles.summary}>
                     <View style={styles.flexA}>
                         <TextComponent text={'Day :'} style={styles.textx} />
-                        <TextComponent text={routeData?.date ? moment(routeData?.date).format('ddd D MMM') : '--'} style={[styles.textx, { color: Colors?.BLACK, fontSize: 16 }]} />
+                        <TextComponent text={routeData?.date ? moment(routeData?.date).format('ddd D MMM') : '--'} style={[styles.textx, { color: Colors?.BLACK }]} />
                     </View>
 
                     <View style={styles.flexA}>
                         <TextComponent text={'Time :'} style={styles.textx} />
-                        <TextComponent text={routeData?.timeSlot?.time ? routeData?.timeSlot?.time : '--'} style={[styles.textx, { color: Colors?.BLACK, fontSize: 16 }]} />
+                        <TextComponent text={routeData?.timeSlot ? moment(routeData?.timeSlot).utc().format('h:mm A') + ' to ' + moment(routeData?.timeSlot).add(30, 'minutes').utc().format('h:mm A') : '--'} style={[styles.textx, { color: Colors?.BLACK }]} />
                     </View>
 
                 </View>

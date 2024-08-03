@@ -15,6 +15,8 @@ const Appointments = () => {
 
     const appointmentsData = useSelector(state => state.AppointmentsReducer?.myAppointmentList)
 
+    // console.log('appointmentsData', JSON.stringify(appointmentsData, null, 8));
+    
     useEffect(() => {
         fetchAppointmentsData()
     }, [])

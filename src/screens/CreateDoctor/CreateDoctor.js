@@ -137,7 +137,6 @@ const CreateDoctor = (props) => {
         setopenEndTimeModal(false)
     };
 
-
     const generateTimeSlots = () => {
         if (!selectedDay) {
             seterror('Please select a day first')
@@ -147,20 +146,11 @@ const CreateDoctor = (props) => {
         }
         else {
             setopenAvailabilityModal(false)
-            // const slots = [];
-            // let currentTime = new Date(startTime);
-
-            // while (currentTime < endTime) {
-            //     const slotStartTime = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            //     currentTime.setMinutes(currentTime.getMinutes() + 30);
-            //     const slotEndTime = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            //     slots.push(`${slotStartTime} - ${slotEndTime}`);
-            // }
+        
             let finalSlot = [];
-            finalSlot.push({ day: selectedDay, startTime: moment(startTime, 'hh:mm').format('LT'), endTime: moment(endTime, 'hh:mm').format('LT') })
+            finalSlot.push({ day: selectedDay, startTime: startTime, endTime: endTime })
             setTimeSlots(TimeSlots ? [...TimeSlots, ...finalSlot] : finalSlot)
 
-            console.log(finalSlot);
             setStartTime(null)
             setEndTime(null)
             setselectedDay(null)
@@ -319,7 +309,7 @@ const CreateDoctor = (props) => {
                                 <TextComponent text={item?.day?.name} style={styles.text} />
                             </View>
                             <View key={index} style={[styles.slot_box, { width: 130 }]} >
-                                <TextComponent style={styles.textx} text={item?.startTime + ' - ' + item?.endTime} />
+                                <TextComponent style={styles.textx} text={moment(item?.startTime, 'hh:mm').format('LT') + ' - ' + moment(item?.endTime, 'hh:mm').format('LT')} />
                             </View>
                             <TouchableOpacity onPress={() => {
                                 let temp = TimeSlots;
@@ -376,7 +366,8 @@ const CreateDoctor = (props) => {
                             }
                         }}>
                             <Icon name={'clockcircleo'} type={IconTypes.AntDesign} color={Colors.PRIMARY} size={15} />
-                            <TextComponent text={startTime ? startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Start Time'} style={styles.textx} />
+                            {/* <TextComponent text={startTime ? startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Start Time'} style={styles.textx} /> */}
+                            <TextComponent text={startTime ? moment(startTime , 'hh:mm A').format('LT') : 'Start Time'} style={styles.textx} />
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.select_time_btn} onPress={() => {
@@ -386,7 +377,9 @@ const CreateDoctor = (props) => {
                             } setopenEndTimeModal(true)
                         }}>
                             <Icon name={'clockcircleo'} type={IconTypes.AntDesign} color={Colors.PRIMARY} size={15} />
-                            <TextComponent text={endTime ? endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'End Time'} style={styles.textx} />
+                            {/* <TextComponent text={endTime ? endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'End Time'} style={styles.textx} /> */}
+                            <TextComponent text={endTime ? moment(endTime , 'hh:mm A').format('LT') : 'End Time'} style={styles.textx} />
+
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -401,7 +394,7 @@ const CreateDoctor = (props) => {
             <DatePicker
                 modal
                 mode="time"
-                date={currDate}
+                date={startTime ? startTime : currDate}
                 open={openStartTimeModal}
                 onConfirm={onConfirmStartTime}
                 onCancel={() => {
@@ -413,7 +406,7 @@ const CreateDoctor = (props) => {
                 modal
                 minimumDate={startTime ? startTime : new Date()}
                 mode="time"
-                date={currDate}
+                date={endTime ? endTime : currDate}
                 open={openEndTimeModal}
                 onConfirm={onConfirmEndTime}
                 onCancel={() => {
@@ -470,7 +463,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center'
     },
     text: {
-        fontSize: 16,
+        fontSize: 14,
         color: Colors?.PRIMARY,
         marginVertical: 2,
         fontFamily: Fonts?.SEMIBOLD

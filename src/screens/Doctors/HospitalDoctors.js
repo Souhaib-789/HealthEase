@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { DoctorsMiddleware } from "../../redux/middlewares/DoctorsMiddleware";
 import AVATAR from '../../assets/images/avatar.png';
 import Skeleton from "../../components/Skeleton";
+import { getDoctorDetails } from "../../redux/actions/DoctorsActions";
 
 
 const HospitalDoctors = () => {
@@ -73,7 +74,13 @@ const HospitalDoctors = () => {
         )
     }
 
+    const goToDetails = (item) => {
+        dispatch(getDoctorDetails(item))
+        navigation.navigate('DoctorDetails')
+    }
+    
     const renderItem = ({ item }) => {
+        // console.log(JSON.stringify(item, null ,8));
         return (
 
             loading ?
@@ -88,10 +95,10 @@ const HospitalDoctors = () => {
 
                 </View>
                 :
-                <TouchableOpacity style={styles.Appointment_card} onPress={() => navigation.navigate('DoctorDetails', { item: item })} >
+                <TouchableOpacity style={styles.Appointment_card} onPress={() => goToDetails(item)} >
                     <View style={styles.appointment_card_subview1}>
                         <View style={styles.appointment_card_subview2}>
-                            <Image source={item?.image ? { uri: item?.image } : AVATAR} style={styles.Appointment_image} />
+                            <Image source={item?.image_url ? { uri: item?.image_url } : AVATAR} style={styles.Appointment_image} resizeMode='cover' />
                             <View>
                                 <TextComponent style={[styles.appointment_card_text, { fontFamily: Fonts?.SEMIBOLD }]} text={item?.name ? item?.name : '--'} />
                                 <TextComponent style={styles.appointment_card_span} text={item?.specialization ? item?.specialization : '--'} />
@@ -106,7 +113,7 @@ const HospitalDoctors = () => {
     return (
         <View style={styles.mainContainer}>
             <View style={styles.sub_container}>
-                <TextComponent style={styles.sub_container_heading} text={"Your Doctors"} />
+                <TextComponent style={styles.sub_container_heading} text={"Your Hospital's Doctors"} />
 
                 <FlatList
                     key={"CategoriesList"}
@@ -122,7 +129,7 @@ const HospitalDoctors = () => {
             <FlatList
                 key={'Doctors'}
                 showsHorizontalScrollIndicator={false}
-                data={loading ? [ 1 ,2 ,3,4,5,6] : DoctorsList}
+                data={loading ? [1, 2, 3, 4, 5, 6] : DoctorsList}
                 decelerationRate={'fast'}
                 renderItem={renderItem}
                 ListEmptyComponent={<ListEmptyComponent image={NO_DOC} text={'no doctors found'} />}
@@ -130,7 +137,7 @@ const HospitalDoctors = () => {
                 refreshControl={
                     <RefreshControl
                         refreshing={false}
-                        onRefresh={() => {setLoading(true) ,  fetchDoctorsData()}}
+                        onRefresh={() => { setLoading(true), fetchDoctorsData() }}
                     />
                 }
             />

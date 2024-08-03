@@ -12,15 +12,16 @@ export const AppointmentsMiddleware = {
       dispatch(showLoading());
       return new Promise(async (resolve, reject) => {
         try {
-          const formData = {
+          const rawData = {
             docter_id: params?.doctorId,
             date: params?.appointmentDate,
-            time: params?.appointmentTime,
+            startTime: params?.startTime,
+            endTime: params?.endTime,
             name: params?.patientName,
             relation: params?.relationship,
             contact: params?.contactNo
           }
-          const data = await Axios.post(Apis.bookAppointment, formData, await headers.config());
+          const data = await Axios.post(Apis.bookAppointment, rawData, await headers.config());
           if (data?.status == 200) {
             resolve(true)
           }
