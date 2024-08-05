@@ -1,8 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const Storage  = {
+export const Storage = {
 
-     setToken : async token => {
+    setToken: async token => {
         try {
             return await AsyncStorage.setItem('@token', token);
         } catch (e) {
@@ -10,7 +10,7 @@ export const Storage  = {
         }
     },
 
-     getToken : async () => {
+    getToken: async () => {
         try {
             return await AsyncStorage.getItem('@token');
         } catch (e) {
@@ -18,7 +18,7 @@ export const Storage  = {
         }
     },
 
-     set : async (key, value) => {
+    set: async (key, value) => {
         try {
             return await AsyncStorage.setItem(key, value);
         } catch (e) {
@@ -26,7 +26,7 @@ export const Storage  = {
         }
     },
 
-     get : async key => {
+    get: async key => {
         try {
             return await AsyncStorage.getItem(key);
         } catch (e) {
@@ -34,7 +34,7 @@ export const Storage  = {
         }
     },
 
-     clearStorage : async () => {
+    clearStorage: async () => {
         try {
             // return await AsyncStorage.clear();
             await AsyncStorage.removeItem('@user')
@@ -44,7 +44,7 @@ export const Storage  = {
         }
     },
 
-     getStarted : async value => {
+    getStarted: async value => {
         try {
             return await AsyncStorage.setItem('@getstarted', value);
         } catch (e) {
@@ -53,9 +53,17 @@ export const Storage  = {
     },
 
 
-     setTheme : async value => {
+    setLanguage: async lng => {
         try {
-            return await AsyncStorage.setItem('@Theme', value);
+            return await AsyncStorage.setItem('@language', lng);
+        } catch (e) {
+            return null;
+        }
+    },
+
+    getLanguage: async () => {
+        try {
+            return await AsyncStorage.getItem('@language');
         } catch (e) {
             return null;
         }

@@ -36,7 +36,7 @@ const AppointmentForm = (props) => {
         })
         .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
 
-    // console.log('Data ---->>>>>', JSON.stringify(formattedDate, null, 8));
+    // console.log('Data ---->>>>>', JSON.stringify(DETAILS, null, 8));
 
 
     const onBookAppointment = () => {
@@ -51,7 +51,7 @@ const AppointmentForm = (props) => {
         }
         else {
             const data = {
-                doctorId: DETAILS?.user_id,
+                doctorId: DETAILS?._id,
                 appointmentDate: formattedDate,
                 startTime: moment(routeData?.timeSlot).utc(),
                 endTime: moment(routeData?.timeSlot).utc().add(15, 'minutes'),
@@ -75,12 +75,12 @@ const AppointmentForm = (props) => {
 
                 <View style={styles.summary}>
                     <View style={styles.flexA}>
-                        <TextComponent text={'Day :'} style={styles.textx} />
+                        <TextComponent text={'Day : '} style={styles.textx} />
                         <TextComponent text={routeData?.date ? moment(routeData?.date).format('ddd D MMM') : '--'} style={[styles.textx, { color: Colors?.BLACK }]} />
                     </View>
 
                     <View style={styles.flexA}>
-                        <TextComponent text={'Time :'} style={styles.textx} />
+                        <TextComponent text={'Time : '} style={styles.textx} />
                         <TextComponent text={routeData?.timeSlot ? moment(routeData?.timeSlot).utc().format('h:mm A') + ' to ' + moment(routeData?.timeSlot).add(30, 'minutes').utc().format('h:mm A') : '--'} style={[styles.textx, { color: Colors?.BLACK }]} />
                     </View>
 

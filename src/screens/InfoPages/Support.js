@@ -26,7 +26,7 @@ const Support = () => {
 
             <Image source={CALL} style={{ width: 200, height: 200 , alignSelf: 'center'}} />
 
-            <TextComponent text={"Need any help ? You can contact to any hospital (regsitered on our app) for any inquiries or details."} style={styles.sub_heading} />
+            <TextComponent text={"Need any help ? You can contact to any hospital for any inquiries or details."} style={styles.sub_heading} />
 
             <View style={styles.row}>
                 <View style={{flexDirection: 'row' , gap: 8}}>

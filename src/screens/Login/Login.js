@@ -88,7 +88,7 @@ const Login = () => {
                 </View>
 
                 <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
-                    <TextComponent style={styles.link_textx} text={'Don’t have an account? Create'} />
+                    <TextComponent style={styles.link_textx} text={'Don’t have an account?'} />
                 </TouchableOpacity>
             </ScrollView>
         </View>

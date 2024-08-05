@@ -47,7 +47,8 @@ export const AppointmentsMiddleware = {
     return dispatch => {
       return new Promise(async (resolve, reject) => {
         try {
-          const data = await Axios.get(Apis.get_my_appointments, await headers.config());
+          const rawData = { status: params?.status, search: params?.search }
+          const data = await Axios.post(Apis.get_my_appointments, params?.search ? rawData : {status: params?.status} , await headers.config());
           if (data?.status == 200) {
             resolve(true)
             dispatch(getMyAppointments(data?.data?.data))

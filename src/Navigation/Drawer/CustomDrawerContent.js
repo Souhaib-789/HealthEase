@@ -41,10 +41,22 @@ function CustomDrawerContent(props) {
             icon: <Icon type={IconTypes.AntDesign} name={'infocirlceo'} size={18} />
         },
         {
-            id: 5,
+            id: 6,
+            screenName: 'Privacy Policy',
+            goto: 'About',
+            icon: <Icon type={IconTypes.AntDesign} name={'infocirlceo'} size={18} />
+        },
+        {
+            id: 7,
             screenName: 'Support',
             goto: 'Support',
             icon: <Icon type={IconTypes.Feather} name={'help-circle'} size={18} />
+        },
+        {
+            id: 8,
+            screenName: 'Languages',
+            goto: 'Languages',
+            icon: <Icon type={IconTypes.Ionicons} name={'language'} size={18} />
         },
     ]
 
@@ -136,7 +148,7 @@ function CustomDrawerContent(props) {
                     <View style={styles.modal_sub_view}>
                         <Icon name={'alert'} type={IconTypes.Octicons} color={Colors.YELLOW} size={30} />
                         <TextComponent style={styles.modal_heading} text={'Hold on !'} />
-                        <TextComponent style={{ marginVertical: 5 }} text={'are you sure to want to logout ?'} />
+                        <TextComponent style={{ marginVertical: 5 }} text={'Are you sure you want to logout ?'} />
 
                         <View style={styles.modal_bottom_view}>
                             <Button title={'Cancel'} onPress={cancelModal} style={{width: '45%'}} />
@@ -173,7 +185,7 @@ const styles = StyleSheet.create({
         padding: 15
     },
     btn: {
-        marginTop: 200,
+        marginTop: 100,
         alignItems: 'center',
         flexDirection: 'row',
         gap: 5,

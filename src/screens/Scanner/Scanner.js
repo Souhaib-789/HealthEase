@@ -14,8 +14,11 @@ import { showAlert } from "../../redux/actions/GeneralAction";
 import FormModal from "../../components/FormModal";
 import Clipboard from "@react-native-clipboard/clipboard";
 import Tts from 'react-native-tts';
+import { useTranslation } from "react-i18next";
 
 const Scanner = () => {
+
+    const {t} = useTranslation();
     const dispatch = useDispatch();
     const [image, setImage] = useState(null);
     const [text, setText] = useState();
@@ -44,10 +47,9 @@ const Scanner = () => {
             // }
         }
         else {
-            Tts.speak('No results found');
+            Tts.speak(t('No results found'));
             setResult(false);
-            console.log('No text found');
-            dispatch(showAlert({ message: 'No results found !' }));
+            dispatch(showAlert({ message: 'No results found' + '!' }));
         }
     }
 
@@ -76,19 +78,19 @@ const Scanner = () => {
 
     const onCopyToClipboard = () => {
         Clipboard.setString(text);
-        alert('Text copied to clipboard')
+        alert(t('Text copied to clipboard'))
     };
 
     return (
         <View style={styles.Container}>
             <ScrollView>
-                <Header title={"Scanner"} />
+                <Header title={t("Scanner")} />
 
                 <Icon name={"scan"} type={IconTypes.Ionicons} color={Colors.PRIMARY} size={170} style={styles.scan_icon} />
                 <Icon name={"drug-pack"} type={IconTypes.Fontisto} color={Colors.PRIMARY} size={50} style={styles.med_icon} />
 
-                <TextComponent style={styles.headingy} text={"Recognize your medicine by scanning its image"} />
-                <Button onPress={onUploadImage} title={"SCAN"} style={styles.button} />
+                <TextComponent style={styles.headingy} text={t("Recognize your medicine by scanning its image")} />
+                <Button onPress={onUploadImage} title={t("SCAN")} style={styles.button} />
 
             </ScrollView>
 

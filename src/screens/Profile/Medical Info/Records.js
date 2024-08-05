@@ -18,11 +18,13 @@ import { Fonts } from "../../../utilities/Fonts";
 import Button from "../../../components/Button";
 import { useDispatch } from "react-redux";
 import { showAlert } from "../../../redux/actions/GeneralAction";
+import { useTranslation } from "react-i18next";
 
 
 const Records = () => {
     const navigation = useNavigation()
     const dispatch = useDispatch()
+    const {t} = useTranslation();
     const [currDate, setcurrDate] = useState(new Date())
     const [dateModalopen, setdateModalOpen] = useState(false)
     const [openModal, setopenModal] = useState(false)
@@ -102,7 +104,7 @@ const Records = () => {
             setdoc(res);
         } catch (err) {
             if (DocumentPicker.isCancel(err)) {
-                alert('Selection Canceled');
+                alert(t('Selection Canceled'));
             } else {
                 alert('Unknown Error: ' + JSON.stringify(err));
                 throw err;

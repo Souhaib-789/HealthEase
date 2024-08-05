@@ -19,8 +19,12 @@ import DoctorCurrAppointments from "../Appointment/DoctorCurrAppointments";
 import { clearDoctorDetails } from "../../redux/actions/DoctorsActions";
 import { DoctorsMiddleware } from "../../redux/middlewares/DoctorsMiddleware";
 import Skeleton from "../../components/Skeleton";
+import { useTranslation } from "react-i18next";
+import { isUrduLanguage } from "../../utilities/Utilities";
 
 const DoctorDetails = (props) => {
+
+    const isUrdu = isUrduLanguage();
 
     useEffect(() => {
         return () => {
@@ -30,6 +34,7 @@ const DoctorDetails = (props) => {
 
     const navigation = useNavigation();
     const dispatch = useDispatch();
+    const { t } = useTranslation();
     const USER = useSelector(state => state.AuthReducer.user)
     const DETAILS = useSelector(state => state.DoctorsReducer?.doctorDetails)
     // console.log('----------', JSON.stringify(DETAILS, null, 8));
@@ -77,19 +82,20 @@ const DoctorDetails = (props) => {
         },
     ]
 
-    
+
 
     const getSlotsForDay = (date) => {
         setLoading(true)
         setshowCalendar(false)
         setSelectedDate(date)
         let findDay = DETAILS?.slots?.find(item => item?.day == moment(date).format('ddd'))
-        console.log('findDay', findDay.shift_start_Time, findDay.shift_end_Time);
+        // console.log('findDay', findDay.shift_start_Time, findDay.shift_end_Time);
         const data = {
             id: DETAILS?.user_id,
             date: date,
             startTime: findDay?.shift_start_Time,
-            endTime: findDay?.shift_end_Time
+            endTime: findDay?.shift_end_Time,
+            duration: 15
         }
         dispatch(DoctorsMiddleware.getTimeSlots(data))
             .then(res => {
@@ -111,7 +117,7 @@ const DoctorDetails = (props) => {
                     <Icon type={IconTypes?.MaterialIcons} name={item?.icon_name} size={16} color={Colors?.PRIMARY} />
                 </View>
                 <View>
-                    <TextComponent style={[styles.textx, { fontFamily: Fonts?.SEMIBOLD, fontSize: 12, color: Colors?.BLACK }]} text={item?.no} />
+                    <TextComponent style={[styles.textx, { fontFamily: Fonts?.SEMIBOLD, fontSize: 12, color: Colors?.BLACK }]} text={t(item?.no)} />
                     <TextComponent style={[styles.textx, { color: Colors?.DGREY, fontSize: 10 }]} text={item?.name} />
                 </View>
             </TouchableOpacity>
@@ -120,21 +126,21 @@ const DoctorDetails = (props) => {
 
     const renderSlotCard = ({ item, index }) => {
         const formattedTime = moment(item).utc().format('h:mm A');
-        const toTime = moment(item).add(30, 'minutes').utc().format('h:mm A');
+        const toTime = moment(item).add(15, 'minutes').utc().format('h:mm A');
         const checkIsLastIndex = timeSlots.length - 1 == index;
         return (
             checkIsLastIndex ? null :
-            <TouchableOpacity key={index}
-                style={[styles.slot_box,
-                {
-                    backgroundColor: item == confirmedSlot
-                        ? Colors.PRIMARY : Colors?.LIGHT
-                }]}
-                onPress={() => setconfirmedSlot(item)}>
-                <TextComponent
-                    style={{ color: item == confirmedSlot ? Colors.WHITE : Colors.PRIMARY, fontSize: 10, textAlign: 'center' }}
-                    text={formattedTime + '\n to \n' + toTime } />
-            </TouchableOpacity>
+                <TouchableOpacity key={index}
+                    style={[styles.slot_box,
+                    {
+                        backgroundColor: item == confirmedSlot
+                            ? Colors.PRIMARY : Colors?.LIGHT
+                    }]}
+                    onPress={() => setconfirmedSlot(item)}>
+                    <TextComponent
+                        style={{ color: item == confirmedSlot ? Colors.WHITE : Colors.PRIMARY, fontSize: 10, textAlign: 'center' }}
+                        text={formattedTime + '\n' + t('to') + '\n' + toTime} />
+                </TouchableOpacity>
         )
     }
 
@@ -201,10 +207,10 @@ const DoctorDetails = (props) => {
                                 <TextComponent style={styles.textx} text={DETAILS?.about ? DETAILS?.about : '--'} />
 
                                 <TextComponent style={styles.heading} text={'Availability'} />
-                                <View style={styles.flexA}>
+                                <View style={[styles.flexA , {flexDirection: isUrdu ? 'row-reverse' : 'row'}]}>
                                     <View style={{ width: '60%' }}>
-                                        <View style={styles.flex}>
-                                            <TextComponent text={'Days :  '} style={styles.short_heading} />
+                                    <View style={[styles.flex, { flexDirection: isUrdu ? 'row-reverse' : 'row' }]}>
+                                    <TextComponent text={'Days :  '} style={styles.short_heading} />
                                             <FlatList
                                                 data={DETAILS?.slots}
                                                 horizontal
@@ -213,10 +219,12 @@ const DoctorDetails = (props) => {
                                             />
                                         </View>
 
-                                        <View style={styles.flex}>
+                                        <View style={[styles.flex, { flexDirection: isUrdu ? 'row-reverse' : 'row' }]}>
                                             <TextComponent text={'Duration : '} style={styles.short_heading} />
-                                            <TextComponent text={'30 Minutes'} style={styles.texty} />
+                                            <TextComponent text={'15 Minutes'} style={styles.texty} />
                                         </View>
+
+
                                     </View>
 
                                     <TouchableOpacity style={styles.select_button} onPress={() => { setshowCalendar(true) }}>
@@ -242,7 +250,7 @@ const DoctorDetails = (props) => {
                                                 horizontal
                                                 renderItem={renderSlotCard}
                                                 keyExtractor={item => item?.id}
-                                                ListEmptyComponent={<TextComponent text={'No slots available'} style={styles.textx} />}
+                                                ListEmptyComponent={<TextComponent text={'no slots available'} style={styles.textx} />}
                                             />
                                         )
                                         :
@@ -278,7 +286,7 @@ const DoctorDetails = (props) => {
                             if (allDays?.includes(day)) {
                                 getSlotsForDay(e.dateString)
                             } else {
-                                alert('Doctor is not available on this day')
+                                alert(t('Doctor is not available on this day'))
                             }
                         }}
                         markedDates={{ [selectedDate]: { selected: true, disableTouchEvent: true } }}

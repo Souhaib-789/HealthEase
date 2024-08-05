@@ -26,7 +26,7 @@ const InviteFriend = () => {
         <View style={styles.container}>
             <Header title="Invite Friends" back  />
                 <Image source={INVITE} style={{width: 170 , height: 170 , marginTop: 50, alignSelf: 'center'}} resizeMode={'cover'} />
-                <TextComponent text={"Invite your friends so they can also avail easy health treatment"} style={styles.sub_heading} />
+                <TextComponent text={"Invite your friends so they can also avail easy health treatments"} style={styles.sub_heading} />
 
                     <TextComponent text={link} style={styles.span} />
 

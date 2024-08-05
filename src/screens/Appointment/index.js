@@ -1,36 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
+import React, { useState } from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { Colors } from "../../utilities/Colors";
 import TopTab from "../../components/TopTabs";
 import Upcoming from "./Upcoming";
 import Completed from "./Completed";
 import Header from "../../components/Header";
-import { AppointmentsMiddleware } from "../../redux/middlewares/AppointmentsMiddleware";
-import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 const Appointments = () => {
     const [activeCompo, setactiveCompo] = useState({ name: 'Upcoming' })
-    const [loading, setLoading] = useState(true)
-    const dispatch = useDispatch();
+    const {t} = useTranslation();
 
-    const appointmentsData = useSelector(state => state.AppointmentsReducer?.myAppointmentList)
-
-    // console.log('appointmentsData', JSON.stringify(appointmentsData, null, 8));
-    
-    useEffect(() => {
-        fetchAppointmentsData()
-    }, [])
-
-    const fetchAppointmentsData = () => {
-        dispatch(AppointmentsMiddleware.getAppointmentsData())
-            .then(() => setLoading(false))
-            .catch(() => setLoading(false))
-    }
 
     return (
         <View style={styles.container}>
 
-            <Header title="Appointments" back bell />
+            <Header title={t("Appointments")} back bell />
             <TopTab
                 options={[{
                     id: 1,
@@ -45,18 +30,12 @@ const Appointments = () => {
                 focused={activeCompo?.name}
                 onActivePress={(e) => setactiveCompo(e)}
             />
-            <ScrollView
-                refreshControl={
-                    <RefreshControl
-                        refreshing={false}
-                        onRefresh={ () => {setLoading(true) , fetchAppointmentsData() }}
-                    />
-                }>
+            <ScrollView>
 
                 {
                     activeCompo?.name == 'Upcoming' ?
                         (
-                            <Upcoming data={loading ? [1 ,2 ,3 ,4 ,5 ,6] :appointmentsData} loading={loading} />
+                            <Upcoming />
                         ) : (
                             <Completed />
                         )

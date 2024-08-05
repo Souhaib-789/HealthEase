@@ -133,7 +133,7 @@ const Signup = () => {
                 <Button title={'Signup'} onPress={onPressSignup} style={styles.button} />
 
                 <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                    <TextComponent style={styles.link_textx} text={'Already have an account? Login'} />
+                    <TextComponent style={styles.link_textx} text={'Already have an account?'} />
                 </TouchableOpacity>
             </ScrollView>
         </View>

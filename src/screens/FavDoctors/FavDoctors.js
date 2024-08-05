@@ -7,21 +7,23 @@ import DoctorCard from "../../components/DoctorCard";
 import ListEmptyComponent from "../../components/ListEmptyComponent";
 import Icon, { IconTypes } from "../../components/Icon";
 import NO_DOC from '../../assets/images/noDoc.png'
+import { useTranslation } from "react-i18next";
 
 const FavDoctors = () => {
 
     const [search, setsearch] = useState(null)
+    const { t } = useTranslation()
 
 
     return (
         <View style={styles.mainContainer}>
-            <Header title={'Favorite Doctors'} back bell />
+            <Header title={t('Favorite Doctors')} back bell />
             <ScrollView>
                 <Input
                     search
                     value={search}
                     onChangeText={(e) => setsearch(e)}
-                    placeholder={'Search'}
+                    placeholder={t('Search')}
                     rightIcon={search && <Icon type={IconTypes.Entypo} name={'cross'} size={18} />}
                     onPressRightIcon={() => setsearch(null)}
                     mainStyle={{ marginBottom: 13, width: '90%', marginTop: 10 }} />
@@ -32,7 +34,7 @@ const FavDoctors = () => {
                     renderItem={({ item }) =>
                         (<DoctorCard item={item} book={true} heart={true} style={{ width: '90%' }} />)}
                     keyExtractor={(_, index) => index.toString()}
-                    ListEmptyComponent={<ListEmptyComponent image={NO_DOC} text={'no fav. doctor yet'} />}
+                    ListEmptyComponent={<ListEmptyComponent image={NO_DOC} text={t('no fav. doctor yet')} />}
                 />
             </ScrollView>
         </View>

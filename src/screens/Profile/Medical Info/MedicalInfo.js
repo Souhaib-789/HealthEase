@@ -32,7 +32,7 @@ const MedicalInfo = () => {
                     <View style={styles.row}>
                         <Icon name={'clipboard-text-outline'} type={IconTypes.MaterialCommunityIcons} size={20} color={Colors.PRIMARY} />
                         <View>
-                            <TextComponent text={'Prescription'} style={{ color: Colors.PRIMARY, fontSize: 14 }} />
+                            <TextComponent text={'Prescriptions'} style={{ color: Colors.PRIMARY, fontSize: 14 }} />
                             <TextComponent text={'20-Oct-2024'} style={{ fontSize: 10 }} />
                         </View>
                     </View>

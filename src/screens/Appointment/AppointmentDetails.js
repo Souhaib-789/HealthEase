@@ -13,6 +13,7 @@ import STAR from '../../assets/images/star.png';
 import Input from "../../components/Input";
 import { useNavigation } from "@react-navigation/native";
 import AVATAR from '../../assets/images/avatar.png';
+import { useTranslation } from "react-i18next";
 
 const AppointmentDetails = (props) => {
 
@@ -21,7 +22,7 @@ const AppointmentDetails = (props) => {
     const startTime = moment(routeData?.startTime).utc().format('hh:mm A')
     const endTime = moment(routeData?.endTime).utc().format('hh:mm A')
     // console.log('--------', JSON.stringify(routeData, null, 8));
-
+    const {t} = useTranslation();
     const details = [
         {
             name: 'Reviews',
@@ -88,7 +89,7 @@ const AppointmentDetails = (props) => {
                         <View style={styles.wide_row}>
                             <View style={styles.row}>
                                 <Icon name='calendar-clear-outline' type={IconTypes.Ionicons} size={18} color={Colors?.BLACK} />
-                                <TextComponent text={'Day :  '} style={styles.short_heading} />
+                                <TextComponent text={'Day : '} style={styles.short_heading} />
                             </View>
                             <TextComponent text={routeData?.date ? moment(routeData?.date).format('dddd , DD MMMM') : '--'} style={styles.texty} />
                         </View>
@@ -96,7 +97,7 @@ const AppointmentDetails = (props) => {
                         <View style={styles.wide_row}>
                             <View style={styles.row}>
                                 <Icon name='clockcircleo' type={IconTypes.AntDesign} size={18} color={Colors?.BLACK} />
-                                <TextComponent text={'Time :  '} style={styles.short_heading} />
+                                <TextComponent text={'Time : '} style={styles.short_heading} />
                             </View>
                             <TextComponent text={startTime ? startTime + ' - ' + endTime : '--'} style={styles.texty} />
                         </View>
@@ -104,9 +105,9 @@ const AppointmentDetails = (props) => {
                         <View style={styles.wide_row}>
                             <View style={styles.row}>
                                 <Icon name='timer-outline' type={IconTypes.Ionicons} size={18} color={Colors?.BLACK} />
-                                <TextComponent text={'Duration :  '} style={styles.short_heading} />
+                                <TextComponent text={'Duration : '} style={styles.short_heading} />
                             </View>
-                            <TextComponent text={'30 Minutes'} style={styles.texty} />
+                            <TextComponent text={'15 Minutes'} style={styles.texty} />
                         </View>
 
                         <View style={styles.hr} />
@@ -115,17 +116,17 @@ const AppointmentDetails = (props) => {
                         <TextComponent style={styles.heading} text={'Patient Info'} />
 
                         <View style={styles.wide_row}>
-                            <TextComponent text={'Name :  '} style={styles.short_heading} />
+                            <TextComponent text={'Name'} style={styles.short_heading} />
                             <TextComponent text={routeData?.name ? routeData?.name : '--'} style={styles.textx} />
                         </View>
 
                         <View style={styles.wide_row}>
-                            <TextComponent text={'Relationship :  '} style={styles.short_heading} />
+                            <TextComponent text={'Relationship'} style={styles.short_heading} />
                             <TextComponent text={routeData?.relation ? routeData?.relation : '--' } style={styles.textx} />
                         </View>
 
                         <View style={styles.wide_row}>
-                            <TextComponent text={'Contact No :  '} style={styles.short_heading} />
+                            <TextComponent text={'Contact No.'} style={styles.short_heading} />
                             <TextComponent text={routeData?.contact ? routeData?.contact : '--'} style={styles.textx} />
                         </View>
                     </View>
@@ -133,7 +134,7 @@ const AppointmentDetails = (props) => {
                     {
                         screenType === 'upcoming' ?
 
-                            <Button icon={<Icon name='map-location' type={IconTypes.FontAwesome6} size={20} color={Colors?.PRIMARY} />} title={`Get Directions to ${routeData?.hospital_name ? routeData?.hospital_name : 'hospital'}`} light style={styles.button} />
+                            <Button icon={<Icon name='map-location' type={IconTypes.FontAwesome6} size={20} color={Colors?.PRIMARY} />} title={t(`Get Directions to ${routeData?.hospital_name ? routeData?.hospital_name : 'hospital'}`)} light style={styles.button} />
                             :
                             <Button onPress={() => setShowReviewModal(true)} icon={<Icon name='star' type={IconTypes.AntDesign} size={20} color={Colors?.PRIMARY} />} title={'Add Review'} light style={styles.button} />
                     }
@@ -175,10 +176,10 @@ const AppointmentDetails = (props) => {
                 </View>
                 <Button title={'Submit'} onPress={() => {
                     if (!rating) {
-                        alert('Please give rating')
+                        alert(t('Please give rating'))
                     }
                     else if (!review) {
-                        alert('Please write review statement')
+                        alert(t('Please write review statement'))
                     }
                     else {
                         setShowReviewModal(false), navigation.goBack()

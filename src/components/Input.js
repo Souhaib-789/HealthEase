@@ -5,11 +5,12 @@ import { Colors } from '../utilities/Colors';
 import { Fonts } from '../utilities/Fonts';
 import TextComponent from './TextComponent';
 import Icon, { IconTypes } from './Icon';
+import { useTranslation } from 'react-i18next';
 
 const Input = props => {
 
     const [isPassword, setIsPassword] = useState(props.isPassword);
-
+    const {t} = useTranslation();
     return (
         <View style={props?.parentStyle}>
             {
@@ -33,7 +34,7 @@ const Input = props => {
                 <TextInput
                 onFocus={props?.onFocus}
                     style={[styles.input, {  width: props?.search ? '80%' : props?.rightIcon || props?.isPassword ? '90%' : '100%' }, { ...props?.style }]}
-                    placeholder={props?.placeholder}
+                    placeholder={t(props?.placeholder)}
                     placeholderTextColor={Colors.DGREY}
                     value={props?.value}
                     onChangeText={props?.onChangeText}

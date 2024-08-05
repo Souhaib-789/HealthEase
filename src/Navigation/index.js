@@ -10,6 +10,7 @@ import { Colors } from '../utilities/Colors';
 import { Storage } from '../utilities/AsyncStorage';
 import { login, userData } from '../redux/actions/AuthAction';
 import { hideAlert } from '../redux/actions/GeneralAction';
+import { useTranslation } from 'react-i18next';
 
 
 
@@ -20,7 +21,7 @@ const AppNavigation = () => {
   const alert = useSelector(state => state.GeneralReducer.alertOptions);
   const dispatch = useDispatch();
   const [GetStarted, setGetStarted] = useState(false);
-
+  const { t } = useTranslation();
 
   // useEffect(() => {
   //   checkPermission()
@@ -135,7 +136,7 @@ const AppNavigation = () => {
       <RNModal visible={loading} transparent>
         <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center' }}>
           <ActivityIndicator size={'large'} color={Colors.WHITE} />
-          <Text style={{ color: '#fff', margin: 10 }}>Loading , Please wait ...</Text>
+          <Text style={{ color: '#fff', margin: 10 }}>{t("Loading , Please wait ...")}</Text>
         </View>
       </RNModal>
 
@@ -145,7 +146,7 @@ const AppNavigation = () => {
         duration={3000}
         style={{ backgroundColor: Colors.PRIMARY }}
         visible={showAlert}>
-        {alert?.message ? alert?.message : null}
+        {alert?.message ? t(alert?.message) : null}
       </Snackbar>
     </NavigationContainer>
   );

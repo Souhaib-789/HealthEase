@@ -1,66 +1,52 @@
-import React, { useState } from "react";
-import {View, StyleSheet, ScrollView, FlatList} from "react-native";
-import Header from "../../components/Header";
+import React, { useCallback, useEffect, useState } from "react";
+import {View, StyleSheet, ScrollView, FlatList, RefreshControl} from "react-native";
 import Input from "../../components/Input";
 import { Colors } from "../../utilities/Colors";
-import docC from "../../assets/images/doc3.png";
-import docD from "../../assets/images/doc4.png";
-import docE from "../../assets/images/doc5.png";
-import DoctorCard from "../../components/DoctorCard";
 import ListEmptyComponent from "../../components/ListEmptyComponent";
 import Icon, { IconTypes } from "../../components/Icon";
 import AppointCard from "../../components/AppointCard";
+import { useTranslation } from "react-i18next";
+import { AppointmentsMiddleware } from "../../redux/middlewares/AppointmentsMiddleware";
+import { useDispatch, useSelector } from "react-redux";
 
 const Completed = () => {
 
     const [search, setsearch] = useState(null)
-    const FavoriteDoctors = [
-        {
-            id: 1,
-            image: docC,
-            name: 'Dr. Crick',
-            fees: '2500',
-            rating: 3,
-            hearted: false,
-            category: 'Medicine Specialist',
-            hospital_name: 'City Hospital',
-            experience: 5,
-        },
-        {
-            id: 2,
-            image: docD,
-            name: 'Dr. Strain',
-            fees: '2200',
-            rating: 3,
-            hearted: true,
-            category: 'Dentist ',
-            experience: 3,
-            hospital_name: 'City Hospital',
-        },
-        {
-            id: 3,
-            image: docE,
-            name: 'Dr. Lachinet',
-            fees: '2900',
-            rating: 2,
-            hearted: false,
-            category: 'Physio Therapy Specialist',
-            experience: 5,
-            hospital_name: 'City Hospital',
-        },
-        {
-            id: 4,
-            image: docC,
-            name: 'Dr. Crick',
-            fees: '2500',
-            rating: 3,
-            hearted: true,
-            category: 'Cardiologist',
-            experience: 9,
-            hospital_name: 'City Hospital',
+    const { t } = useTranslation();
+    const ref = React.useRef();
+    const [loading, setLoading] = useState(true)
+    const dispatch = useDispatch();
+    const appointmentsData = useSelector(state => state.AppointmentsReducer?.myAppointmentList)
 
-        },
-    ]
+
+    useEffect(() => {
+        const data = {
+            status: 'completed',
+            search: undefined
+        }
+        fetchPastAppointmentsData(data)
+    }, [])
+
+    const fetchPastAppointmentsData = (data) => {
+        dispatch(AppointmentsMiddleware.getAppointmentsData(data))
+            .then(() => setLoading(false))
+            .catch(() => setLoading(false))
+    }
+
+    const onSearch = useCallback((val) => {
+        setLoading(true);
+        setsearch(val);
+        clearTimeout(ref.current);
+        ref.current = setTimeout(() => {
+            const data = {
+                status: 'completed',
+                search: val
+            }
+            fetchPastAppointmentsData(data)
+        }, 1000);
+    }, []);
+
+    const onRefreshPage = () => { setLoading(true), fetchPastAppointmentsData(), setsearch(null) }
 
     return (
         <View style={styles.mainContainer}>
@@ -68,19 +54,25 @@ const Completed = () => {
                     <Input
                         search
                         value={search}
-                        onChangeText={(e) => setsearch(e)}
-                        placeholder={'Search'}
+                        onChangeText={(e) => onSearch(e)}
+                        placeholder={t('Search')}
                         rightIcon={search && <Icon type={IconTypes.Entypo} name={'cross'} size={18} />}
-                        onPressRightIcon={() => setsearch(null)}
+                        onPressRightIcon={onRefreshPage}
                         mainStyle={{ marginVertical: 15 }} />
 
                     <FlatList
                         showsVerticalScrollIndicator={false}
-                        data={FavoriteDoctors}
+                        data={loading ? [1, 2, 3, 4, 5, 6] : appointmentsData}
                         renderItem={({ item }) =>
-                            (<AppointCard item={item}  screenType={'completed'}   />)}
+                            (<AppointCard item={item} loading={loading} screenType={'completed'}   />)}
                         keyExtractor={(_ , index) => index.toString()}
-                        ListEmptyComponent={<ListEmptyComponent text={'no doctors found'} />}
+                        ListEmptyComponent={<ListEmptyComponent short text={t('no appointments found')} />}
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={false}
+                                onRefresh={onRefreshPage}
+                            />
+                        }
                     />
             </ScrollView>
         </View>

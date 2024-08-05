@@ -1,3 +1,4 @@
+import i18n from "../translations/i18n";
 import { Storage } from "./AsyncStorage";
 
 export const headers = {
@@ -22,6 +23,10 @@ export const headers = {
     };
   },
 }
+
+export const isUrduLanguage = () => {
+  return i18n.language === 'ur'; // 'ur' is the language code for Urdu
+};
 
 export const doctorCategories = [
   {

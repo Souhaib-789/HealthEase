@@ -20,8 +20,12 @@ import Button from "../../components/Button";
 import { Storage } from "../../utilities/AsyncStorage";
 import { AppointmentsMiddleware } from "../../redux/middlewares/AppointmentsMiddleware";
 import moment from "moment";
+import { useTranslation } from "react-i18next";
+import { isUrduLanguage } from "../../utilities/Utilities";
 
 const Home = () => {
+    
+    const { t } = useTranslation()
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const [search, setsearch] = useState();
@@ -32,8 +36,9 @@ const Home = () => {
     const USER = useSelector(state => state.AuthReducer?.user)
     const Doctors = useSelector(state => state.DoctorsReducer?.dashboardDoctors)
     const UPAppointment = useSelector(state => state.AppointmentsReducer?.myAppointmentList[0])
+    const isUrdu = isUrduLanguage();
 
-    console.log('Data ->>>>', JSON.stringify(UPAppointment, null, 8));
+    // console.log('Data ->>>>', JSON.stringify(UPAppointment, null, 8));
 
     useEffect(() => {
         fetchDoctorsData();
@@ -43,7 +48,11 @@ const Home = () => {
 
 
     const fetchDoctorsData = () => {
-        dispatch(DoctorsMiddleware.getAllDoctorsData())
+        const data = {
+            search: 'Henry',
+            category: 'Cardiologist',
+        }
+        dispatch(DoctorsMiddleware.getAllDoctorsData(data))
             .then(() => setloading(false))
             .catch(() => setloading(false))
     }
@@ -55,7 +64,11 @@ const Home = () => {
 
 
     const fetchAppointmentsData = () => {
-        dispatch(AppointmentsMiddleware.getAppointmentsData())
+        const data = {
+            status: 'upcoming',
+            search: undefined
+        }
+        dispatch(AppointmentsMiddleware.getAppointmentsData(data))
     }
 
     return (
@@ -78,30 +91,31 @@ const Home = () => {
                 </View>
 
                 <View style={styles.mV}>
-                    <TextComponent style={styles.sub_heading} text={'Good Morning !'} />
-                    <TextComponent style={styles.heading} text={USER?.user_name ? USER?.user_name : 'Mr. Patient'} />
+                    <TextComponent style={styles.sub_heading} text={t('Good Morning') + ' !'} />
+                    <TextComponent style={[styles.heading , {alignSelf: isUrdu ? 'flex-end' : 'flex-start'}]} text={USER?.user_name ? USER?.user_name : 'Mr. Patient'} />
                 </View>
 
                 <View style={styles.sub_container}>
-                    <TextComponent style={styles.sub_container_heading} text={'Keep Healthy !'} />
+                    <TextComponent style={styles.sub_container_heading} text={t('Keep Healthy') + ' !'} />
                     <View>
                         <View style={styles.input_caption}>
-                            <TextComponent style={styles.caption_text} text={'AI Chatbot'} />
+                            <TextComponent style={styles.caption_text} text={t('AI Chatbot')} />
                         </View>
                         <Input
-                            placeholder={'Ask to healthbot ...'}
+                            placeholder={t('Ask to healthbot ...')}
                             value={search}
                             leftIcon={
                                 <Image source={BOT_ICON} style={{ width: 35, height: 35 }} />
                             }
+                            style={{ width: isUrdu ? '80%' : '90%'}}
                             onFocus={() => introModalStatus ? navigation.navigate('HealthbotChat') : setIntroModal(true)}
                             mainStyle={styles.search_input} />
 
                     </View>
                     <View style={styles.flex}>
-                        <TextComponent style={styles.headingx} text={'Upcoming Appointments'} />
+                        <TextComponent style={styles.headingx} text={t('Upcoming Appointments')} />
                         <TouchableOpacity onPress={() => navigation.navigate('Appointments')}>
-                            <TextComponent text={'See all '} />
+                            <TextComponent text={t('See all')} />
                         </TouchableOpacity>
                     </View>
 
@@ -136,7 +150,7 @@ const Home = () => {
                                 </View>
                             </View>
                         </TouchableOpacity>
-                        : <ListEmptyComponent short text={'not booked yet !'} />
+                        : <ListEmptyComponent short text={t('not booked yet') + ' !'} />
                     }
 
 
@@ -147,9 +161,9 @@ const Home = () => {
                     showsHorizontalScrollIndicator={false}
                     ListHeaderComponent={() => (
                         <View style={[styles.flex, styles.mV]}>
-                            <TextComponent style={styles.headingx} text={'Find your doctor'} />
+                            <TextComponent style={styles.headingx} text={t('Find your doctor')} />
                             <TouchableOpacity onPress={() => navigation.navigate('Doctors')}>
-                                <TextComponent text={'See all'} />
+                                <TextComponent text={t('See all')} />
                             </TouchableOpacity>
                         </View>
                     )}
@@ -157,7 +171,7 @@ const Home = () => {
                     decelerationRate={'fast'}
                     renderItem={({ item }) =>
                         (<DoctorCard item={item} loading={loading} />)}
-                    ListEmptyComponent={<ListEmptyComponent image={NO_DOC} text={'no doctors found'} />}
+                    ListEmptyComponent={<ListEmptyComponent image={NO_DOC} text={t('no doctors found')} />}
                     keyExtractor={(item, index) => index.toString()}
 
                 />
@@ -178,8 +192,8 @@ const Home = () => {
                         </TouchableOpacity>
                         <Image source={require('../../assets/images/BG2.png')} style={{ position: 'absolute', bottom: 150, width: '100%', height: '80%' }} />
                         <View style={styles.heading_container}>
-                            <TextComponent style={styles.heading} text={"Hello ! I'm "} />
-                            <TextComponent style={styles.headingx} text={"Healthbot"} />
+                            <TextComponent style={styles.heading} text={t("Hello ! I'm ")} />
+                            <TextComponent style={styles.headingx} text={t("Healthbot")} />
                         </View>
 
                         <Lottie source={require('../../assets/animations/bot.json')}
@@ -188,12 +202,12 @@ const Home = () => {
                             style={{ width: 170, height: 180, alignSelf: 'center', marginVertical: 100 }}
                         />
 
-                        <TextComponent style={styles.headingy} text={"Do you want any healthy food advice ?"} />
+                        <TextComponent style={styles.headingy} text={t("Do you want any healthy food advice ?")} />
                         <Button onPress={() => {
                             Storage.set('@introModal', 'true')
                             setIntroModal(false)
                             navigation.navigate('HealthbotChat')
-                        }} title={"Ask me"} style={styles.button} />
+                        }} title={t("Ask me")} style={styles.button} />
                     </View>
                 </View>
             </Modal>
@@ -237,7 +251,7 @@ const styles = StyleSheet.create({
     sub_container_heading: {
         fontSize: 20,
         color: Colors.BLACK,
-        width: '70%',
+        // width: '100%',
         lineHeight: 25,
         marginVertical: 8
     },

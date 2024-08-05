@@ -58,7 +58,7 @@ const DoctorCard = ({ item, book, heart, style, loading }) => {
                         <View style={styles.subview2}>
                             <View style={styles.flex}>
                                 <Image source={require('../assets/images/star.png')} style={{ width: 18, height: 18, marginRight: 3 }} />
-                                <TextComponent style={styles.spanx} text={item?.rating ? item?.rating : 0 + ' (Reviews )'} />
+                                <TextComponent style={styles.spanx} text={item?.rating ? item?.rating : 0 + ' Reviews'} />
                             </View>
                             {
                                 book &&

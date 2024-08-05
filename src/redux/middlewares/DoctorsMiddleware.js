@@ -3,16 +3,16 @@ import Apis from '../../apis/apis';
 import { hideLoading, showAlert, showLoading } from '../actions/GeneralAction';
 import { headers } from '../../utilities/Utilities';
 import { getAllDoctors, getHospitalDoctors } from '../actions/DoctorsActions';
-import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 export const DoctorsMiddleware = {
 
   // doctor list for patient
-  getAllDoctorsData: () => {
+  getAllDoctorsData: (params) => {
     return dispatch => {
       return new Promise(async (resolve, reject) => {
         try {
-          const data = await Axios.get(Apis.getDoctors, await headers.config());
+          const rawData = { name: params?.search , category: params?.category }
+          const data = await Axios.post(Apis.getDoctors ,rawData , await headers.config());
           if (data?.status == 200) {
             dispatch(getAllDoctors(data?.data?.data));
             resolve(true);

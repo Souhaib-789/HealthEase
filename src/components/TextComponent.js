@@ -2,17 +2,17 @@ import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { Colors } from '../utilities/Colors';
 import { Fonts } from '../utilities/Fonts';
-// import { useSelector } from 'react-redux';
-// import { Fonts } from '../utilities/Fonts';
+import { useTranslation } from 'react-i18next';
+
 
 const TextComponent = (props) => {
-  //   const theme = useSelector(state => state.AppReducer.theme)
+  const { t } = useTranslation();
 
   return (
     <Text
       numberOfLines={props?.numberOfLines}
       onTextLayout={props?.onTextLayout}
-      style={[styles.text,props?.style]}>{props?.text}</Text>
+      style={[styles.text,props?.style]}>{t(props?.text)}</Text>
   )
 };
 
