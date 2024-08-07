@@ -8,9 +8,12 @@ import { Fonts } from "../../utilities/Fonts";
 import Icon, { IconTypes } from "../../components/Icon";
 import Button from "../../components/Button";
 import FormModal from "../../components/FormModal";
-import PATIENT from '../../assets/images/profile.png';
+import AVATAR from '../../assets/images/avatar.png';
 import Input from "../../components/Input";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { AppointmentsMiddleware } from "../../redux/middlewares/AppointmentsMiddleware";
+import { showAlert } from "../../redux/actions/GeneralAction";
 
 const PatientDetails = (props) => {
 
@@ -19,28 +22,25 @@ const PatientDetails = (props) => {
     const [openModal, setopenModal] = useState(false)
     const [prescription, setprescription] = useState(null)
     const navigation = useNavigation()
+    const dispatch = useDispatch()
+    const startTime = moment(item?.startTime).utc().format('hh:mm A')
+    const endTime = moment(item?.endTime).utc().format('hh:mm A')
+    // console.log('item', JSON.stringify(item, null, 8))
 
-    console.log('item', JSON.stringify(item , null ,8))
+    const onMakeCompleted = () => {
+        const data = { id: item?._id }
+        dispatch(AppointmentsMiddleware.onCompleteAppointment(data))
+            .then((res) => { 
+                dispatch(showAlert({message: res?.message, title: 'Appointment Completed'}))
+                navigation.goBack() })
+            .catch((err) => { console.log('err', err) })
 
-    const renderDetailsItem = (item, index) => {
-        return (
-            <View style={styles.row}>
-                <View style={{ backgroundColor: Colors?.LIGHT, padding: 8, borderRadius: 50, marginRight: 6 }}>
-                    <Icon type={IconTypes?.MaterialIcons} name={item?.icon_name} size={16} color={Colors?.PRIMARY} />
-                </View>
-                <View>
-                    <TextComponent style={[styles.textx, { fontFamily: Fonts?.SEMIBOLD, fontSize: 12, color: Colors?.BLACK }]} text={item?.no} />
-                    <TextComponent style={[styles.textx, { color: Colors?.DGREY, fontSize: 10 }]} text={item?.name} />
-                </View>
-            </View>
-        )
     }
-
     return (
         <View style={styles.mainContainer}>
             <ScrollView>
                 <Header title={'Details'} back />
-                <Image source={PATIENT} style={styles.card_image} />
+                <Image source={item?.patient?.image_url ? { uri: item?.patient?.image_url } : AVATAR} style={styles.card_image} />
 
                 <View style={styles.details_card}>
 
@@ -59,7 +59,7 @@ const PatientDetails = (props) => {
                                 <Icon name='clockcircleo' type={IconTypes.AntDesign} size={18} color={Colors?.BLACK} />
                                 <TextComponent text={'Time :  '} style={styles.short_heading} />
                             </View>
-                            <TextComponent text={item?.time ? item?.time : '--'} style={styles.texty} />
+                            <TextComponent text={startTime ? startTime + ' - ' + endTime : '--'} style={styles.texty} />
                         </View>
 
                         <View style={styles.wide_row}>
@@ -67,7 +67,7 @@ const PatientDetails = (props) => {
                                 <Icon name='timer-outline' type={IconTypes.Ionicons} size={18} color={Colors?.BLACK} />
                                 <TextComponent text={'Duration :  '} style={styles.short_heading} />
                             </View>
-                            <TextComponent text={'30 Minutes'} style={styles.texty} />
+                            <TextComponent text={'15 Minutes'} style={styles.texty} />
                         </View>
 
                         <View style={styles.hr} />
@@ -101,7 +101,7 @@ const PatientDetails = (props) => {
                             (
                                 <>
                                     <Button onPress={() => setopenModal(true)} icon={<Icon name='clipboard' type={IconTypes.Feather} size={20} color={Colors?.PRIMARY} />} title={'Write a prescription'} light style={{ marginTop: 15 }} />
-                                    <Button onPress={() => navigation.goBack()} icon={<Icon name='checkmark-done-circle-outline' type={IconTypes.Ionicons} size={20} color={Colors?.WHITE} />} title={'Make it completed'} style={styles.button} />
+                                    <Button onPress={onMakeCompleted} icon={<Icon name='checkmark-done-circle-outline' type={IconTypes.Ionicons} size={20} color={Colors?.WHITE} />} title={'Make it completed'} style={styles.button} />
                                 </>
                             )
                             : null

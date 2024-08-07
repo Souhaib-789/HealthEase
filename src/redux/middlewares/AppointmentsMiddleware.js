@@ -98,6 +98,35 @@ export const AppointmentsMiddleware = {
     };
   },
 
+  //complete appointment by doctor
+  onCompleteAppointment : params => {
+    return dispatch => {
+      dispatch(showLoading());
+      return new Promise(async (resolve, reject) => {
+        try {
+          const rawData = {
+            appintment_id: params?.id,
+          }
+          const data = await Axios.post(Apis.completeAppointment, rawData, await headers.config());
+          if (data?.status == 200) {           
+            resolve(data?.data)
+          }
+        } catch (error) {
+          reject(error);
+          dispatch(
+            showAlert({
+              title: 'Complete Appointment',
+              message: error?.response?.data?.message ? error?.response?.data?.message : error?.message,
+              type: 'Error',
+              status: error?.response?.status,
+            }),
+          );
+        } finally {
+          dispatch(hideLoading());
+        }
+      });
+    };
+  },
 
 
 };

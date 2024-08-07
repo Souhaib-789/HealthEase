@@ -16,6 +16,13 @@ const DoctorsReducer = (state = initialState, action) => {
       };
       break;
 
+      case ActionTypes.CLEAR_ALL_DOCTORS:
+        state = {
+          ...state, allDoctors: [],
+          dashboardDoctors: []
+        };
+        break;
+
     case ActionTypes.GET_DOCTOR_DETAILS:
       state = { ...state, doctorDetails: action.payload };
       break;

@@ -49,8 +49,8 @@ const Home = () => {
 
     const fetchDoctorsData = () => {
         const data = {
-            search: 'Henry',
-            category: 'Cardiologist',
+            search: '',
+            category: '',
         }
         dispatch(DoctorsMiddleware.getAllDoctorsData(data))
             .then(() => setloading(false))

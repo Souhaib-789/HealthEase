@@ -2,7 +2,7 @@ import Axios from 'axios';
 import Apis from '../../apis/apis';
 import { hideLoading, showAlert, showLoading } from '../actions/GeneralAction';
 import { headers } from '../../utilities/Utilities';
-import { getAllDoctors, getHospitalDoctors } from '../actions/DoctorsActions';
+import { clearAllDoctors, getAllDoctors, getHospitalDoctors } from '../actions/DoctorsActions';
 
 export const DoctorsMiddleware = {
 
@@ -11,8 +11,14 @@ export const DoctorsMiddleware = {
     return dispatch => {
       return new Promise(async (resolve, reject) => {
         try {
-          const rawData = { name: params?.search , category: params?.category }
-          const data = await Axios.post(Apis.getDoctors ,rawData , await headers.config());
+          // if(params?.search && params?.category){
+          //   dispatch(clearAllDoctors());
+          // }
+
+          const rawData = { name: params?.search , category: params?.category };
+          console.log('rawData ->>>>>>>>>>>>>>>' , JSON.stringify(rawData, null, 8));
+          
+          const data = await Axios.post(Apis.getDoctors ,rawData, await headers.config());
           if (data?.status == 200) {
             dispatch(getAllDoctors(data?.data?.data));
             resolve(true);

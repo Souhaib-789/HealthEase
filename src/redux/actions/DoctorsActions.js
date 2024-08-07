@@ -8,6 +8,12 @@ const getAllDoctors = (payload) => {
     };
 }
 
+const clearAllDoctors = () => {
+    return {
+        type: ActionTypes.CLEAR_ALL_DOCTORS,
+    };
+}
+
 const getDoctorDetails = (payload) => {
     return {
         type: ActionTypes.GET_DOCTOR_DETAILS,
@@ -30,4 +36,4 @@ const getHospitalDoctors = (payload) => {
 }
 
 
-export { getAllDoctors, getHospitalDoctors, getDoctorDetails, clearDoctorDetails };
+export { getAllDoctors, getHospitalDoctors, getDoctorDetails, clearDoctorDetails ,clearAllDoctors };

@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native'
 import TextComponent from '../../components/TextComponent'
 import { Fonts } from '../../utilities/Fonts'
 import { useSelector } from 'react-redux'
+import moment from 'moment'
 
 const PersonalInfo = () => {
     const navigation = useNavigation()
@@ -98,9 +99,9 @@ const PersonalInfo = () => {
                             data={USER?.slots}
                             renderItem={({ item, index }) => {
                                 return (
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginVertical: 10, width: '70%' }}>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginVertical: 10, width: '75%' }}>
                                         <TextComponent text={item?.day} style={{ fontSize: 12, }} />
-                                        <TextComponent text={item?.startTime ? item?.startTime : '--' + ' - ' + item?.shift_end_Time ? item?.shift_end_Time : '--'} style={{ fontSize: 12 }} />
+                                        <TextComponent text={(item?.shift_start_Time ? moment(item?.shift_start_Time).utc().format('hh:mm A') : '--') + ' - ' + (item?.shift_end_Time ? moment(item?.shift_end_Time).utc().format('hh:mm A') : '--')} style={{ fontSize: 12 }} />
                                     </View>
                                 )
                             }}

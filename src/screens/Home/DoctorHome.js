@@ -20,13 +20,12 @@ import Skeleton from "../../components/Skeleton";
 const DoctorHome = () => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
-    const [search, setsearch] = useState();
     const [state, setState] = useState();
     const [loading, setLoading] = useState(true);
     const USER_DATA = useSelector(state => state.AuthReducer.user)
     const APPOINTMENTS = useSelector(state => state.AppointmentsReducer?.doctorAppointmentList)
 
-    console.log('USER_DATA ------->>>>', JSON.stringify(USER_DATA, null, 8));
+    console.log('USER_DATA ------->>>>', JSON.stringify(APPOINTMENTS, null, 8));
 
 
     useEffect(() => {
@@ -84,7 +83,7 @@ const DoctorHome = () => {
                         </View>
                         <View style={styles.appointment_card_subview4}>
                             <Ionicons name='time-outline' color={Colors.PRIMARY} size={15} />
-                            <TextComponent style={styles.appointment_card_span} text={item?.time ? item?.time : '--'} />
+                            <TextComponent style={styles.appointment_card_span} text={item?.startTime ? moment(item?.startTime).utc().format('hh:mm A') : '--'} />
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -101,12 +100,12 @@ const DoctorHome = () => {
                                 <Icon type={IconTypes.Feather} name='menu' size={23} color={Colors.WHITE} />
                             </TouchableOpacity>
                             <View>
-                                <TextComponent style={styles.sub_heading} text={'Hey Doctor !'} />
+                                <TextComponent style={styles.sub_heading} text={'Hello Doctor !'} />
                                 <TextComponent style={styles.heading} text={USER_DATA?.user_name} />
                             </View>
                         </View>
                         <TouchableOpacity onPress={() => navigation.navigate('Profile')} >
-                            <Image source={USER_DATA?.image_url ? { uri: USER_DATA?.image_url } : AVATAR} style={{ width: 35, height: 35 }} />
+                            <Image source={USER_DATA?.image_url ? { uri: USER_DATA?.image_url } : AVATAR} resizeMode={'cover'} style={{ width: 35, height: 35, borderRadius: 100 }} />
                         </TouchableOpacity>
                     </View>
 

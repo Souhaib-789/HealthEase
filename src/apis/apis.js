@@ -14,6 +14,7 @@ const Apis = {
     bookAppointment: `${BASE_URL}/user/api/book-Appointment`,
     get_my_appointments: `${BASE_URL}/user/api/getAppointment`,
     getDocterAppointment: `${BASE_URL}/user/api/getDocterAppointment`,
+    completeAppointment: `${BASE_URL}/user/api/completeAppointment`,
 
     //Slots
     getDocterSlots: `${BASE_URL}/user/api/getDocterSlots`,
