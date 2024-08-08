@@ -39,7 +39,7 @@ const AppointCard = ({ item, screenType, loading }) => {
                             <Icon type={IconTypes.MaterialCommunityIcons} name={'clock-fast'} color={Colors?.PRIMARY} size={20} />
                     }
                 </View>
-                <TextComponent style={[styles.span, { color: Colors.BLACK }]} text={item?.docter?.specialization ? item?.docter?.specialization : '--'} />
+                <TextComponent style={[styles.span, { color: Colors.BLACK,  alignSelf:'flex-start'  }]} text={item?.docter?.specialization ? item?.docter?.specialization : '--'} />
 
                 <View style={styles.flex}>
                     <View style={[styles.flex, { gap: 5 }]}>

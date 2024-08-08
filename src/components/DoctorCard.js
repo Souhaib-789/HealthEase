@@ -11,6 +11,7 @@ import AVATAR from '../assets/images/avatar.png'
 import { useDispatch } from "react-redux";
 import { getDoctorDetails } from "../redux/actions/DoctorsActions";
 import Skeleton from "./Skeleton";
+import { isUrduLanguage } from "../utilities/Utilities";
 
 const DoctorCard = ({ item, book, heart, style, loading }) => {
     const navigation = useNavigation();
@@ -48,7 +49,7 @@ const DoctorCard = ({ item, book, heart, style, loading }) => {
                                 <Icon type={IconTypes.Ionicons} name={'heart-sharp'} color={Colors?.PRIMARY} size={20} />
                             }
                         </View>
-                        <TextComponent style={[styles.span, { color: Colors.BLACK }]} text={item?.specialization ? item?.specialization : '--'} />
+                        <TextComponent style={[styles.span, { color: Colors.BLACK, alignSelf:'flex-start'   }]} text={item?.specialization ? item?.specialization : '--'} />
 
                         <View style={[styles.flex, { gap: 5 }]}>
                             <Icon name={'location'} type={IconTypes?.EvilIcons} size={16} color={Colors?.DDGREY} />

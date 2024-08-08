@@ -81,7 +81,7 @@ const AppointmentForm = (props) => {
 
                     <View style={styles.flexA}>
                         <TextComponent text={'Time : '} style={styles.textx} />
-                        <TextComponent text={routeData?.timeSlot ? moment(routeData?.timeSlot).utc().format('h:mm A') + ' to ' + moment(routeData?.timeSlot).add(30, 'minutes').utc().format('h:mm A') : '--'} style={[styles.textx, { color: Colors?.BLACK }]} />
+                        <TextComponent text={routeData?.timeSlot ? moment(routeData?.timeSlot).utc().format('h:mm A') + ' to ' + moment(routeData?.timeSlot).add(15, 'minutes').utc().format('h:mm A') : '--'} style={[styles.textx, { color: Colors?.BLACK }]} />
                     </View>
 
                 </View>
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     },
     input_parent_style: {
         marginVertical: 10,
-        alignSelf: 'center'
+        alignSelf: 'center',
     },
     text: {
         fontSize: 25,

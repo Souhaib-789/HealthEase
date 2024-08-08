@@ -17,6 +17,8 @@ import { showAlert } from "../../redux/actions/GeneralAction";
 import { askHealthbot } from "../../apis/Gemini";
 import { saveChat } from "../../redux/actions/HealthbotActions";
 import ListEmptyComponent from "../../components/ListEmptyComponent";
+import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 const HealthbotChat = () => {
     const user = { id: 1 }
@@ -25,8 +27,8 @@ const HealthbotChat = () => {
     const [loader, setLoader] = useState(false)
     const [refreshing, setRefreshing] = useState(false)
     const XList = useSelector(state => state.HealthbotReducer?.chatList)
-    console.log('XList', JSON.stringify(XList, null, 8))
-
+    // console.log('XList', JSON.stringify(XList, null, 8))
+    const {t} = useTranslation()
     const [isTextShown, setisTextShown] = useState(false);
     const [lengthMore, setLengthMore] = useState(false);
 
@@ -132,7 +134,7 @@ const HealthbotChat = () => {
                 renderItem={renderChatItem}
                 inverted={XList.length > 0 ? true : false}
                 ListEmptyComponent={
-                    <ListEmptyComponent text={'No Chats Found'} />
+                    <ListEmptyComponent short text={'No Chats Found'} />
                 }
             />
 
@@ -149,7 +151,7 @@ const HealthbotChat = () => {
 
 
             <Input
-                placeholder={'Type a message'}
+                placeholder={t('Type a message')}
                 value={message}
                 extraData={refreshing}
                 onChangeText={(e) => setMessage(e)}

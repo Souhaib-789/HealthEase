@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, TouchableOpacity, ScrollView, Image, FlatList, Pressable, LayoutAnimation } from "react-native";
+import { View, StyleSheet, TouchableOpacity, ScrollView, Image, FlatList, Pressable, LayoutAnimation, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Header from "../../components/Header";
 import moment, { duration } from "moment";
@@ -72,7 +72,7 @@ const DoctorDetails = (props) => {
         },
         {
             name: 'Experience',
-            no: `${DETAILS?.experience ? DETAILS?.experience : 1} Years`,
+            no: DETAILS?.experience ? DETAILS?.experience : '--',
             icon_name: 'tips-and-updates'
         },
         {
@@ -117,7 +117,7 @@ const DoctorDetails = (props) => {
                     <Icon type={IconTypes?.MaterialIcons} name={item?.icon_name} size={16} color={Colors?.PRIMARY} />
                 </View>
                 <View>
-                    <TextComponent style={[styles.textx, { fontFamily: Fonts?.SEMIBOLD, fontSize: 12, color: Colors?.BLACK }]} text={t(item?.no)} />
+                    <TextComponent style={[styles.textx, { fontFamily: Fonts?.SEMIBOLD, fontSize: 12, color: Colors?.BLACK }]} text={item?.no + ' ' + (item?.name == 'Experience' ? t(' Years ') : '')} />
                     <TextComponent style={[styles.textx, { color: Colors?.DGREY, fontSize: 10 }]} text={item?.name} />
                 </View>
             </TouchableOpacity>
@@ -207,10 +207,10 @@ const DoctorDetails = (props) => {
                                 <TextComponent style={styles.textx} text={DETAILS?.about ? DETAILS?.about : '--'} />
 
                                 <TextComponent style={styles.heading} text={'Availability'} />
-                                <View style={[styles.flexA , {flexDirection: isUrdu ? 'row-reverse' : 'row'}]}>
+                                <View style={[styles.flexA, { flexDirection: isUrdu ? 'row-reverse' : 'row' }]}>
                                     <View style={{ width: '60%' }}>
-                                    <View style={[styles.flex, { flexDirection: isUrdu ? 'row-reverse' : 'row' }]}>
-                                    <TextComponent text={'Days :  '} style={styles.short_heading} />
+                                        <View style={[styles.flex, { flexDirection: isUrdu ? 'row-reverse' : 'row' }]}>
+                                            <TextComponent text={'Days :  '} style={styles.short_heading} />
                                             <FlatList
                                                 data={DETAILS?.slots}
                                                 horizontal
@@ -233,8 +233,15 @@ const DoctorDetails = (props) => {
                                     </TouchableOpacity>
                                 </View>
 
+                                {
+                                    isUrdu ?
+                                        <TextComponent style={styles.heading} text={(selectedDate ? t(moment(selectedDate).format('dddd')) : 'دن') + ' ' + t('for') + ' ' + t('Available Slots')} />
 
-                                <TextComponent style={styles.heading} text={'Available Slots' + (selectedDate ? ` for ${moment(selectedDate).format('dddd')}` : ' ')} />
+                                        :
+
+                                        <TextComponent style={styles.heading} text={'Available Slots' + (selectedDate ? 'for' + moment(selectedDate).format('dddd') : ' ')} />
+                                }
+
                                 {
                                     selectedDate ?
                                         (loading ?
@@ -262,7 +269,7 @@ const DoctorDetails = (props) => {
                                         null
                                         :
                                         <Button title={'Schedule appointment'}
-                                            style={{ marginVertical: 15 }}
+                                            style={{ marginVertical: 25 }}
                                             onPress={onProceed} />
                                 }
 
@@ -286,7 +293,7 @@ const DoctorDetails = (props) => {
                             if (allDays?.includes(day)) {
                                 getSlotsForDay(e.dateString)
                             } else {
-                                alert(t('Doctor is not available on this day'))
+                                Alert.alert(t('Note'), t('Doctor is not available on this day'))
                             }
                         }}
                         markedDates={{ [selectedDate]: { selected: true, disableTouchEvent: true } }}

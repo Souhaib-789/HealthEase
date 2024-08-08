@@ -11,6 +11,7 @@ import { Storage } from '../utilities/AsyncStorage';
 import { login, userData } from '../redux/actions/AuthAction';
 import { hideAlert } from '../redux/actions/GeneralAction';
 import { useTranslation } from 'react-i18next';
+import i18n from '../translations/i18n';
 
 
 
@@ -93,6 +94,9 @@ const AppNavigation = () => {
   }, [islogin, GetStarted]);
 
   const isAuthentication = async () => {
+    let Language = await Storage.getLanguage()
+    i18n.changeLanguage(Language ? Language : 'en')
+
     let user_data = await Storage.get('@user');
     if (user_data != null) {
       const userdata = JSON.parse(user_data);

@@ -45,7 +45,13 @@ const Upcoming = () => {
         }, 1000);
     }, []);
 
-    const onRefreshPage = () => { setLoading(true), fetchAppointmentsData(), setsearch(null) }
+    const onRefreshPage = () => {
+        setLoading(true),
+            fetchAppointmentsData({
+                status: 'upcoming',
+                search: undefined
+            }), setsearch(null)
+    }
 
 
 
