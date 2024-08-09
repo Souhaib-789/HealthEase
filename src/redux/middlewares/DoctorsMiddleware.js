@@ -69,9 +69,9 @@ export const DoctorsMiddleware = {
           formData.append('fee', params?.fee);
           formData.append('about', params?.about);
           for (const [index, item] of params?.availability?.entries()) {
-            formData.append(`slots[${index}][day]`, item?.day?.name);
-            formData.append(`slots[${index}][shift_start_Time]`, item?.startTime);
-            formData.append(`slots[${index}][shift_end_Time]`, item?.endTime);
+            formData.append(`slots[${index}][day]`, item?.day);
+            formData.append(`slots[${index}][shift_start_Time]`, item?.shift_start_Time);
+            formData.append(`slots[${index}][shift_end_Time]`, item?.shift_end_Time);
           }
           formData.append('email', params?.email);
           formData.append('password', params?.password);

@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
     icon: {
         alignSelf: 'flex-end',
         position: 'relative',
-        right: 15, top: 10
+        right: 15, top: 10,
+        zIndex: 1,
     }
 });

@@ -18,7 +18,7 @@ import { useTranslation } from "react-i18next";
 
 const Scanner = () => {
 
-    const {t} = useTranslation();
+    const { t } = useTranslation();
     const dispatch = useDispatch();
     const [image, setImage] = useState(null);
     const [text, setText] = useState();
@@ -98,14 +98,18 @@ const Scanner = () => {
 
             <FormModal
                 visible={result}
-                onClose={() => { setResult(false), setImage(null), setText(null) , Tts.stop()}}
+                onClose={() => { setResult(false), setImage(null), setText(null), Tts.stop() }}
             >
-                <View style={{ padding: 10 , maxHeight: 500 }}>
-                <ScrollView>
-                    <View style={styles.image_container}>
-                        <Image source={{ uri: image?.uri }} style={styles.image} resizeMode='cover' />
-                    </View>
-                    <TextComponent text={text} style={styles.output_text} />
+                <View style={{ padding: 10, maxHeight: 500 }}>
+                    <ScrollView>
+                        <View style={styles.image_container}>
+                            <Image source={{ uri: image?.uri }} style={styles.image} resizeMode='cover' />
+                        </View>
+                        <TouchableOpacity onPress={() => onScan(image.uri)}>
+                            <Icon name={'repeat'} type={IconTypes.FontAwesome} size={20} color={Colors.PRIMARY} style={{ alignSelf: 'center', marginTop: 15 }} />
+                        </TouchableOpacity>
+
+                        <TextComponent text={text} style={styles.output_text} />
                     </ScrollView>
                     <View style={styles.row}>
                         <Button onPress={onCopyToClipboard} title={"Copy"} style={styles.button} />
@@ -128,7 +132,7 @@ const styles = StyleSheet.create({
     },
     image_container: { backgroundColor: Colors.WHITE, elevation: 5, borderRadius: 8, width: 220, height: 220, padding: 5, marginTop: 30, alignSelf: 'center', justifyContent: 'center', alignItems: 'center' },
     image: { width: '100%', height: '100%', borderRadius: 10 },
-    output_text: { alignSelf: 'center', width: '80%', textAlign: 'center', color: Colors.PRIMARY, fontSize: 16, fontFamily: Fonts.SEMIBOLD, marginTop: 30 },
+    output_text: { alignSelf: 'center', width: '80%', textAlign: 'center', color: Colors.PRIMARY, fontSize: 16, fontFamily: Fonts.SEMIBOLD, marginTop: 18 },
     share_button: { alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.LIGHT, borderWidth: 1, borderColor: Colors.PRIMARY, borderRadius: 8, width: 43, height: 47 },
     scan_icon: { position: 'absolute', top: 100, alignSelf: 'center', marginVertical: 100 },
     med_icon: { alignSelf: 'center', marginTop: 200 },

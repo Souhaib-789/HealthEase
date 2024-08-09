@@ -37,7 +37,7 @@ const DoctorDetails = (props) => {
     const { t } = useTranslation();
     const USER = useSelector(state => state.AuthReducer.user)
     const DETAILS = useSelector(state => state.DoctorsReducer?.doctorDetails)
-    // console.log('----------', JSON.stringify(DETAILS, null, 8));
+    // console.log('----------', JSON.stringify(USER, null, 8));
 
     const [activeCompo, setactiveCompo] = useState({ name: 'Info' })
     const [confirmedSlot, setconfirmedSlot] = useState();
@@ -173,7 +173,7 @@ const DoctorDetails = (props) => {
                     <View style={{ alignItems: 'center' }}>
                         <TextComponent style={styles.text} text={DETAILS?.name ? DETAILS?.name : '--'} />
                         <TextComponent style={styles.textx} text={DETAILS?.specialization ? DETAILS?.specialization : '--'} />
-                        <TextComponent style={styles.textx} text={DETAILS?.hospital?.user_name ? DETAILS?.hospital?.user_name : '--'} />
+                        <TextComponent style={styles.textx} text={DETAILS?.hospital?.user_name ? DETAILS?.hospital?.user_name : USER?.user_name} />
                     </View>
 
 

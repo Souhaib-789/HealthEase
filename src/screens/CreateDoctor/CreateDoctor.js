@@ -13,7 +13,7 @@ import { Fonts } from "../../utilities/Fonts";
 import moment from "moment";
 import Dropdown from "../../components/Dropdown";
 import FormModal from "../../components/FormModal";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ListEmptyComponent from "../../components/ListEmptyComponent";
 import DatePicker from "react-native-date-picker";
 import { showAlert } from "../../redux/actions/GeneralAction";
@@ -23,17 +23,20 @@ import { DoctorsMiddleware } from "../../redux/middlewares/DoctorsMiddleware";
 
 const CreateDoctor = (props) => {
 
+    const DETAILS = useSelector(state => state.DoctorsReducer?.doctorDetails)
+    // console.log('----------', JSON.stringify(DETAILS, null, 8));
+
     const routeData = props?.route?.params
     const navigation = useNavigation();
     const dispatch = useDispatch()
-    const [docName, setdocName] = useState()
-    const [email, setemail] = useState()
+    const [docName, setdocName] = useState(DETAILS?.user_id?.user_name ? DETAILS?.user_id?.user_name : null)
+    const [email, setemail] = useState(DETAILS?.user_id?.email ? DETAILS?.user_id?.email : null)
     const [password, setpassword] = useState()
-    const [fees, setfees] = useState()
-    const [experience, setexperience] = useState()
-    const [image, setimage] = useState()
-    const [about, setabout] = useState()
-    const [specialization, setspecialization] = useState()
+    const [fees, setfees] = useState(DETAILS?.fee ? DETAILS?.fee : null)
+    const [experience, setexperience] = useState(DETAILS?.experience ? DETAILS?.experience : null)
+    const [image, setimage] = useState(DETAILS?.image_url ? DETAILS?.image_url : null)
+    const [about, setabout] = useState(DETAILS?.about ? DETAILS?.about : null)
+    const [specialization, setspecialization] = useState(DETAILS?.specialization ? DETAILS?.specialization : null)
     const [selectedDay, setselectedDay] = useState();
     const [error, seterror] = useState(false)
 
@@ -46,7 +49,7 @@ const CreateDoctor = (props) => {
     const [currDate, setcurrDate] = useState(new Date())
     const [endTime, setEndTime] = useState(null);
     const [openEndTimeModal, setopenEndTimeModal] = useState(false)
-    const [TimeSlots, setTimeSlots] = useState();
+    const [TimeSlots, setTimeSlots] = useState(DETAILS?.slots ? DETAILS?.slots : null);
     const [refresh, setRefresh] = useState(false)
 
     const Days = [
@@ -108,7 +111,8 @@ const CreateDoctor = (props) => {
 
     const renderDaysCard = ({ item, index }) => {
         let isExits = selectedDay?.id == item?.id
-        let isAlreadyBooked = TimeSlots?.find(e => e?.day?.id == item?.id)
+        let isAlreadyBooked = TimeSlots?.find(e => e?.day == item?.name)
+        
         return (
             <TouchableOpacity key={index} style={[styles.slot_box,
             { backgroundColor: isExits ? Colors.PRIMARY : Colors?.LIGHT }]}
@@ -148,7 +152,7 @@ const CreateDoctor = (props) => {
             setopenAvailabilityModal(false)
         
             let finalSlot = [];
-            finalSlot.push({ day: selectedDay, startTime: startTime, endTime: endTime })
+            finalSlot.push({ day: selectedDay?.name, shift_start_Time: startTime, shift_end_Time: endTime })
             setTimeSlots(TimeSlots ? [...TimeSlots, ...finalSlot] : finalSlot)
 
             setStartTime(null)
@@ -206,6 +210,7 @@ const CreateDoctor = (props) => {
         }
     }
 
+console.log('image', JSON.stringify(image, null, 8));
 
     return (
         <View style={styles.Container}>
@@ -214,7 +219,7 @@ const CreateDoctor = (props) => {
                 <TouchableOpacity style={styles.uploaded_image} onPress={UploadImage}>
                     {
                         image ?
-                            <Image source={{ uri: image?.uri }} style={styles.uploaded_image} />
+                            <Image source={image?.uri ? { uri: image?.uri }: {uri: image}} style={styles.uploaded_image} />
                             :
                             <>
                                 <Icon type={IconTypes.Feather} name={'plus'} size={30} color={Colors.PRIMARY} />
@@ -231,41 +236,40 @@ const CreateDoctor = (props) => {
                     onChangeText={(e) => setdocName(e)}
                     mainStyle={styles.mainInput} parentStyle={styles.input_parent_style} />
 
-                {
-                    routeData?.screenType == 'edit' ? null :
-                        <>
+             
 
                             <Input
                                 label={'Doctor Email'}
                                 placeholder={'Enter doctor email'}
                                 value={email}
+                                editable={routeData?.screenType == 'edit' ? false : true}
                                 onChangeText={(e) => setemail(e)}
                                 mainStyle={styles.mainInput} parentStyle={styles.input_parent_style} />
 
 
                             <Input
-                                label={'Password'}
+                                label={(routeData?.screenType == 'edit' && 'Change ') + 'Password'}
                                 placeholder={'*************'}
                                 isPassword
                                 value={password}
                                 onChangeText={(e) => setpassword(e)}
                                 mainStyle={styles.mainInput} parentStyle={styles.input_parent_style} />
-                        </>
-                }
+                      
+                
 
 
                 <View style={styles.wide_row}>
                     <TextComponent text={'Specialization'} style={styles.label} />
                 </View>
                 <Dropdown
-                    placeholder={'Select specialization'}
+                    placeholder={specialization ? specialization :'Select specialization'}
                     array={doctorCategories}
                     state={specialization}
                     setState={(e) => setspecialization(e)}
                     style={{ width: '90%', marginBottom: 10 }} />
 
                 <Input
-                    label={'Fees (per slot)'}
+                    label={'Fee (per slot)'}
                     placeholder={'Enter fees'}
                     value={fees}
                     onChangeText={(e) => setfees(e)}
@@ -306,10 +310,10 @@ const CreateDoctor = (props) => {
                         <View style={styles.summary}>
                             <View style={styles.row}>
                                 <Icon name={'clockcircleo'} type={IconTypes.AntDesign} size={18} color={Colors.PRIMARY} />
-                                <TextComponent text={item?.day?.name} style={styles.text} />
+                                <TextComponent text={item?.day ? item?.day : '--'} style={styles.text} />
                             </View>
                             <View key={index} style={[styles.slot_box, { width: 130 }]} >
-                                <TextComponent style={styles.textx} text={moment(item?.startTime, 'hh:mm').format('LT') + ' - ' + moment(item?.endTime, 'hh:mm').format('LT')} />
+                                <TextComponent style={styles.textx} text={moment(item?.shift_start_Time).utc().format('hh:mm A') + ' - ' + moment(item?.shift_end_Time).utc().format('hh:mm A')} />
                             </View>
                             <TouchableOpacity onPress={() => {
                                 let temp = TimeSlots;

@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, TouchableOpacity, ScrollView, FlatList } from "react-native";
-import docC from "../../assets/images/doc3.png";
-import docF from "../../assets/images/doc9.jpg";
-import docD from "../../assets/images/doc4.png";
-import docE from "../../assets/images/doc5.png";
+import { View, StyleSheet, TouchableOpacity, ScrollView, FlatList, RefreshControl } from "react-native";
+import AVATAR from '../../assets/images/avatar.png'
 import { Colors } from "../../utilities/Colors";
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { useNavigation } from "@react-navigation/native";
@@ -12,21 +9,18 @@ import Icon, { IconTypes } from "../../components/Icon";
 import Image from "../../components/Image";
 import { Fonts } from "../../utilities/Fonts";
 import ListEmptyComponent from "../../components/ListEmptyComponent";
-import CalendarStrip from 'react-native-slideable-calendar-strip';
-import PROFILE from '../../assets/images/profile.png'
-import NO_DOC from '../../assets/images/noDoc.png'
 import { AppointmentsMiddleware } from "../../redux/middlewares/AppointmentsMiddleware";
 import { useDispatch, useSelector } from "react-redux";
+import moment from "moment";
+import Skeleton from "../../components/Skeleton";
 
 const DoctorCurrAppointments = (props) => {
     const navigation = useNavigation();
-    const [search, setsearch] = useState();
-    const [state, setState] = useState();
     const [loading, setLoading] = useState(true)
     const dispatch = useDispatch()
     const APPOINTMENTS = useSelector(state => state.AppointmentsReducer?.doctorAppointmentList)
 
-        console.log('-----------------', JSON.stringify(APPOINTMENTS, null, 8));
+        // console.log('-----------------', JSON.stringify(APPOINTMENTS, null, 8));
 
     useEffect(() => {
         const data = { doctorId: props?.docID }
@@ -39,51 +33,30 @@ const DoctorCurrAppointments = (props) => {
             .catch(() => setLoading(false))
     }
 
-    const Featured = [
-        {
-            id: 1,
-            image: docC,
-            name: 'Dr. Crick',
-            fees: '2500',
-            rating: 5,
-            hearted: false,
-            category: 'Medicine Specialist',
-            hospital_name: 'City Hospital',
-            experience: 5,
-        },
-        {
-            id: 2,
-            image: docD,
-            name: 'Dr. Strain',
-            fees: '2200',
-            rating: 3,
-            hearted: true,
-            category: 'Dentist ',
-            hospital_name: 'City Hospital',
-            experience: 3,
-        },
-        {
-            id: 3,
-            image: docE,
-            name: 'Dr. Lachinet',
-            fees: '2900',
-            rating: 2,
-            hearted: false,
-            category: 'Physio Therapy Specialist',
-            hospital_name: 'City Hospital',
-            experience: 5,
-        }
-    ]
 
     const renderItem = ({ item }) => {
         return (
-            <TouchableOpacity style={styles.Appointment_card} onPress={() => navigation.navigate('PatientDetails', { screenType: 'hospital' })} >
+            loading ?
+            <View style={styles.Appointment_card}  >
+            <View style={styles.appointment_card_subview1}>
+                <View style={styles.appointment_card_subview2}>
+                    <Skeleton style={styles.Appointment_image} styles={{ width: '18%' }} />
+                    <View>
+                        <Skeleton style={{ width: '45%', height: 15, borderRadius: 3 }} />
+                        <Skeleton style={{ width: '50%', height: 10, borderRadius: 3 }} />
+                    </View>
+                </View>
+            </View>
+            <Skeleton style={{ width: '100%', height: 33, borderRadius: 10 }} />
+        </View>
+        :
+            <TouchableOpacity style={styles.Appointment_card} onPress={() => navigation.navigate('PatientDetails', {item: item, screenType: 'hospital' })} >
                 <View style={styles.appointment_card_subview1}>
                     <View style={styles.appointment_card_subview2}>
-                        <Image source={docF} style={styles.Appointment_image} />
+                        <Image source={item?.patient?.image_url ? {uri: item?.patient?.image_url}: AVATAR} style={styles.Appointment_image} />
                         <View>
-                            <TextComponent style={[styles.appointment_card_text, { fontFamily: Fonts?.SEMIBOLD }]} text={'Mr. Fernendes'} />
-                            <TextComponent style={styles.appointment_card_span} text={'for Himself'} />
+                            <TextComponent style={[styles.appointment_card_text, { fontFamily: Fonts?.SEMIBOLD }]} text={item?.patient?.user_name} />
+                            <TextComponent style={styles.appointment_card_span} text={'for ' + item?.relation} />
                         </View>
                     </View>
                     <Icon type={IconTypes.MaterialIcons} name={'keyboard-arrow-right'} size={25} color={Colors.PRIMARY} />
@@ -92,11 +65,11 @@ const DoctorCurrAppointments = (props) => {
                 <View style={styles.appointment_card_subview3}>
                     <View style={styles.appointment_card_subview4}>
                         <Icon type={IconTypes.Feather} name={'calendar'} size={15} color={Colors.PRIMARY} />
-                        <TextComponent style={styles.appointment_card_span} text={'23 Oct 2023'} />
+                        <TextComponent style={styles.appointment_card_span} text={item?.date ? moment(item?.date).format('DD MMM YYYY') : '--'} />
                     </View>
                     <View style={styles.appointment_card_subview4}>
                         <Ionicons name='time-outline' color={Colors.PRIMARY} size={15} />
-                        <TextComponent style={styles.appointment_card_span} text={'12:00 AM'} />
+                        <TextComponent style={styles.appointment_card_span} text={item?.startTime ? moment(item?.startTime).utc().format('hh:mm A') : '--'} />
                     </View>
                 </View>
             </TouchableOpacity>
@@ -108,13 +81,18 @@ const DoctorCurrAppointments = (props) => {
             <ScrollView showsVerticalScrollIndicator={false} >
 
                 <FlatList
-                    key={'Appointments'}
                     showsHorizontalScrollIndicator={false}
-                    data={Featured}
+                    data={ loading ? [1,2,3] : APPOINTMENTS}
                     decelerationRate={'fast'}
                     renderItem={renderItem}
-                    ListEmptyComponent={<ListEmptyComponent image={NO_DOC} text={'no doctors found'} />}
+                    ListEmptyComponent={<ListEmptyComponent short  text={'no appointments found'} />}
                     keyExtractor={(item, index) => index.toString()}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={false}
+                            onRefresh={() => fetchAppointmentsData()}
+                            />
+                    }
                 />
             </ScrollView>
         </View>

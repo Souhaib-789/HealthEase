@@ -3,7 +3,7 @@ import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawe
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import { Colors } from "../../utilities/Colors";
-import profile from '../../assets/images/profile.png'
+import AVATAR from '../../assets/images/avatar.png'
 import bg from '../../assets/images/logo.png'
 import TextComponent from '../../components/TextComponent';
 import { FlatList } from 'react-native-gesture-handler';
@@ -118,7 +118,7 @@ function CustomDrawerContent(props) {
             <Image source={bg} style={styles.bg_icon} tintColor={Colors.PRIMARY} />
 
             <View style={styles.profile_view}>
-                <Image source={profile} style={styles.image} />
+                <Image source={USER?.image ? USER?.image : AVATAR} style={styles.image} />
                 <TextComponent style={styles.heading} text={USER?.user_name} />
             </View>
             <DrawerContentScrollView  {...props} showsVerticalScrollIndicator={false}>
