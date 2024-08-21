@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+import { View, StyleSheet, ScrollView, TouchableOpacity, PermissionsAndroid } from "react-native";
 import { Colors } from "../../utilities/Colors";
 import logo from '../../assets/images/logo.png'
 import Input from "../../components/Input";
@@ -13,6 +13,10 @@ import { useDispatch } from "react-redux";
 import { AuthMiddleware } from "../../redux/middlewares/AuthMiddleware";
 import { showAlert } from "../../redux/actions/GeneralAction";
 import { validateEmail } from "../../utilities/Validators";
+import Icon, { IconTypes } from "../../components/Icon";
+import Geolocation from 'react-native-geolocation-service';
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
+import { LocLoader } from "../../components/LocLoader";
 
 const Signup = () => {
 
@@ -25,6 +29,8 @@ const Signup = () => {
     const [userRole, setuserRole] = useState()
     const [password, setpassword] = useState()
     const [confirmPassword, setconfirmPassword] = useState()
+    const [location, setLocation] = useState(false);
+    const [loading, setLoading] = useState(false);
 
 
     const onPressSignup = () => {
@@ -34,7 +40,7 @@ const Signup = () => {
         else if (!email) {
             dispatch(showAlert({ message: 'Please enter email' }))
         }
-        else if(!validateEmail(email)){
+        else if (!validateEmail(email)) {
             dispatch(showAlert({ message: 'Please enter valid email' }))
         }
         else if (!userRole) {
@@ -73,7 +79,62 @@ const Signup = () => {
                     console.log(err)
                 })
         }
+
+
     }
+
+
+    const requestLocationPermission = async () => {
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
+                {
+                    title: 'Geolocation Permission',
+                    message: 'Can we access your location?',
+                    buttonNeutral: 'Ask Me Later',
+                    buttonNegative: 'Cancel',
+                    buttonPositive: 'OK',
+                },
+            );
+            //   console.log('granted', granted);
+            if (granted === 'granted') {
+                getLocation();
+                return true;
+            } else {
+                // console.log('You cannot use Geolocation');
+                dispatch(showAlert({ message: 'Permission denied!' }))
+                return false;
+            }
+        } catch (err) {
+            dispatch(showAlert({ message: 'Location access permission denied!' }))
+            return false;
+        }
+    }
+
+
+    const getLocation = async () => {
+
+        setLoading(true);
+        Geolocation.getCurrentPosition(
+            position => {
+                setLocation({ latitude: position?.coords?.latitude, longitude: position?.coords?.longitude });
+                setLoading(false);
+                dispatch(showAlert({ message: 'Location saved!' }))
+            },
+            error => {
+                console.log(error);
+                setLocation(false);
+                setLoading(false);
+                dispatch(showAlert({ message: 'Something went wrong' }))
+            },
+            {
+                enableHighAccuracy: true,
+                // timeout: 15000, maximumAge: 10000
+            },
+        );
+
+    };
 
     return (
         <View style={styles.Container}>
@@ -111,12 +172,6 @@ const Signup = () => {
                     mainStyle={styles.mainInput} />
 
                 <Input
-                    placeholder={'Enter address'}
-                    value={address}
-                    onChangeText={(e) => setaddress(e)}
-                    mainStyle={styles.mainInput} />
-
-                <Input
                     placeholder={'Enter password'}
                     isPassword
                     value={password}
@@ -130,12 +185,34 @@ const Signup = () => {
                     onChangeText={(e) => setconfirmPassword(e)}
                     mainStyle={styles.mainInput} />
 
+                {
+                    userRole?.name === 'hospital' ?
+
+                        <TouchableOpacity onPress={requestLocationPermission} style={{ backgroundColor: Colors.WHITE, shadowColor: Colors.PRIMARY, elevation: 5, borderRadius: 10, width: '98%', paddingVertical: 30, alignSelf: 'center', marginVertical: 10, alignItems: 'center', justifyContent: 'center' }}>
+                            {
+                                location?.latitude && location?.longitude ?
+                                    <Icon name={'location-pin-lock'} type={IconTypes.FontAwesome6} size={30} color={Colors.PRIMARY} />
+                                    :
+
+                                    <Icon name={'location'} type={IconTypes.EvilIcons} size={40} color={Colors.PRIMARY} />
+                            }
+                            <TextComponent style={{ fontSize: 12, color: Colors.PRIMARY, marginTop: 10 }} text={location?.latitude && location?.longitude ? 'Location saved' : 'Tap to pick live location'} />
+                        </TouchableOpacity>
+
+                        : <Input
+                            placeholder={'Enter address'}
+                            value={address}
+                            onChangeText={(e) => setaddress(e)}
+                            mainStyle={styles.mainInput} />
+                }
+
                 <Button title={'Signup'} onPress={onPressSignup} style={styles.button} />
 
-                <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                <TouchableOpacity onPress={() => navigation.navigate('Login')} style={{ marginBottom: 20 }}>
                     <TextComponent style={styles.link_textx} text={'Already have an account?'} />
                 </TouchableOpacity>
             </ScrollView>
+            <LocLoader visible={loading} />
         </View>
     )
 }

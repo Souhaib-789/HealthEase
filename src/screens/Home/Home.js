@@ -112,7 +112,7 @@ const Home = () => {
                             mainStyle={styles.search_input} />
 
                     </View>
-                    <View style={styles.flex}>
+                    <View style={[styles.flex , {flexDirection: isUrdu ? 'row-reverse' : 'row'}]}>
                         <TextComponent style={styles.headingx} text={t('Upcoming Appointments')} />
                         <TouchableOpacity onPress={() => navigation.navigate('Appointments')}>
                             <TextComponent text={t('See all')} />
@@ -160,7 +160,7 @@ const Home = () => {
                     key={'Featured Doctors'}
                     showsHorizontalScrollIndicator={false}
                     ListHeaderComponent={() => (
-                        <View style={[styles.flex, styles.mV]}>
+                        <View style={[styles.flex ,styles.mV , {flexDirection: isUrdu ? 'row-reverse' : 'row'}]}>
                             <TextComponent style={styles.headingx} text={t('Find your doctor')} />
                             <TouchableOpacity onPress={() => navigation.navigate('Doctors')}>
                                 <TextComponent text={t('See all')} />

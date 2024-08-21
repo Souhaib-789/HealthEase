@@ -14,6 +14,7 @@ import Input from "../../components/Input";
 import { useNavigation } from "@react-navigation/native";
 import AVATAR from '../../assets/images/avatar.png';
 import { useTranslation } from "react-i18next";
+import { isUrduLanguage } from "../../utilities/Utilities";
 
 const AppointmentDetails = (props) => {
 
@@ -60,6 +61,7 @@ const AppointmentDetails = (props) => {
     const [showReviewModal, setShowReviewModal] = useState(false);
     const [review, setReview] = useState('');
     const [rating, setRating] = useState(0);
+    const isUrdu = isUrduLanguage();
 
 
 
@@ -86,24 +88,24 @@ const AppointmentDetails = (props) => {
                         <TextComponent style={styles.heading} text={
                             screenType === 'upcoming' ? 'Scheduled Appointment'
                                 : 'Completed Appointment'} />
-                        <View style={styles.wide_row}>
-                            <View style={styles.row}>
+                        <View style={[styles.wide_row , {flexDirection: isUrdu ? 'row-reverse' : 'row'}]}>
+                            <View style={[styles.row , {flexDirection: isUrdu ? 'row-reverse' : 'row'}]}>
                                 <Icon name='calendar-clear-outline' type={IconTypes.Ionicons} size={18} color={Colors?.BLACK} />
                                 <TextComponent text={'Day : '} style={styles.short_heading} />
                             </View>
                             <TextComponent text={routeData?.date ? moment(routeData?.date).format('dddd , DD MMMM') : '--'} style={styles.texty} />
                         </View>
 
-                        <View style={styles.wide_row}>
-                            <View style={styles.row}>
+                        <View style={[styles.wide_row , {flexDirection: isUrdu ? 'row-reverse' : 'row'}]}>
+                            <View style={[styles.row , {flexDirection: isUrdu ? 'row-reverse' : 'row'}]}>
                                 <Icon name='clockcircleo' type={IconTypes.AntDesign} size={18} color={Colors?.BLACK} />
                                 <TextComponent text={'Time : '} style={styles.short_heading} />
                             </View>
                             <TextComponent text={startTime ? startTime + ' - ' + endTime : '--'} style={styles.texty} />
                         </View>
 
-                        <View style={styles.wide_row}>
-                            <View style={styles.row}>
+                        <View style={[styles.wide_row , {flexDirection: isUrdu ? 'row-reverse' : 'row'}]}>
+                            <View style={[styles.row , {flexDirection: isUrdu ? 'row-reverse' : 'row'}]}>
                                 <Icon name='timer-outline' type={IconTypes.Ionicons} size={18} color={Colors?.BLACK} />
                                 <TextComponent text={'Duration : '} style={styles.short_heading} />
                             </View>
@@ -115,17 +117,17 @@ const AppointmentDetails = (props) => {
 
                         <TextComponent style={styles.heading} text={'Patient Info'} />
 
-                        <View style={styles.wide_row}>
+                        <View style={[styles.wide_row , {flexDirection: isUrdu ? 'row-reverse' : 'row'}]}>
                             <TextComponent text={'Name'} style={styles.short_heading} />
                             <TextComponent text={routeData?.name ? routeData?.name : '--'} style={styles.textx} />
                         </View>
 
-                        <View style={styles.wide_row}>
+                        <View style={[styles.wide_row , {flexDirection: isUrdu ? 'row-reverse' : 'row'}]}>
                             <TextComponent text={'Relationship'} style={styles.short_heading} />
                             <TextComponent text={routeData?.relation ? routeData?.relation : '--' } style={styles.textx} />
                         </View>
 
-                        <View style={styles.wide_row}>
+                        <View style={[styles.wide_row , {flexDirection: isUrdu ? 'row-reverse' : 'row'}]}>
                             <TextComponent text={'Contact No.'} style={styles.short_heading} />
                             <TextComponent text={routeData?.contact ? routeData?.contact : '--'} style={styles.textx} />
                         </View>

@@ -14,6 +14,7 @@ import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { showAlert } from "../../redux/actions/GeneralAction";
 import { AppointmentsMiddleware } from "../../redux/middlewares/AppointmentsMiddleware";
+import { isUrduLanguage } from "../../utilities/Utilities";
 
 const AppointmentForm = (props) => {
 
@@ -25,7 +26,7 @@ const AppointmentForm = (props) => {
     const [detail, setdetail] = useState()
     const [openModal, setopenModal] = useState(false)
     const DETAILS = useSelector(state => state.DoctorsReducer?.doctorDetails)
-
+    const isUrdu = isUrduLanguage()
     const formattedDate = moment(routeData?.date)
         .utc()
         .set({
@@ -74,12 +75,12 @@ const AppointmentForm = (props) => {
                 <DoctorCard item={DETAILS} style={{ width: '90%' }} />
 
                 <View style={styles.summary}>
-                    <View style={styles.flexA}>
+                    <View style={[styles.flexA, { flexDirection: isUrdu ? 'row-reverse' : 'row' }]}>
                         <TextComponent text={'Day : '} style={styles.textx} />
                         <TextComponent text={routeData?.date ? moment(routeData?.date).format('ddd D MMM') : '--'} style={[styles.textx, { color: Colors?.BLACK }]} />
                     </View>
 
-                    <View style={styles.flexA}>
+                    <View style={[styles.flexA, { flexDirection: isUrdu ? 'row-reverse' : 'row' }]}>
                         <TextComponent text={'Time : '} style={styles.textx} />
                         <TextComponent text={routeData?.timeSlot ? moment(routeData?.timeSlot).utc().format('h:mm A') + ' to ' + moment(routeData?.timeSlot).add(15, 'minutes').utc().format('h:mm A') : '--'} style={[styles.textx, { color: Colors?.BLACK }]} />
                     </View>
@@ -91,6 +92,7 @@ const AppointmentForm = (props) => {
                     onChangeText={(e) => setpatient(e)}
                     placeholder={'Enter Patient Name'}
                     mainStyle={styles.mainInput} parentStyle={styles.input_parent_style} />
+<View/>
 
                 <Input
                     label={'Contact Number'}

@@ -27,23 +27,7 @@ const PersonalInfo = () => {
             id: 4,
             icon: <Icon name={'location-pin'} type={IconTypes.Entypo} size={15} color={Colors.PRIMARY} />,
             info: USER?.address
-        },
-        {
-            id: 5,
-            icon: <Icon name={'weight'} type={IconTypes.FontAwesome5} size={15} color={Colors.PRIMARY} />,
-            info: '80 kg'
-        },
-        {
-            id: 6,
-            icon: <Icon name={'human-male-height'} type={IconTypes.MaterialCommunityIcons} size={15} color={Colors.PRIMARY} />,
-            info: '5.8 ft'
-        },
-        {
-            id: 7,
-            info: 'B+',
-            icon: <Icon name={'bloodtype'} type={IconTypes.MaterialIcons} size={15} color={Colors.PRIMARY} />,
         }
-
     ]
 
     const doctorInfo = [

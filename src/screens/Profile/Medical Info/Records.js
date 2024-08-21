@@ -288,7 +288,7 @@ const styles = StyleSheet.create({
     },
     modal_sub_container: {
         alignSelf: "center",
-        paddingVertical: 23,
+        paddingVertical: 37,
         paddingHorizontal: 15,
         backgroundColor: Colors.WHITE,
         marginTop: '60%',
