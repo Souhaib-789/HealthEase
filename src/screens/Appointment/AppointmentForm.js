@@ -26,18 +26,8 @@ const AppointmentForm = (props) => {
     const [openModal, setopenModal] = useState(false)
     const DETAILS = useSelector(state => state.DoctorsReducer?.doctorDetails)
 
-    const formattedDate = moment(routeData?.date)
-        .utc()
-        .set({
-            hour: 14,
-            minute: 51,
-            second: 10,
-            millisecond: 927
-        })
-        .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
-
-    // console.log('Data ---->>>>>', JSON.stringify(DETAILS, null, 8));
-
+    const formattedDate = moment(routeData?.date).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+  
 
     const onBookAppointment = () => {
         if (!patient) {
@@ -54,7 +44,7 @@ const AppointmentForm = (props) => {
                 doctorId: DETAILS?._id,
                 appointmentDate: formattedDate,
                 startTime: moment(routeData?.timeSlot).utc(),
-                endTime: moment(routeData?.timeSlot).utc().add(15, 'minutes'),
+                endTime: moment(routeData?.timeSlot).utc().add(routeData?.duration, 'minutes'),
                 patientName: patient,
                 relationship: detail,
                 contactNo: contactNo
@@ -65,6 +55,10 @@ const AppointmentForm = (props) => {
                 .catch((err) => { console.log('error', err) })
         }
     }
+
+    // console.log('====================================');
+    // console.log('routeData', JSON.stringify(routeData, null , 8));
+    // console.log('====================================');
 
     return (
         <View style={styles.Container}>
@@ -81,7 +75,7 @@ const AppointmentForm = (props) => {
 
                     <View style={styles.flexA}>
                         <TextComponent text={'Time : '} style={styles.textx} />
-                        <TextComponent text={routeData?.timeSlot ? moment(routeData?.timeSlot).utc().format('h:mm A') + ' to ' + moment(routeData?.timeSlot).add(15, 'minutes').utc().format('h:mm A') : '--'} style={[styles.textx, { color: Colors?.BLACK }]} />
+                        <TextComponent text={routeData?.timeSlot ? moment(routeData?.timeSlot).utc().format('h:mm A') + ' to ' + moment(routeData?.timeSlot).add(routeData?.duration, 'minutes').utc().format('h:mm A') : '--'} style={[styles.textx, { color: Colors?.BLACK }]} />
                     </View>
 
                 </View>

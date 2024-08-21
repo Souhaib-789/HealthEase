@@ -61,7 +61,9 @@ const AppointmentDetails = (props) => {
     const [review, setReview] = useState('');
     const [rating, setRating] = useState(0);
 
-
+console.log('====================================')
+console.log('routeData', routeData?.date)
+console.log('====================================')
 
     return (
         <View style={styles.mainContainer}>

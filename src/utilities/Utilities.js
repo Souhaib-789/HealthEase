@@ -22,6 +22,16 @@ export const headers = {
       },
     };
   },
+  docHeader: async () => {
+    let token = await Storage.getToken();
+    return {
+
+        Accept: '*/*',
+        'Content-Type' : 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+
+    };
+  },
 }
 
 export const isUrduLanguage = () => {

@@ -21,6 +21,10 @@ export const AppointmentsMiddleware = {
             relation: params?.relationship,
             contact: params?.contactNo
           }
+
+          console.log('====================================');
+          console.log('rawData', JSON.stringify(rawData, null, 8));
+          console.log('====================================');
           const data = await Axios.post(Apis.bookAppointment, rawData, await headers.config());
           if (data?.status == 200) {
             resolve(true)

@@ -37,7 +37,7 @@ const DoctorDetails = (props) => {
     const { t } = useTranslation();
     const USER = useSelector(state => state.AuthReducer.user)
     const DETAILS = useSelector(state => state.DoctorsReducer?.doctorDetails)
-    // console.log('----------', JSON.stringify(USER, null, 8));
+    console.log('----------', JSON.stringify(DETAILS, null, 8));
 
     const [activeCompo, setactiveCompo] = useState({ name: 'Info' })
     const [confirmedSlot, setconfirmedSlot] = useState();
@@ -82,20 +82,23 @@ const DoctorDetails = (props) => {
         },
     ]
 
-
+// console.log('====================================');
+// console.log('timeSlots', JSON.stringify(DETAILS, null ,8));
+// console.log('====================================');
 
     const getSlotsForDay = (date) => {
         setLoading(true)
         setshowCalendar(false)
         setSelectedDate(date)
+  
         let findDay = DETAILS?.slots?.find(item => item?.day == moment(date).format('ddd'))
         // console.log('findDay', findDay.shift_start_Time, findDay.shift_end_Time);
         const data = {
-            id: DETAILS?.user_id,
-            date: date,
+            id: DETAILS?.id,
+            date: moment(date).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
             startTime: findDay?.shift_start_Time,
             endTime: findDay?.shift_end_Time,
-            duration: 15
+            duration: DETAILS?.duration
         }
         dispatch(DoctorsMiddleware.getTimeSlots(data))
             .then(res => {
@@ -126,7 +129,7 @@ const DoctorDetails = (props) => {
 
     const renderSlotCard = ({ item, index }) => {
         const formattedTime = moment(item).utc().format('h:mm A');
-        const toTime = moment(item).add(15, 'minutes').utc().format('h:mm A');
+        const toTime = moment(item).add(DETAILS?.duration, 'minutes').utc().format('h:mm A');
         const checkIsLastIndex = timeSlots.length - 1 == index;
         return (
             checkIsLastIndex ? null :
@@ -147,7 +150,7 @@ const DoctorDetails = (props) => {
     const onProceed = () => {
         if (!selectedDate) return dispatch(showAlert({ message: 'Please select a day' }));
         else if (!confirmedSlot) return dispatch(showAlert({ message: 'Please select any timeslot for ' + moment(selectedDate).format('dddd') }));
-        navigation.navigate('Appointment', { timeSlot: confirmedSlot, date: selectedDate })
+        navigation.navigate('Appointment', { timeSlot: confirmedSlot, date: selectedDate, duration: DETAILS?.duration })
     }
 
     return (
@@ -221,7 +224,7 @@ const DoctorDetails = (props) => {
 
                                         <View style={[styles.flex, { flexDirection: isUrdu ? 'row-reverse' : 'row' }]}>
                                             <TextComponent text={'Duration : '} style={styles.short_heading} />
-                                            <TextComponent text={'15 Minutes'} style={styles.texty} />
+                                            <TextComponent text={(DETAILS?.duration ? DETAILS?.duration : 15) + ' Minutes'} style={styles.texty} />
                                         </View>
 
 
