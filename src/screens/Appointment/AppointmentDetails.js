@@ -63,7 +63,9 @@ const AppointmentDetails = (props) => {
     const [rating, setRating] = useState(0);
     const isUrdu = isUrduLanguage();
 
-
+console.log('====================================')
+console.log('routeData', routeData?.date)
+console.log('====================================')
 
     return (
         <View style={styles.mainContainer}>

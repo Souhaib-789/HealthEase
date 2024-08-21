@@ -10,10 +10,10 @@ import ListEmptyComponent from "../../components/ListEmptyComponent";
 import NO_DOC from '../../assets/images/noDoc.png'
 import CustomCategoryIcon from "../../components/CustomCategoryIcon";
 import { useDispatch, useSelector } from "react-redux";
-import { DoctorsMiddleware } from "../../redux/middlewares/DoctorsMiddleware";
 import AVATAR from '../../assets/images/avatar.png';
 import Skeleton from "../../components/Skeleton";
 import { getDoctorDetails } from "../../redux/actions/DoctorsActions";
+import { DoctorsMiddleware } from "../../redux/middlewares/DoctorsMiddleware";
 
 
 const HospitalDoctors = () => {

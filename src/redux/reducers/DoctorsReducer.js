@@ -16,12 +16,12 @@ const DoctorsReducer = (state = initialState, action) => {
       };
       break;
 
-      case ActionTypes.CLEAR_ALL_DOCTORS:
-        state = {
-          ...state, allDoctors: [],
-          dashboardDoctors: []
-        };
-        break;
+    case ActionTypes.CLEAR_ALL_DOCTORS:
+      state = {
+        ...state, allDoctors: [],
+        dashboardDoctors: []
+      };
+      break;
 
     case ActionTypes.GET_DOCTOR_DETAILS:
       state = { ...state, doctorDetails: action.payload };
@@ -33,6 +33,12 @@ const DoctorsReducer = (state = initialState, action) => {
 
     case ActionTypes.GET_HOSPITAL_DOCTORS:
       state = { ...state, hospitalDoctors: action.payload };
+      break;
+
+    case ActionTypes.UPDATE_HOSPITAL_DOCTORS:
+      // let copy = state.hospitalDoctors;
+      // copy.push(action.payload);
+      state = { ...state, hospitalDoctors: [...state.hospitalDoctors , action.payload] };
       break;
 
     default:

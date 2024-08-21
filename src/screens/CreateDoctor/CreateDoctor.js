@@ -10,7 +10,7 @@ import TextComponent from "../../components/TextComponent";
 import Button from "../../components/Button";
 import Icon, { IconTypes } from "../../components/Icon";
 import { Fonts } from "../../utilities/Fonts";
-import moment from "moment";
+import moment, { duration } from "moment";
 import Dropdown from "../../components/Dropdown";
 import FormModal from "../../components/FormModal";
 import { useDispatch, useSelector } from "react-redux";
@@ -39,6 +39,7 @@ const CreateDoctor = (props) => {
     const [specialization, setspecialization] = useState(DETAILS?.specialization ? DETAILS?.specialization : null)
     const [selectedDay, setselectedDay] = useState();
     const [error, seterror] = useState(false)
+    const [duration, setduration] = useState(DETAILS?.duration ? DETAILS?.duration : null)
 
     const [openAvailabilityModal, setopenAvailabilityModal] = useState(false)
     const [openModal, setopenModal] = useState(false)
@@ -112,7 +113,7 @@ const CreateDoctor = (props) => {
     const renderDaysCard = ({ item, index }) => {
         let isExits = selectedDay?.id == item?.id
         let isAlreadyBooked = TimeSlots?.find(e => e?.day == item?.name)
-        
+
         return (
             <TouchableOpacity key={index} style={[styles.slot_box,
             { backgroundColor: isExits ? Colors.PRIMARY : Colors?.LIGHT }]}
@@ -150,7 +151,7 @@ const CreateDoctor = (props) => {
         }
         else {
             setopenAvailabilityModal(false)
-        
+
             let finalSlot = [];
             finalSlot.push({ day: selectedDay?.name, shift_start_Time: startTime, shift_end_Time: endTime })
             setTimeSlots(TimeSlots ? [...TimeSlots, ...finalSlot] : finalSlot)
@@ -202,7 +203,8 @@ const CreateDoctor = (props) => {
                 fee: fees,
                 experience: experience,
                 about: about,
-                availability: TimeSlots
+                availability: TimeSlots,
+                duration: duration ? duration : undefined
             }
             dispatch(DoctorsMiddleware.onCreateDoctor(data))
                 .then(() => { setopenModal(true) })
@@ -210,7 +212,7 @@ const CreateDoctor = (props) => {
         }
     }
 
-console.log('image', JSON.stringify(image, null, 8));
+    // console.log('image', JSON.stringify(image, null, 8));
 
     return (
         <View style={styles.Container}>
@@ -219,7 +221,7 @@ console.log('image', JSON.stringify(image, null, 8));
                 <TouchableOpacity style={styles.uploaded_image} onPress={UploadImage}>
                     {
                         image ?
-                            <Image source={image?.uri ? { uri: image?.uri }: {uri: image}} style={styles.uploaded_image} />
+                            <Image source={image?.uri ? { uri: image?.uri } : { uri: image }} style={styles.uploaded_image} />
                             :
                             <>
                                 <Icon type={IconTypes.Feather} name={'plus'} size={30} color={Colors.PRIMARY} />
@@ -236,33 +238,33 @@ console.log('image', JSON.stringify(image, null, 8));
                     onChangeText={(e) => setdocName(e)}
                     mainStyle={styles.mainInput} parentStyle={styles.input_parent_style} />
 
-             
-
-                            <Input
-                                label={'Doctor Email'}
-                                placeholder={'Enter doctor email'}
-                                value={email}
-                                editable={routeData?.screenType == 'edit' ? false : true}
-                                onChangeText={(e) => setemail(e)}
-                                mainStyle={styles.mainInput} parentStyle={styles.input_parent_style} />
 
 
-                            <Input
-                                label={(routeData?.screenType == 'edit' && 'Change ') + 'Password'}
-                                placeholder={'*************'}
-                                isPassword
-                                value={password}
-                                onChangeText={(e) => setpassword(e)}
-                                mainStyle={styles.mainInput} parentStyle={styles.input_parent_style} />
-                      
-                
+                <Input
+                    label={'Doctor Email'}
+                    placeholder={'Enter doctor email'}
+                    value={email}
+                    editable={routeData?.screenType == 'edit' ? false : true}
+                    onChangeText={(e) => setemail(e)}
+                    mainStyle={styles.mainInput} parentStyle={styles.input_parent_style} />
+
+
+                <Input
+                    label={(routeData?.screenType == 'edit' ? 'Change ' : '') + 'Password'}
+                    placeholder={'*************'}
+                    isPassword
+                    value={password}
+                    onChangeText={(e) => setpassword(e)}
+                    mainStyle={styles.mainInput} parentStyle={styles.input_parent_style} />
+
+
 
 
                 <View style={styles.wide_row}>
                     <TextComponent text={'Specialization'} style={styles.label} />
                 </View>
                 <Dropdown
-                    placeholder={specialization ? specialization :'Select specialization'}
+                    placeholder={specialization ? specialization : 'Select specialization'}
                     array={doctorCategories}
                     state={specialization}
                     setState={(e) => setspecialization(e)}
@@ -295,6 +297,14 @@ console.log('image', JSON.stringify(image, null, 8));
                     mainStyle={styles.mainInput} parentStyle={styles.input_parent_style} />
 
 
+                <Input
+                    label={'Appointment Time duration (in minutes)'}
+                    placeholder={'Enter time duration for slots'}
+                    value={duration}
+                    keyboardType={'phone-pad'}
+                    onChangeText={(e) => setduration(e)}
+                    mainStyle={styles.mainInput} parentStyle={styles.input_parent_style} />
+
                 <View style={styles.wide_row}>
                     <TextComponent text={'Set Availability'} style={styles.label} />
                     <TouchableOpacity onPress={() => setopenAvailabilityModal(true)} style={{ flexDirection: 'row', alignItems: 'center', gap: 3, padding: 5, borderRadius: 5, backgroundColor: Colors.LIGHT_GREY }}>
@@ -313,7 +323,7 @@ console.log('image', JSON.stringify(image, null, 8));
                                 <TextComponent text={item?.day ? item?.day : '--'} style={styles.text} />
                             </View>
                             <View key={index} style={[styles.slot_box, { width: 130 }]} >
-                                <TextComponent style={styles.textx} text={moment(item?.shift_start_Time).utc().format('hh:mm A') + ' - ' + moment(item?.shift_end_Time).utc().format('hh:mm A')} />
+                                <TextComponent style={styles.textx} text={(routeData?.screenType == 'edit' ? moment(item?.shift_start_Time).utc().format('hh:mm A') : moment(item?.shift_start_Time).format('hh:mm A')) + ' - ' + (routeData?.screenType == 'edit' ? moment(item?.shift_end_Time).utc().format('hh:mm A') : moment(item?.shift_end_Time).format('hh:mm A'))} />
                             </View>
                             <TouchableOpacity onPress={() => {
                                 let temp = TimeSlots;
@@ -329,6 +339,7 @@ console.log('image', JSON.stringify(image, null, 8));
                     extraData={refresh}
                     ListEmptyComponent={<ListEmptyComponent short text={'no availability found'} />}
                 />
+
 
                 <Button title={routeData?.screenType == 'edit' ? 'Save' : 'Create'} onPress={onPressCreateDoctor} style={styles.button} />
             </ScrollView>
@@ -371,7 +382,7 @@ console.log('image', JSON.stringify(image, null, 8));
                         }}>
                             <Icon name={'clockcircleo'} type={IconTypes.AntDesign} color={Colors.PRIMARY} size={15} />
                             {/* <TextComponent text={startTime ? startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Start Time'} style={styles.textx} /> */}
-                            <TextComponent text={startTime ? moment(startTime , 'hh:mm A').format('LT') : 'Start Time'} style={styles.textx} />
+                            <TextComponent text={startTime ? moment(startTime, 'hh:mm A').format('LT') : 'Start Time'} style={styles.textx} />
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.select_time_btn} onPress={() => {
@@ -382,7 +393,7 @@ console.log('image', JSON.stringify(image, null, 8));
                         }}>
                             <Icon name={'clockcircleo'} type={IconTypes.AntDesign} color={Colors.PRIMARY} size={15} />
                             {/* <TextComponent text={endTime ? endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'End Time'} style={styles.textx} /> */}
-                            <TextComponent text={endTime ? moment(endTime , 'hh:mm A').format('LT') : 'End Time'} style={styles.textx} />
+                            <TextComponent text={endTime ? moment(endTime, 'hh:mm A').format('LT') : 'End Time'} style={styles.textx} />
 
                         </TouchableOpacity>
                     </View>
