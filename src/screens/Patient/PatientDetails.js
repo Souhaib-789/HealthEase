@@ -36,6 +36,10 @@ const PatientDetails = (props) => {
             .catch((err) => { console.log('err', err) })
 
     }
+
+    // console.log('====================================');
+    // console.log('item', JSON.stringify(item, null, 8));
+    // console.log('====================================');
     return (
         <View style={styles.mainContainer}>
             <ScrollView>

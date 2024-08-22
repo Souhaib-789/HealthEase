@@ -17,7 +17,7 @@ export const DoctorsMiddleware = {
           // }
 
           const rawData = { name: params?.search, category: params?.category };
-          console.log('rawData ->>>>>>>>>>>>>>>', JSON.stringify(rawData, null, 8));
+          // console.log('rawData ->>>>>>>>>>>>>>>', JSON.stringify(rawData, null, 8));
 
           const data = await Axios.post(Apis.getDoctors, rawData, await headers.config());
           if (data?.status == 200) {
@@ -40,18 +40,22 @@ export const DoctorsMiddleware = {
   },
 
   // doctors list of hospital
-  getHospitalDoctorsData: () => {
+  getHospitalDoctorsData: (params) => {
     return dispatch => {
       return new Promise(async (resolve, reject) => {
         try {
-          const data = await Axios.get(Apis.getHospitalDoctors, await headers.config());
+          const rawData = { name: params?.search, category: params?.category };
+          // console.log('rawData ->>>>>>>>>>>>>>>', JSON.stringify(rawData, null, 8));
+          const data = await Axios.post(Apis.getHospitalDoctors, rawData, await headers.config());
           if (data?.status == 200) {
             resolve(true);
             dispatch(getHospitalDoctors(data?.data?.data));
           }
+
         } catch (error) {
           reject(error);
-          dispatch(showAlert({ title: 'Get Hospital Doctors', message: 'Something went wrong', type: 'Error', }));
+          dispatch(showAlert({ title: 'Get Hospital Doctors', message: error?.response?.data?.message ? error?.response?.data?.message : 'Something went wrong!', type: 'Error', }));
+
         }
       });
     };
@@ -87,60 +91,70 @@ export const DoctorsMiddleware = {
             data: params?.duration,
           } : null
 
+          let dataToSend = [
+            {
+              name: "docter_name",
+              data: params?.name,
+            },
+            {
+              name: "specialization",
+              data: params?.specialization?.name,
+            },
+            {
+              name: "experience",
+              data: params?.experience.toString(),
+            },
+            {
+              name: "fee",
+              data: params?.fee.toString(),
+            },
+            {
+              name: "about",
+              data: params?.about,
+            },
+            {
+              name: "email",
+              data: params?.email,
+            },
+            {
+              name: "password",
+              data: params?.password,
+            },
+
+
+
+            {
+              name: 'image',
+              filename: params?.image?.name,
+              data: RNFetchBlob.wrap(params?.image?.uri),
+              // data: Platform.OS == 'android' ? RNFetchBlob.wrap(userData?.media?.uri) : RNFetchBlob.wrap(decodeURIComponent(userData?.media?.uri.replace("file://", ""))),
+              type: params?.image?.type,
+
+            },
+            ...responseData,
+          ]
+
+          if (duration) {
+            dataToSend.push(duration)
+          }
+
+          // console.log('====================================');
+          // console.log(JSON.stringify(dataToSend, null, 8));
+          // console.log('====================================');
+
+
           await RNFetchBlob
             // .config({ timeout: 60 * 60 })
             .fetch("POST", Apis.createDocter,
               await headers.docHeader(),
-              [
-                {
-                  name: "docter_name",
-                  data: params?.name,
-                },
-                {
-                  name: "specialization",
-                  data: params?.specialization?.name,
-                },
-                {
-                  name: "experience",
-                  data: params?.experience.toString(),
-                },
-                {
-                  name: "fee",
-                  data: params?.fee.toString(),
-                },
-                {
-                  name: "about",
-                  data: params?.about,
-                },
-                {
-                  name: "email",
-                  data: params?.email,
-                },
-                {
-                  name: "password",
-                  data: params?.password,
-                },
-                
-                
-
-                {
-                  name: 'image',
-                  filename: params?.image?.name,
-                  data: RNFetchBlob.wrap(params?.image?.uri),
-                  // data: Platform.OS == 'android' ? RNFetchBlob.wrap(userData?.media?.uri) : RNFetchBlob.wrap(decodeURIComponent(userData?.media?.uri.replace("file://", ""))),
-                  type: params?.image?.type,
-
-                },
-                ...responseData,
-                duration
-              ])
+              dataToSend
+            )
             .then((value) => {
               let data = JSON.parse(value?.data)
 
-              // console.log("checking----", JSON.stringify(data, null, 8))
               if (data?.status == true) {
                 resolve(true)
-                dispatch(updateHospitalDoctors(data?.data));
+                dispatch(updateHospitalDoctors(data?.data?.details));
               } else {
                 reject(value)
                 dispatch(showAlert({ title: 'create doctor', message: data?.message, type: 'Error', }));
@@ -168,6 +182,130 @@ export const DoctorsMiddleware = {
     };
   },
 
+  onUpdateDoctor: params => {
+    return dispatch => {
+      dispatch(showLoading());
+      return new Promise(async (resolve, reject) => {
+        try {
+          let responseData = []
+          for (const [index, item] of params?.availability?.entries()) {
+            let day = {
+              name: `slots[${index}][day]`,
+              data: item?.day,
+            }
+            responseData.push(day)
+            let shift_start_Time = {
+              name: `slots[${index}][shift_start_Time]`,
+              data: String(item?.shift_start_Time),
+            }
+            responseData.push(shift_start_Time)
+            let shift_end_Time = {
+              name: `slots[${index}][shift_end_Time]`,
+              data: String(item?.shift_end_Time),
+            }
+            responseData.push(shift_end_Time)
+          }
+
+
+          let dataToSend = [
+            params?.name ?
+              {
+                name: "docter_name",
+                data: params?.name,
+              } : {},
+            params?.specialization ?
+              {
+                name: "specialization",
+                data: params?.specialization?.name,
+              } : {},
+            params?.experience ?
+              {
+                name: "experience",
+                data: params?.experience.toString(),
+              } : {},
+            params?.fee ?
+              {
+                name: "fee",
+                data: params?.fee.toString(),
+              } : {},
+
+            params?.about ?
+              {
+                name: "about",
+                data: params?.about,
+              } : {},
+
+            params?.password ?
+              {
+                name: "password",
+                data: params?.password,
+              } : {},
+
+            params?.duration ? {
+              name: "duration",
+              data: params?.duration,
+            } : {},
+
+
+          ]
+
+          params?.image?.uri ?
+            dataToSend.push({
+              name: 'image',
+              filename: params?.image?.name,
+              data: RNFetchBlob.wrap(params?.image?.uri),
+              // data: Platform.OS == 'android' ? RNFetchBlob.wrap(userData?.media?.uri) : RNFetchBlob.wrap(decodeURIComponent(userData?.media?.uri.replace("file://", ""))),
+              type: params?.image?.type,
+
+            }) : {}
+
+          params?.availability ?
+            dataToSend.push(...responseData) : {}
+
+          console.log('====================================');
+          console.log(JSON.stringify(dataToSend, null, 8));
+          console.log('====================================');
+
+
+          await RNFetchBlob
+            // .config({ timeout: 60 * 60 })
+            .fetch("POST", Apis.updateDocter,
+              await headers.docHeader(),
+              dataToSend
+            )
+            .then((value) => {
+              let data = JSON.parse(value?.data)
+
+              if (data?.status == true) {
+                resolve(true)
+                dispatch(updateHospitalDoctors(data?.data?.details));
+              } else {
+                reject(value)
+                dispatch(showAlert({ title: 'update doctor', message: data?.message, type: 'Error', }));
+              }
+            }).catch((reason) => {
+              reject(reason)
+            })
+
+
+        } catch (error) {
+          console.log(error);
+          reject(error);
+          dispatch(
+            showAlert({
+              title: 'update doctor',
+              message: error?.message ? error?.message : 'Something went wrong!',
+              type: 'Error',
+              status: error?.response?.status,
+            }),
+          );
+        } finally {
+          dispatch(hideLoading());
+        }
+      });
+    };
+  },
+
 
   getTimeSlots: params => {
     return dispatch => {
@@ -180,9 +318,6 @@ export const DoctorsMiddleware = {
             endTime: params?.endTime,
             duration: params?.duration,
           }
-console.log('====================================');
-console.log(rawData);
-console.log('====================================');
           const data = await Axios.post(Apis.getDocterSlots, rawData, await headers.config());
           if (data?.status == 200) {
             resolve(data?.data?.data);

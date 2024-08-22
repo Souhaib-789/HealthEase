@@ -69,6 +69,9 @@ const PersonalInfo = () => {
 
     ]
     
+    console.log('====================================');
+    console.log('USER', JSON.stringify(USER , null ,8));
+    console.log('====================================');
     
     const renderItem = ({ item, index }) => {
         return (

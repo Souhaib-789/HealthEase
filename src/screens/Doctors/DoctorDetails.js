@@ -25,6 +25,9 @@ import { isUrduLanguage } from "../../utilities/Utilities";
 const DoctorDetails = (props) => {
 
     const isUrdu = isUrduLanguage();
+    console.log('====================================');
+    console.log('isUrdu', isUrdu);
+    console.log('====================================');
 
     useEffect(() => {
         return () => {
@@ -82,9 +85,9 @@ const DoctorDetails = (props) => {
         },
     ]
 
-// console.log('====================================');
-// console.log('timeSlots', JSON.stringify(DETAILS, null ,8));
-// console.log('====================================');
+console.log('====================================');
+console.log('timeSlots', JSON.stringify(DETAILS, null ,8));
+console.log('====================================');
 
     const getSlotsForDay = (date) => {
         setLoading(true)
@@ -300,7 +303,7 @@ const DoctorDetails = (props) => {
                             }
                         }}
                         markedDates={{ [selectedDate]: { selected: true, disableTouchEvent: true } }}
-                        disabledDaysIndexes={[0, 2, 4, 6]}
+                        // disabledDaysIndexes={[0, 2, 4, 6]}
                         style={styles.calendar}
                         minDate={moment().format('YYYY-MM-DD')}
                         theme={calendarTheme}

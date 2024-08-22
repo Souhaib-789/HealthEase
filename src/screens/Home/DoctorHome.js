@@ -24,12 +24,11 @@ const DoctorHome = () => {
     const [loading, setLoading] = useState(true);
     const USER_DATA = useSelector(state => state.AuthReducer.user)
     const APPOINTMENTS = useSelector(state => state.AppointmentsReducer?.doctorAppointmentList)
-
-    console.log('USER_DATA ------->>>>', JSON.stringify(APPOINTMENTS, null, 8));
+    // console.log('USER_DATA ------->>>>', JSON.stringify(SD, null, 8));
 
 
     useEffect(() => {
-        fetchAppointmentsData({ doctorId: USER_DATA?.user_id })
+        fetchAppointmentsData({ doctorId: USER_DATA?.id })
     }, [USER_DATA])
 
     const fetchAppointmentsData = (data = null) => {
@@ -39,11 +38,12 @@ const DoctorHome = () => {
     }
 
     const onFilterByDate = (date) => {
+       
         setState({ selectedDate: date });
         setLoading(true)
         const data = {
-            doctorId: USER_DATA?.user_id,
-            date: date
+            doctorId: USER_DATA?.id,
+            date:  moment(date).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
         }
         fetchAppointmentsData(data)
     }
@@ -161,7 +161,7 @@ const DoctorHome = () => {
                     refreshControl={
                         <RefreshControl
                             refreshing={false}
-                            onRefresh={() => { setLoading(true), setState(new Date()), fetchAppointmentsData({ doctorId: USER_DATA?.user_id }) }}
+                            onRefresh={() => { setLoading(true), setState(new Date()), fetchAppointmentsData({ doctorId: USER_DATA?.id }) }}
                         />
                     }
                 />

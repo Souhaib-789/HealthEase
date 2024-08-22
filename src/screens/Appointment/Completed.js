@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import {View, StyleSheet, ScrollView, FlatList, RefreshControl} from "react-native";
+import { View, StyleSheet, ScrollView, FlatList, RefreshControl } from "react-native";
 import Input from "../../components/Input";
 import { Colors } from "../../utilities/Colors";
 import ListEmptyComponent from "../../components/ListEmptyComponent";
@@ -8,6 +8,7 @@ import AppointCard from "../../components/AppointCard";
 import { useTranslation } from "react-i18next";
 import { AppointmentsMiddleware } from "../../redux/middlewares/AppointmentsMiddleware";
 import { useDispatch, useSelector } from "react-redux";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 const Completed = () => {
 
@@ -16,16 +17,21 @@ const Completed = () => {
     const ref = React.useRef();
     const [loading, setLoading] = useState(true)
     const dispatch = useDispatch();
+    const navigation = useNavigation();
     const appointmentsData = useSelector(state => state.AppointmentsReducer?.myAppointmentList)
 
 
-    useEffect(() => {
-        const data = {
-            status: 'completed',
-            search: undefined
-        }
-        fetchPastAppointmentsData(data)
-    }, [])
+
+    useFocusEffect(
+        useCallback(() => {
+            const data = {
+                status: 'completed',
+                search: undefined
+            }
+            fetchPastAppointmentsData(data)
+        }, [navigation]))
+
+
 
     const fetchPastAppointmentsData = (data) => {
         dispatch(AppointmentsMiddleware.getAppointmentsData(data))
@@ -51,29 +57,29 @@ const Completed = () => {
     return (
         <View style={styles.mainContainer}>
             <ScrollView>
-                    <Input
-                        search
-                        value={search}
-                        onChangeText={(e) => onSearch(e)}
-                        placeholder={t('Search')}
-                        rightIcon={search && <Icon type={IconTypes.Entypo} name={'cross'} size={18} />}
-                        onPressRightIcon={onRefreshPage}
-                        mainStyle={{ marginVertical: 15 }} />
+                <Input
+                    search
+                    value={search}
+                    onChangeText={(e) => onSearch(e)}
+                    placeholder={t('Search')}
+                    rightIcon={search && <Icon type={IconTypes.Entypo} name={'cross'} size={18} />}
+                    onPressRightIcon={onRefreshPage}
+                    mainStyle={{ marginVertical: 15 }} />
 
-                    <FlatList
-                        showsVerticalScrollIndicator={false}
-                        data={loading ? [1, 2, 3, 4, 5, 6] : appointmentsData}
-                        renderItem={({ item }) =>
-                            (<AppointCard item={item} loading={loading} screenType={'completed'}   />)}
-                        keyExtractor={(_ , index) => index.toString()}
-                        ListEmptyComponent={<ListEmptyComponent short text={t('no appointments found')} />}
-                        refreshControl={
-                            <RefreshControl
-                                refreshing={false}
-                                onRefresh={onRefreshPage}
-                            />
-                        }
-                    />
+                <FlatList
+                    showsVerticalScrollIndicator={false}
+                    data={loading ? [1, 2, 3, 4, 5, 6] : appointmentsData}
+                    renderItem={({ item }) =>
+                        (<AppointCard item={item} loading={loading} screenType={'completed'} />)}
+                    keyExtractor={(_, index) => index.toString()}
+                    ListEmptyComponent={<ListEmptyComponent short text={t('no appointments found')} />}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={false}
+                            onRefresh={onRefreshPage}
+                        />
+                    }
+                />
             </ScrollView>
         </View>
     )

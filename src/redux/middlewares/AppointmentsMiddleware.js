@@ -2,7 +2,7 @@ import Axios from 'axios';
 import Apis from '../../apis/apis';
 import { hideLoading, showAlert, showLoading } from '../actions/GeneralAction';
 import { headers } from '../../utilities/Utilities';
-import { getAppointments, getMyAppointments } from '../actions/AppointmentsActions';
+import {  getDoctorAppointments, getMyAppointments, updateDoctorAppointments } from '../actions/AppointmentsActions';
 
 export const AppointmentsMiddleware = {
 
@@ -78,14 +78,13 @@ export const AppointmentsMiddleware = {
       return new Promise(async (resolve, reject) => {
         try {
           const rawData = { doctor_id: params?.doctorId }
-
           const data = await Axios.post(Apis.getDocterAppointment,
              params?.date ? { doctor_id: params?.doctorId , date: params?.date } : rawData,
               await headers.config());
 
           if (data?.status == 200) {
             resolve(true)
-            dispatch(getAppointments(data?.data?.data))
+            dispatch(getDoctorAppointments(data?.data?.data))
           }
         } catch (error) {
           reject(error);
@@ -109,11 +108,12 @@ export const AppointmentsMiddleware = {
       return new Promise(async (resolve, reject) => {
         try {
           const rawData = {
-            appintment_id: params?.id,
+            appointment_id: params?.id,
           }
           const data = await Axios.post(Apis.completeAppointment, rawData, await headers.config());
           if (data?.status == 200) {           
             resolve(data?.data)
+            dispatch(updateDoctorAppointments(data?.data?.data))
           }
         } catch (error) {
           reject(error);

@@ -1,4 +1,4 @@
-import { FlatList, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { FlatList, Linking, Platform, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import Icon, { IconTypes } from '../../components/Icon'
 import { Colors } from '../../utilities/Colors'
@@ -14,6 +14,9 @@ import { useSelector } from 'react-redux'
 const HospitalProfile = () => {
     const navigation = useNavigation()
     const USER = useSelector(state => state.AuthReducer?.user);
+    // console.log('====================================');
+    // console.log(JSON.stringify(USER, null, 8));
+    // console.log('====================================');
 
     const INFO = [
         {
@@ -24,7 +27,8 @@ const HospitalProfile = () => {
         {
             id: 4,
             icon: <Icon name={'location-pin'} type={IconTypes.Entypo} size={15} color={Colors.PRIMARY} />,
-            info: USER?.address ? USER?.address : '--'
+            info: USER?.address ? USER?.address : '--',
+            address: true
         },
         {
             id: 5,
@@ -38,23 +42,44 @@ const HospitalProfile = () => {
         }
     ]
 
+    const goToLocation = () => {
+        const scheme = Platform.select({ ios: 'maps://0,0?q=', android: 'geo:0,0?q=' });
+        const latLng = `${USER?.address?.lat},${USER?.address?.lng}`;
+        const label = USER?.user_name;
+        const url = Platform.select({
+            ios: `${scheme}${label}@${latLng}`,
+            android: `${scheme}${latLng}(${label})`
+        });
+
+
+        Linking.openURL(url);
+    }
+
     const renderItem = ({ item, index }) => {
         return (
             <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', gap: 15, marginVertical: 10, }}>
                 <View style={{ borderRadius: 100, width: 38, height: 38, justifyContent: "center", alignItems: 'center', backgroundColor: Colors?.LIGHT_GREY }}>
                     {item?.icon}
                 </View>
-                <TextComponent text={item?.info} style={{ fontSize: 12, color: Colors.DGREY }} />
+                {
+                    item?.address ?
+                        <TouchableOpacity onPress={goToLocation}>
+                            <TextComponent text={'See location'} style={{ fontSize: 12, color: Colors.DARK_BLUE, textDecorationLine: 'underline', }} />
+                        </TouchableOpacity>
+                        : <TextComponent text={item?.info} style={{ fontSize: 12, color: Colors.DGREY }} />
+                }
             </TouchableOpacity>
         )
     }
 
+
+
     return (
         <View style={styles.container}>
             <Header title={'Profile'} />
-            <ScrollView showsVerticalScrollIndicator={false} style={{width: '90%' , alignSelf: 'center'}}>
-            <TextComponent style={styles.heading} text={USER?.user_name} />
-            <Image source={USER?.image ? {uri: USER?.image } : AVATAR} resizeMode={USER?.image ? 'cover' : 'contain'} style={{width: '100%', marginVertical: 20 , alignSelf: 'center', height: 130 , borderRadius: 10}} />
+            <ScrollView showsVerticalScrollIndicator={false} style={{ width: '90%', alignSelf: 'center' }}>
+                <TextComponent style={styles.heading} text={USER?.user_name} />
+                <Image source={USER?.image ? { uri: USER?.image } : AVATAR} resizeMode={USER?.image ? 'cover' : 'contain'} style={{ width: '100%', marginVertical: 20, alignSelf: 'center', height: 130, borderRadius: 10 }} />
 
 
                 <FlatList

@@ -12,6 +12,7 @@ import { login, userData } from '../redux/actions/AuthAction';
 import { hideAlert } from '../redux/actions/GeneralAction';
 import { useTranslation } from 'react-i18next';
 import i18n from '../translations/i18n';
+import Image from '../components/Image';
 
 
 
@@ -23,6 +24,7 @@ const AppNavigation = () => {
   const dispatch = useDispatch();
   const [GetStarted, setGetStarted] = useState(false);
   const { t } = useTranslation();
+  const [isReadyToGo, setIsReadyToGo] = useState(false);
 
   // useEffect(() => {
   //   checkPermission()
@@ -106,6 +108,9 @@ const AppNavigation = () => {
       dispatch(login(false));
     }
     SplashScreen.hide();
+    setTimeout(() => {
+      setIsReadyToGo(true);
+    }, 1000);
   };
 
 
@@ -113,6 +118,12 @@ const AppNavigation = () => {
     let response = await Storage.get('@getstarted');
     setGetStarted(response);
   };
+
+  if (isReadyToGo == false) {
+    return (
+      <Image source={require('../assets/images/launch_screen.png')} style={{ flex: 1 }} resizeMode='cover' />
+    );
+  }
 
 
   return (

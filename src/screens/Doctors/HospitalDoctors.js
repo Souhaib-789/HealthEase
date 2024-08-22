@@ -27,8 +27,16 @@ const HospitalDoctors = () => {
         fetchDoctorsData()
     }, [])
 
+    console.log('====================================');
+    console.log('DoctorsList', JSON.stringify(DoctorsList, null, 8));
+    console.log('====================================');
+
     const fetchDoctorsData = () => {
-        dispatch(DoctorsMiddleware.getHospitalDoctorsData())
+        let data = {
+            search: '',
+            category: '',
+        }
+        dispatch(DoctorsMiddleware.getHospitalDoctorsData(data))
             .then(() => setLoading(false))
             .catch(() => setLoading(false))
     }

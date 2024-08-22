@@ -22,6 +22,7 @@ const Apis = {
 
     //Hospital
     createDocter: `${BASE_URL}/hospital/api/createDocter`,
+    updateDocter: `${BASE_URL}/hospital/api/updateDocter`,
     getHospitalDoctors: `${BASE_URL}/hospital/api/getDocters`,
 
 }

@@ -8,6 +8,7 @@ import AppointCard from "../../components/AppointCard";
 import { useTranslation } from "react-i18next";
 import { AppointmentsMiddleware } from "../../redux/middlewares/AppointmentsMiddleware";
 import { useDispatch, useSelector } from "react-redux";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 const Upcoming = () => {
 
@@ -17,14 +18,19 @@ const Upcoming = () => {
     const [search, setsearch] = useState(null)
     const { t } = useTranslation();
     const ref = React.useRef();
+    const navigation = useNavigation();
 
-    useEffect(() => {
-        const data = {
-            status: 'upcoming',
-            search: undefined
-        }
-        fetchAppointmentsData(data)
-    }, [])
+
+      useFocusEffect(
+        useCallback(() => {
+            const data = {
+                status: 'upcoming',
+                search: undefined
+            }
+            fetchAppointmentsData(data)   
+         }, [navigation])
+      );
+
 
     const fetchAppointmentsData = (data) => {
         dispatch(AppointmentsMiddleware.getAppointmentsData(data))

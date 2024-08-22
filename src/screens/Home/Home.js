@@ -38,7 +38,7 @@ const Home = () => {
     const UPAppointment = useSelector(state => state.AppointmentsReducer?.myAppointmentList[0])
     const isUrdu = isUrduLanguage();
 
-    // console.log('Data ->>>>', JSON.stringify(UPAppointment, null, 8));
+    console.log('Data ->>>>', JSON.stringify(UPAppointment?.[0], null, 8));
 
     useEffect(() => {
         fetchDoctorsData();
@@ -126,13 +126,13 @@ const Home = () => {
                             <View style={styles.Appointment_card} >
                                 <View style={styles.appointment_card_subview1}>
                                     <View style={styles.appointment_card_subview2}>
-                                        <Image source={UPAppointment?.doctor?.image ?
-                                            { uri: UPAppointment?.doctor?.image } : require('../../assets/images/avatar.png')
+                                        <Image source={UPAppointment?.docter?.image ?
+                                            { uri: UPAppointment?.docter?.image } : require('../../assets/images/avatar.png')
                                         } style={styles.Appointment_image} />
                                         <View>
                                             <TextComponent style={[styles.appointment_card_text, { fontFamily: Fonts?.SEMIBOLD }]}
-                                                text={UPAppointment?.doctor?.user_name ? UPAppointment?.doctor?.user_name : '--'} />
-                                            <TextComponent style={styles.appointment_card_span} text={UPAppointment?.doctor?.specialization ? UPAppointment?.doctor?.specialization : '--'} />
+                                                text={UPAppointment?.docter?.name ? UPAppointment?.docter?.name : '--'} />
+                                            <TextComponent style={styles.appointment_card_span} text={UPAppointment?.docter?.specialization ? UPAppointment?.docter?.specialization : '--'} />
                                         </View>
                                     </View>
                                     <Icon type={IconTypes.MaterialIcons} name={'keyboard-arrow-right'} size={25} color={Colors.WHITE} />
@@ -157,7 +157,7 @@ const Home = () => {
                 </View>
 
                 <FlatList
-                    key={'Featured Doctors'}
+                    key={'Featured doctors'}
                     showsHorizontalScrollIndicator={false}
                     ListHeaderComponent={() => (
                         <View style={[styles.flex ,styles.mV , {flexDirection: isUrdu ? 'row-reverse' : 'row'}]}>

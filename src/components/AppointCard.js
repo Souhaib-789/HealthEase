@@ -13,7 +13,7 @@ import Skeleton from "./Skeleton";
 const AppointCard = ({ item, screenType, loading }) => {
     const navigation = useNavigation();
     return (
-        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('AppointmentDetails', { item: item, screenType: screenType })}>
+        <TouchableOpacity disabled={loading} style={styles.card} onPress={() => navigation.navigate('AppointmentDetails', { item: item, screenType: screenType })}>
             {
                 loading ?
                     <Skeleton style={styles.image} borderRadius={10} styles={{ width: '15%' }} />

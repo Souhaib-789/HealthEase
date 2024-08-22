@@ -19,16 +19,18 @@ export const AuthMiddleware = {
             // device_id: userdata.deviceID,
           };
           const data = await Axios.post(Apis.login, formData);
-          console.log(JSON.stringify(data, null, 8))
+          // console.log(JSON.stringify(data, null, 8))
           if (data?.status == 200) {
             await Storage.setToken(data?.data?.token);
-            dispatch(login(true));
+            
             if (data?.data?.user?.user_role == 'doctor') {
               await Storage.set('@user', JSON.stringify({...data?.data?.user , ...data?.data?.details}));
               dispatch(userData({...data?.data?.user , ...data?.data?.details}));
+              dispatch(login(true));
             } else {
               await Storage.set('@user', JSON.stringify(data?.data?.user));
               dispatch(userData(data?.data?.user));
+              dispatch(login(true));
             }
           }
         } catch (error) {
@@ -89,17 +91,30 @@ export const AuthMiddleware = {
       dispatch(showLoading());
       return new Promise(async (resolve, reject) => {
         try {
-          const formData = {
-            user_name: userdata.name,
-            phone_number: userdata.contact,
-            email: userdata.email,
-            address: userdata.address,
-            password: userdata.password,
-            password_confirmation: userdata.confirm_password,
-            user_role: userdata.user_role,
+          const pFormData = {
+            user_name: userdata?.name,
+            phone_number: userdata?.contact,
+            email: userdata?.email,
+            address: userdata?.address,
+            password: userdata?.password,
+            password_confirmation: userdata?.confirm_password,
+            user_role: userdata?.user_role,
           };
 
-          const data = await Axios.post(Apis.signup, formData);
+          const hFormData = {
+            user_name: userdata?.name,
+            phone_number: userdata?.contact,
+            email: userdata?.email,
+            address: userdata?.address,
+            password: userdata?.password,
+            password_confirmation: userdata?.confirm_password,
+            user_role: userdata?.user_role,
+            lat: userdata?.lat,
+            lng: userdata?.lng,
+          };
+
+
+          const data = await Axios.post(Apis.signup, userdata.user_role == 'hospital' ? hFormData : pFormData);
           // console.log(JSON.stringify(data, null, 8))
           if (data?.status == 200) {
             resolve(true);

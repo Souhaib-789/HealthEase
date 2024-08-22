@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, ScrollView, Image } from "react-native";
+import { View, StyleSheet, ScrollView, Image, Platform, Linking } from "react-native";
 import Header from "../../components/Header";
 import moment, { duration } from "moment";
 import { Colors } from "../../utilities/Colors";
@@ -63,9 +63,19 @@ const AppointmentDetails = (props) => {
     const [rating, setRating] = useState(0);
     const isUrdu = isUrduLanguage();
 
-console.log('====================================')
-console.log('routeData', routeData?.date)
-console.log('====================================')
+    const goToLocation = () => {
+        const scheme = Platform.select({ ios: 'maps://0,0?q=', android: 'geo:0,0?q=' });
+        const latLng = `${routeData?.docter?.hospital?.address?.lat},${routeData?.docter?.hospital?.address?.lng}`;
+        const label = routeData?.docter?.hospital?.user_name;
+        const url = Platform.select({
+            ios: `${scheme}${label}@${latLng}`,
+            android: `${scheme}${latLng}(${label})`
+        });
+
+
+        Linking.openURL(url);
+    }
+
 
     return (
         <View style={styles.mainContainer}>
@@ -111,7 +121,7 @@ console.log('====================================')
                                 <Icon name='timer-outline' type={IconTypes.Ionicons} size={18} color={Colors?.BLACK} />
                                 <TextComponent text={'Duration : '} style={styles.short_heading} />
                             </View>
-                            <TextComponent text={'15 Minutes'} style={styles.texty} />
+                            <TextComponent text={(routeData?.docter?.duration ? routeData?.docter?.duration : 15) + ' Minutes'} style={styles.texty} />
                         </View>
 
                         <View style={styles.hr} />
@@ -138,7 +148,7 @@ console.log('====================================')
                     {
                         screenType === 'upcoming' ?
 
-                            <Button icon={<Icon name='map-location' type={IconTypes.FontAwesome6} size={20} color={Colors?.PRIMARY} />} title={t(`Get Directions to ${routeData?.hospital_name ? routeData?.hospital_name : 'hospital'}`)} light style={styles.button} />
+                            <Button onPress={goToLocation} icon={<Icon name='map-location' type={IconTypes.FontAwesome6} size={20} color={Colors?.PRIMARY} />} title={t(`Get Directions to ${routeData?.docter?.hospital?.user_name ? routeData?.docter?.hospital?.user_name : 'hospital'}`)} light style={styles.button} />
                             :
                             <Button onPress={() => setShowReviewModal(true)} icon={<Icon name='star' type={IconTypes.AntDesign} size={20} color={Colors?.PRIMARY} />} title={'Add Review'} light style={styles.button} />
                     }

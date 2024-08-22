@@ -18,6 +18,7 @@ import { isUrduLanguage } from "../../utilities/Utilities";
 
 const AppointmentForm = (props) => {
 
+    const isUrdu = isUrduLanguage();
     const routeData = props?.route?.params;
     const navigation = useNavigation();
     const dispatch = useDispatch();

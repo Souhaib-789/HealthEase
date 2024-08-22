@@ -15,21 +15,20 @@ import { showAlert } from "../../redux/actions/GeneralAction";
 import { validateEmail } from "../../utilities/Validators";
 import Icon, { IconTypes } from "../../components/Icon";
 import Geolocation from 'react-native-geolocation-service';
-import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 import { LocLoader } from "../../components/LocLoader";
 
 const Signup = () => {
 
     const navigation = useNavigation();
     const dispatch = useDispatch()
-    const [name, setname] = useState()
-    const [email, setemail] = useState()
-    const [contact, setcontact] = useState()
-    const [address, setaddress] = useState()
-    const [userRole, setuserRole] = useState()
-    const [password, setpassword] = useState()
-    const [confirmPassword, setconfirmPassword] = useState()
-    const [location, setLocation] = useState(false);
+    const [name, setname] = useState(null)
+    const [email, setemail] = useState(null)
+    const [contact, setcontact] = useState(null)
+    const [address, setaddress] = useState(null)
+    const [userRole, setuserRole] = useState(null)
+    const [password, setpassword] = useState(null)
+    const [confirmPassword, setconfirmPassword] = useState(null)
+    const [location, setLocation] = useState(null);
     const [loading, setLoading] = useState(false);
 
 
@@ -49,7 +48,7 @@ const Signup = () => {
         else if (!contact) {
             dispatch(showAlert({ message: 'Please enter contact' }))
         }
-        else if (!address) {
+        else if (userRole?.name == 'patient' && !address) {
             dispatch(showAlert({ message: 'Please enter address' }))
         }
         else if (!password) {
@@ -61,15 +60,19 @@ const Signup = () => {
         else if (password !== confirmPassword) {
             dispatch(showAlert({ message: 'Password does not match' }))
         }
+        else if (userRole?.name == 'hospital' && !location) {
+            dispatch(showAlert({ message: 'Please pick your current location' }))
+        }
         else {
             let data = {
                 name: name,
                 email: email,
                 contact: contact,
-                address: address,
                 user_role: userRole?.name,
                 password: password,
-                confirm_password: confirmPassword
+                confirm_password: confirmPassword,
+                lat: location?.latitude ? location?.latitude : undefined,
+                lng: location?.longitude ? location?.longitude : undefined
             }
             dispatch(AuthMiddleware.signUp(data))
                 .then(() => {
@@ -82,6 +85,7 @@ const Signup = () => {
 
 
     }
+
 
 
     const requestLocationPermission = async () => {
