@@ -20,16 +20,19 @@ const HospitalDoctors = () => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const DoctorsList = useSelector(state => state.DoctorsReducer?.hospitalDoctors);
+    const SD = useSelector(state => state.DoctorsReducer?.INDE);
+
     const [currCategory, setcurrCategory] = useState({ id: 1 });
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         fetchDoctorsData()
+        console.log('====================================');
+        console.log('DoctorsList', JSON.stringify(SD, null, 8));
+        console.log('====================================');
     }, [])
 
-    console.log('====================================');
-    console.log('DoctorsList', JSON.stringify(DoctorsList, null, 8));
-    console.log('====================================');
+  
 
     const fetchDoctorsData = () => {
         let data = {

@@ -2,7 +2,7 @@ import Axios from 'axios';
 import Apis from '../../apis/apis';
 import { hideLoading, showAlert, showLoading } from '../actions/GeneralAction';
 import { headers } from '../../utilities/Utilities';
-import { clearAllDoctors, getAllDoctors, getHospitalDoctors, updateHospitalDoctors } from '../actions/DoctorsActions';
+import { addHospitalDoctors, clearAllDoctors, getAllDoctors, getHospitalDoctors, updateHospitalDoctors, } from '../actions/DoctorsActions';
 import RNFetchBlob from 'rn-fetch-blob';
 
 export const DoctorsMiddleware = {
@@ -154,7 +154,7 @@ export const DoctorsMiddleware = {
 
               if (data?.status == true) {
                 resolve(true)
-                dispatch(updateHospitalDoctors(data?.data?.details));
+                dispatch(addHospitalDoctors(data?.data?.details));
               } else {
                 reject(value)
                 dispatch(showAlert({ title: 'create doctor', message: data?.message, type: 'Error', }));
@@ -187,6 +187,7 @@ export const DoctorsMiddleware = {
       dispatch(showLoading());
       return new Promise(async (resolve, reject) => {
         try {
+
           let responseData = []
           for (const [index, item] of params?.availability?.entries()) {
             let day = {
@@ -196,18 +197,22 @@ export const DoctorsMiddleware = {
             responseData.push(day)
             let shift_start_Time = {
               name: `slots[${index}][shift_start_Time]`,
-              data: String(item?.shift_start_Time),
+              data: item?.shift_start_Time,
             }
             responseData.push(shift_start_Time)
             let shift_end_Time = {
               name: `slots[${index}][shift_end_Time]`,
-              data: String(item?.shift_end_Time),
+              data: item?.shift_end_Time,
             }
             responseData.push(shift_end_Time)
           }
 
 
           let dataToSend = [
+            {
+              name: "doctor_id",
+              data: params?.id,
+            } ,
             params?.name ?
               {
                 name: "docter_name",
@@ -235,21 +240,25 @@ export const DoctorsMiddleware = {
                 data: params?.about,
               } : {},
 
-            params?.password ?
-              {
-                name: "password",
-                data: params?.password,
-              } : {},
+
 
             params?.duration ? {
               name: "duration",
-              data: params?.duration,
+              data: params?.duration.toString(),
             } : {},
 
 
           ]
 
-          params?.image?.uri ?
+          if (params?.password) {
+            dataToSend.push(
+              {
+                name: "password",
+                data: params?.password,
+              })
+          }
+
+          if (params?.image?.uri) {
             dataToSend.push({
               name: 'image',
               filename: params?.image?.name,
@@ -257,14 +266,18 @@ export const DoctorsMiddleware = {
               // data: Platform.OS == 'android' ? RNFetchBlob.wrap(userData?.media?.uri) : RNFetchBlob.wrap(decodeURIComponent(userData?.media?.uri.replace("file://", ""))),
               type: params?.image?.type,
 
-            }) : {}
+            })
+          }
 
-          params?.availability ?
-            dataToSend.push(...responseData) : {}
+          if (params?.availability) {
+            dataToSend.push(...responseData)
+          }
 
           console.log('====================================');
           console.log(JSON.stringify(dataToSend, null, 8));
           console.log('====================================');
+
+
 
 
           await RNFetchBlob
@@ -275,7 +288,9 @@ export const DoctorsMiddleware = {
             )
             .then((value) => {
               let data = JSON.parse(value?.data)
-
+                console.log('----------------------------');
+                console.log(JSON.stringify(data.data, null , 8));
+                console.log('----------------------------');
               if (data?.status == true) {
                 resolve(true)
                 dispatch(updateHospitalDoctors(data?.data?.details));

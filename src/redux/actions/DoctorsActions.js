@@ -35,6 +35,13 @@ const getHospitalDoctors = (payload) => {
     };
 }
 
+const addHospitalDoctors = (payload) => {
+    return {
+        type: ActionTypes.ADD_HOSPITAL_DOCTORS,
+        payload,
+    };
+}
+
 const updateHospitalDoctors = (payload) => {
     return {
         type: ActionTypes.UPDATE_HOSPITAL_DOCTORS,
@@ -43,4 +50,4 @@ const updateHospitalDoctors = (payload) => {
 }
 
 
-export { getAllDoctors, getHospitalDoctors, getDoctorDetails, clearDoctorDetails ,clearAllDoctors, updateHospitalDoctors };
+export { getAllDoctors, getHospitalDoctors, getDoctorDetails, clearDoctorDetails ,clearAllDoctors, addHospitalDoctors, updateHospitalDoctors };

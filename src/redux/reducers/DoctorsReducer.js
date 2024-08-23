@@ -5,6 +5,7 @@ let initialState = {
   dashboardDoctors: [],
   doctorDetails: {},
   hospitalDoctors: [],
+  INDE: null
 };
 
 const DoctorsReducer = (state = initialState, action) => {
@@ -35,10 +36,15 @@ const DoctorsReducer = (state = initialState, action) => {
       state = { ...state, hospitalDoctors: action.payload };
       break;
 
+    case ActionTypes.ADD_HOSPITAL_DOCTORS:
+      state = { ...state, hospitalDoctors: [...state.hospitalDoctors, action.payload] };
+      break;
+
     case ActionTypes.UPDATE_HOSPITAL_DOCTORS:
-      // let copy = state.hospitalDoctors;
-      // copy.push(action.payload);
-      state = { ...state, hospitalDoctors: [...state.hospitalDoctors , action.payload] };
+      let arr = [...state.hospitalDoctors];
+      let index = arr.findIndex((item) => item._id == action.payload._id);
+      arr.splice(index, 1, action.payload);
+      state = { ...state, hospitalDoctors: arr , INDE: index };
       break;
 
     default:

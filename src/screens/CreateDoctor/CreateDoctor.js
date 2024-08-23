@@ -24,7 +24,7 @@ import { DoctorsMiddleware } from "../../redux/middlewares/DoctorsMiddleware";
 const CreateDoctor = (props) => {
 
     const DETAILS = useSelector(state => state.DoctorsReducer?.doctorDetails)
-    console.log('----------', JSON.stringify(DETAILS, null, 8));
+    // console.log('----------', JSON.stringify(DETAILS, null, 8));
 
     const routeData = props?.route?.params
     const navigation = useNavigation();
@@ -36,7 +36,7 @@ const CreateDoctor = (props) => {
     const [experience, setexperience] = useState(DETAILS?.experience ? DETAILS?.experience : null)
     const [image, setimage] = useState(DETAILS?.image_url ? DETAILS?.image_url : null)
     const [about, setabout] = useState(DETAILS?.about ? DETAILS?.about : null)
-    const [specialization, setspecialization] = useState(DETAILS?.specialization ? {name: DETAILS?.specialization} : null)
+    const [specialization, setspecialization] = useState(DETAILS?.specialization ? { name: DETAILS?.specialization } : null)
     const [selectedDay, setselectedDay] = useState();
     const [error, seterror] = useState(false)
     const [duration, setduration] = useState(DETAILS?.duration ? DETAILS?.duration : null)
@@ -53,7 +53,7 @@ const CreateDoctor = (props) => {
     const [TimeSlots, setTimeSlots] = useState(DETAILS?.slots ? DETAILS?.slots : null);
     const [refresh, setRefresh] = useState(false)
 
-  
+
 
     const Days = [
         {
@@ -155,7 +155,7 @@ const CreateDoctor = (props) => {
             setopenAvailabilityModal(false)
 
             let finalSlot = [];
-            finalSlot.push({ day: selectedDay?.name, shift_start_Time: startTime, shift_end_Time: endTime })
+            finalSlot.push({ day: selectedDay?.name, shift_start_Time: startTime.toString(), shift_end_Time: endTime.toString() })
             setTimeSlots(TimeSlots ? [...TimeSlots, ...finalSlot] : finalSlot)
 
             setStartTime(null)
@@ -215,23 +215,28 @@ const CreateDoctor = (props) => {
     }
 
     const onPressUpdateDoctor = () => {
-                 const data = {
-                name: docName ? docName : undefined,
-                email: email ? email : undefined,
-                password: password ? password : undefined,
-                image: image ? image : undefined,
-                specialization: specialization ? specialization : undefined,
-                fee: fees ? fees : undefined,
-                experience: experience ? experience : undefined,
-                about: about ? about : undefined,
-                availability: TimeSlots ? TimeSlots : undefined,
-                duration: duration ? duration : undefined
-            }
-   
-            dispatch(DoctorsMiddleware.onUpdateDoctor(data))
-                .then(() => { setopenModal(true) })
-                .catch((err) => { console.log(err) })
-       
+        const data = {
+            id: DETAILS?._id,
+            name: docName ? docName : undefined,
+            password: password ? password : undefined,
+            image: image ? image : undefined,
+            specialization: specialization ? specialization : undefined,
+            fee: fees ? fees : undefined,
+            experience: experience ? experience : undefined,
+            about: about ? about : undefined,
+            availability: TimeSlots ? TimeSlots : undefined,
+            duration: duration ? duration : undefined
+        }
+
+        // console.log('====================================');
+        // console.log('data', data);
+        // console.log('====================================');
+
+        dispatch(DoctorsMiddleware.onUpdateDoctor(data))
+            .then(() => { setopenModal(true) })
+            .catch((err) => { console.log(err) })
+
+
     }
 
     // console.log('image', JSON.stringify(image, null, 8));
@@ -466,9 +471,10 @@ const CreateDoctor = (props) => {
                         <TextComponent style={styles.modal_message} text={`Your doctor has been ${routeData?.screenType == 'edit' ? 'saved' : 'added'} to your hospital's doctors list.`} />
                     </View>
                 }
-                OnClose={() => navigation.goBack()}
+                OnClose={routeData?.screenType == 'edit' ? ()=> navigation.navigate('HospitalDoctors') : () => navigation.goBack()}
                 close={true}
                 visible={openModal} />
+                
 
         </View>
     )
