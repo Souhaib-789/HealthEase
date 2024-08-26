@@ -5,7 +5,7 @@ let initialState = {
   dashboardDoctors: [],
   doctorDetails: {},
   hospitalDoctors: [],
-  INDE: null
+  favDoctorsList: []
 };
 
 const DoctorsReducer = (state = initialState, action) => {
@@ -16,6 +16,10 @@ const DoctorsReducer = (state = initialState, action) => {
         dashboardDoctors: action.payload.filter((item, index) => index < 3)
       };
       break;
+
+      case ActionTypes.GET_FAV_DOCTORS:
+        state = { ...state, favDoctorsList: action.payload  };
+        break;
 
     case ActionTypes.CLEAR_ALL_DOCTORS:
       state = {

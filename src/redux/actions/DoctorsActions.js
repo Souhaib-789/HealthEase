@@ -49,5 +49,11 @@ const updateHospitalDoctors = (payload) => {
     };
 }
 
+const getFavDoctors = (payload) => {
+    return {
+        type: ActionTypes.GET_FAV_DOCTORS,
+        payload,
+    };
+}
 
-export { getAllDoctors, getHospitalDoctors, getDoctorDetails, clearDoctorDetails ,clearAllDoctors, addHospitalDoctors, updateHospitalDoctors };
+export { getAllDoctors, getHospitalDoctors, getDoctorDetails, clearDoctorDetails ,clearAllDoctors, addHospitalDoctors, updateHospitalDoctors, getFavDoctors };

@@ -2,7 +2,7 @@ import Axios from 'axios';
 import Apis from '../../apis/apis';
 import { hideLoading, showAlert, showLoading } from '../actions/GeneralAction';
 import { headers } from '../../utilities/Utilities';
-import { addHospitalDoctors, clearAllDoctors, getAllDoctors, getHospitalDoctors, updateHospitalDoctors, } from '../actions/DoctorsActions';
+import { addHospitalDoctors, clearAllDoctors, getAllDoctors, getFavDoctors, getHospitalDoctors, updateHospitalDoctors, } from '../actions/DoctorsActions';
 import RNFetchBlob from 'rn-fetch-blob';
 
 export const DoctorsMiddleware = {
@@ -39,7 +39,32 @@ export const DoctorsMiddleware = {
     };
   },
 
-  // doctors list of hospital
+  // doctor list for patient
+  getFavDoctorsData: (params) => {
+    return dispatch => {
+      return new Promise(async (resolve, reject) => {
+        try {
+          const data = await Axios.get(Apis.getFavDocters, await headers.config());
+          if (data?.status == 200) {
+            dispatch(getFavDoctors(data?.data?.data));
+            resolve(true);
+          }
+        } catch (error) {
+          reject(error);
+          dispatch(
+            showAlert({
+              title: 'Get Fav Doctors',
+              message: error?.response?.data?.message ? error?.response?.data?.message : error?.message,
+              type: 'Error',
+              status: error?.response?.status,
+            }),
+          );
+        }
+      });
+    };
+  },
+
+  // doctors list for hospital
   getHospitalDoctorsData: (params) => {
     return dispatch => {
       return new Promise(async (resolve, reject) => {
@@ -212,7 +237,7 @@ export const DoctorsMiddleware = {
             {
               name: "doctor_id",
               data: params?.id,
-            } ,
+            },
             params?.name ?
               {
                 name: "docter_name",
@@ -281,6 +306,9 @@ export const DoctorsMiddleware = {
             )
             .then((value) => {
               let data = JSON.parse(value?.data)
+              console.log('----------------------------');
+              console.log(JSON.stringify(data.data, null, 8));
+              console.log('----------------------------');
               if (data?.status == true) {
                 resolve(true)
                 dispatch(updateHospitalDoctors(data?.data));
@@ -343,6 +371,36 @@ export const DoctorsMiddleware = {
     };
   },
 
+  onFavoritePress: params => {
+    return dispatch => {
+      return new Promise(async (resolve, reject) => {
+        try {
+          dispatch(showLoading());
+          const rawData = { doctor_id: params?.id }
+          const data = await Axios.post(Apis.addAndRemoveFavDoctors, rawData, await headers.config());
+          if (data?.status == 200) {
+            console.log('++++++++++++++++++');
+            console.log(JSON.stringify(params.check, null ,8));
+            console.log('++++++++++++++++++');
+            dispatch(showAlert({ title: 'action to favorite', message: data?.data?.message, type: 'Success', }));
+            resolve(true);
+          }
+        } catch (error) {
+          reject(error);
+          dispatch(
+            showAlert({
+              title: 'action to favorite',
+              message: error?.response?.data?.message ? error?.response?.data?.message : error?.message,
+              type: 'Error',
+              status: error?.response?.status,
+            }),
+          );
+        } finally {
+          dispatch(hideLoading());
+        }
+      });
+    };
+  },
 
 
 };

@@ -26,7 +26,12 @@ const DoctorDetails = (props) => {
 
     const isUrdu = isUrduLanguage();
 
+    const favDoctorsList = useSelector(state => state.DoctorsReducer?.favDoctorsList)
+    const [liked, setLiked] = useState(false)
+
+
     useEffect(() => {
+        checkIsFavorite()
         return () => {
             dispatch(clearDoctorDetails())
         }
@@ -39,7 +44,7 @@ const DoctorDetails = (props) => {
     const { t } = useTranslation();
     const USER = useSelector(state => state.AuthReducer.user)
     const DETAILS = useSelector(state => state.DoctorsReducer?.doctorDetails)
-    console.log(JSON.stringify(DETAILS, null, 8));
+    // console.log('----------', JSON.stringify(DETAILS, null, 8));
 
     const [activeCompo, setactiveCompo] = useState({ name: 'Info' })
     const [confirmedSlot, setconfirmedSlot] = useState();
@@ -83,6 +88,12 @@ const DoctorDetails = (props) => {
             icon_name: 'price-change'
         },
     ]
+
+    const checkIsFavorite = () => {
+        let check = favDoctorsList?.find(item => item?.id == DETAILS?.id) ? true : false
+        setLiked(check)
+    }
+
 
     const getSlotsForDay = (date) => {
         setLoading(true)
@@ -166,7 +177,10 @@ const DoctorDetails = (props) => {
         navigation.navigate('Appointment', { timeSlot: confirmedSlot, date: selectedDate, duration: DETAILS?.duration })
     }
 
-
+    const onActionToFavorite = () => {
+        const data = { id: DETAILS?.id , check: liked }
+        dispatch(DoctorsMiddleware.onFavoritePress(data))
+    }
 
     return (
         <View style={styles.mainContainer}>
@@ -189,8 +203,8 @@ const DoctorDetails = (props) => {
                             </>
 
                             :
-                            <TouchableOpacity style={styles.heart}>
-                                <Icon type={IconTypes.Ionicons} name={'heart-sharp'} color={Colors?.GREY} size={22} />
+                            <TouchableOpacity style={styles.heart} onPress={onActionToFavorite}>
+                                <Icon type={IconTypes.Ionicons} name={'heart-sharp'} color={liked ? Colors?.PRIMARY : Colors?.GREY} size={22} />
                             </TouchableOpacity>
 
                     }

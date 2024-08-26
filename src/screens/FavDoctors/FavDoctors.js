@@ -1,42 +1,60 @@
-import React, { useState } from "react";
-import { View, StyleSheet, ScrollView, FlatList } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, FlatList, RefreshControl } from "react-native";
 import Header from "../../components/Header";
 import Input from "../../components/Input";
 import { Colors } from "../../utilities/Colors";
 import DoctorCard from "../../components/DoctorCard";
 import ListEmptyComponent from "../../components/ListEmptyComponent";
-import Icon, { IconTypes } from "../../components/Icon";
 import NO_DOC from '../../assets/images/noDoc.png'
 import { useTranslation } from "react-i18next";
+import { DoctorsMiddleware } from "../../redux/middlewares/DoctorsMiddleware";
+import { useDispatch, useSelector } from "react-redux";
 
 const FavDoctors = () => {
 
     const [search, setsearch] = useState(null)
     const { t } = useTranslation()
+    const dispatch = useDispatch()
+    const [loading, setloading] = useState(true)
+    const favDoctorsList = useSelector(state => state.DoctorsReducer.favDoctorsList)
+
+    useEffect(() => {
+        fetchFavDoctorsData()
+    }, [])
+
+    const fetchFavDoctorsData = () => {
+        dispatch(DoctorsMiddleware.getFavDoctorsData())
+            .then(() => setloading(false))
+            .catch(() => setloading(false))
+    }
 
 
     return (
         <View style={styles.mainContainer}>
             <Header title={t('Favorite Doctors')} back bell />
-            <ScrollView>
-                <Input
+            {/* <Input
                     search
                     value={search}
                     onChangeText={(e) => setsearch(e)}
                     placeholder={t('Search')}
                     rightIcon={search && <Icon type={IconTypes.Entypo} name={'cross'} size={18} />}
                     onPressRightIcon={() => setsearch(null)}
-                    mainStyle={{ marginBottom: 13, width: '90%', marginTop: 10 }} />
+                    mainStyle={{ marginBottom: 13, width: '90%', marginTop: 10 }} /> */}
 
-                <FlatList
-                    showsVerticalScrollIndicator={false}
-                    data={[]}
-                    renderItem={({ item }) =>
-                        (<DoctorCard item={item} book={true} heart={true} style={{ width: '90%' }} />)}
-                    keyExtractor={(_, index) => index.toString()}
-                    ListEmptyComponent={<ListEmptyComponent image={NO_DOC} text={t('no fav. doctor yet')} />}
-                />
-            </ScrollView>
+            <FlatList
+                showsVerticalScrollIndicator={false}
+                data={loading ? [1, 2, 3, 4] : favDoctorsList}
+                renderItem={({ item }) =>
+                    (<DoctorCard loading={loading} item={item} book={true} heart={true} style={{ width: '90%' }} />)}
+                keyExtractor={(_, index) => index.toString()}
+                ListEmptyComponent={<ListEmptyComponent image={NO_DOC} text={t('no fav. doctor yet')} />}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={false}
+                        onRefresh={fetchFavDoctorsData}
+                    />
+                }
+            />
         </View>
     )
 }

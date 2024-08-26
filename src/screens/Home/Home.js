@@ -38,7 +38,7 @@ const Home = () => {
     const UPAppointment = useSelector(state => state.AppointmentsReducer?.myAppointmentList[0])
     const isUrdu = isUrduLanguage();
 
-    console.log('Data ->>>>', JSON.stringify(UPAppointment?.[0], null, 8));
+    // console.log('Data ->>>>', JSON.stringify(UPAppointment?.[0], null, 8));
 
     useEffect(() => {
         fetchDoctorsData();
