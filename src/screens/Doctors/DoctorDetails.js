@@ -25,11 +25,13 @@ import { isUrduLanguage } from "../../utilities/Utilities";
 const DoctorDetails = (props) => {
 
     const isUrdu = isUrduLanguage();
-    console.log('====================================');
-    console.log('isUrdu', isUrdu);
-    console.log('====================================');
+
+    const favDoctorsList = useSelector(state => state.DoctorsReducer?.favDoctorsList)
+    const [liked, setLiked] = useState(false)
+
 
     useEffect(() => {
+        checkIsFavorite()
         return () => {
             dispatch(clearDoctorDetails())
         }
@@ -40,7 +42,7 @@ const DoctorDetails = (props) => {
     const { t } = useTranslation();
     const USER = useSelector(state => state.AuthReducer.user)
     const DETAILS = useSelector(state => state.DoctorsReducer?.doctorDetails)
-    console.log('----------', JSON.stringify(DETAILS, null, 8));
+    // console.log('----------', JSON.stringify(DETAILS, null, 8));
 
     const [activeCompo, setactiveCompo] = useState({ name: 'Info' })
     const [confirmedSlot, setconfirmedSlot] = useState();
@@ -85,15 +87,17 @@ const DoctorDetails = (props) => {
         },
     ]
 
-console.log('====================================');
-console.log('timeSlots', JSON.stringify(DETAILS, null ,8));
-console.log('====================================');
+    const checkIsFavorite = () => {
+        let check = favDoctorsList?.find(item => item?.id == DETAILS?.id) ? true : false
+        setLiked(check)
+    }
+
 
     const getSlotsForDay = (date) => {
         setLoading(true)
         setshowCalendar(false)
         setSelectedDate(date)
-  
+
         let findDay = DETAILS?.slots?.find(item => item?.day == moment(date).format('ddd'))
         // console.log('findDay', findDay.shift_start_Time, findDay.shift_end_Time);
         const data = {
@@ -156,6 +160,11 @@ console.log('====================================');
         navigation.navigate('Appointment', { timeSlot: confirmedSlot, date: selectedDate, duration: DETAILS?.duration })
     }
 
+    const onActionToFavorite = () => {
+        const data = { id: DETAILS?.id , check: liked }
+        dispatch(DoctorsMiddleware.onFavoritePress(data))
+    }
+
     return (
         <View style={styles.mainContainer}>
             <ScrollView>
@@ -169,8 +178,8 @@ console.log('====================================');
                                 <Icon type={IconTypes.AntDesign} name={'edit'} color={Colors?.DGREY} size={22} />
                             </TouchableOpacity>
                             :
-                            <TouchableOpacity style={styles.heart}>
-                                <Icon type={IconTypes.Ionicons} name={'heart-sharp'} color={Colors?.GREY} size={22} />
+                            <TouchableOpacity style={styles.heart} onPress={onActionToFavorite}>
+                                <Icon type={IconTypes.Ionicons} name={'heart-sharp'} color={liked ? Colors?.PRIMARY : Colors?.GREY} size={22} />
                             </TouchableOpacity>
 
                     }
