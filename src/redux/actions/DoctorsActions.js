@@ -42,7 +42,7 @@ const addHospitalDoctors = (payload) => {
     };
 }
 
-const updateHospitalDoctors = (payload) => {    
+const updateHospitalDoctors = (payload) => {
     return {
         type: ActionTypes.UPDATE_HOSPITAL_DOCTORS,
         payload,
@@ -56,4 +56,29 @@ const getFavDoctors = (payload) => {
     };
 }
 
-export { getAllDoctors, getHospitalDoctors, getDoctorDetails, clearDoctorDetails ,clearAllDoctors, addHospitalDoctors, updateHospitalDoctors, getFavDoctors };
+const removeDocFromFavorites = (payload) => {
+    return {
+        type: ActionTypes.REMOVE_DOC_FROM_FAVORITES,
+        payload,
+    };
+}
+
+const addDocToFavorites = (payload) => {
+    return {
+        type: ActionTypes.ADD_DOC_TO_FAVORITES,
+        payload,
+    };
+}
+
+export {
+    getAllDoctors,
+    getHospitalDoctors,
+    getDoctorDetails,
+    clearDoctorDetails,
+    clearAllDoctors,
+    addHospitalDoctors,
+    updateHospitalDoctors,
+    getFavDoctors,
+    removeDocFromFavorites,
+    addDocToFavorites
+};

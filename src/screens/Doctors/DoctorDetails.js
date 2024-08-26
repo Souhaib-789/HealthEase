@@ -14,7 +14,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { showAlert } from "../../redux/actions/GeneralAction";
 import AVATAR from '../../assets/images/avatar.png'
 import TopTab from "../../components/TopTabs";
-import Appointments from "../Appointment";
 import DoctorCurrAppointments from "../Appointment/DoctorCurrAppointments";
 import { clearDoctorDetails } from "../../redux/actions/DoctorsActions";
 import { DoctorsMiddleware } from "../../redux/middlewares/DoctorsMiddleware";
@@ -25,20 +24,20 @@ import { isUrduLanguage } from "../../utilities/Utilities";
 const DoctorDetails = (props) => {
 
     const isUrdu = isUrduLanguage();
-
     const favDoctorsList = useSelector(state => state.DoctorsReducer?.favDoctorsList)
     const [liked, setLiked] = useState(false)
 
-
     useEffect(() => {
-        checkIsFavorite()
         return () => {
             dispatch(clearDoctorDetails())
         }
     }, [])
 
-    
+    useEffect(() => {
+        checkIsFavorite()
+    }, [favDoctorsList])
 
+    
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const { t } = useTranslation();
@@ -93,7 +92,6 @@ const DoctorDetails = (props) => {
         let check = favDoctorsList?.find(item => item?.id == DETAILS?.id) ? true : false
         setLiked(check)
     }
-
 
     const getSlotsForDay = (date) => {
         setLoading(true)
@@ -170,7 +168,6 @@ const DoctorDetails = (props) => {
         ])
     }
 
-
     const onProceed = () => {
         if (!selectedDate) return dispatch(showAlert({ message: 'Please select a day' }));
         else if (!confirmedSlot) return dispatch(showAlert({ message: 'Please select any timeslot for ' + moment(selectedDate).format('dddd') }));
@@ -178,7 +175,7 @@ const DoctorDetails = (props) => {
     }
 
     const onActionToFavorite = () => {
-        const data = { id: DETAILS?.id , check: liked }
+        const data = { id: DETAILS?.id , check: liked, docInfo: DETAILS }
         dispatch(DoctorsMiddleware.onFavoritePress(data))
     }
 

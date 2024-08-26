@@ -2,7 +2,7 @@ import Axios from 'axios';
 import Apis from '../../apis/apis';
 import { hideLoading, showAlert, showLoading } from '../actions/GeneralAction';
 import { headers } from '../../utilities/Utilities';
-import { addHospitalDoctors, clearAllDoctors, getAllDoctors, getFavDoctors, getHospitalDoctors, updateHospitalDoctors, } from '../actions/DoctorsActions';
+import { addDocToFavorites, addHospitalDoctors, clearAllDoctors, getAllDoctors, getFavDoctors, getHospitalDoctors, removeDocFromFavorites, updateHospitalDoctors, } from '../actions/DoctorsActions';
 import RNFetchBlob from 'rn-fetch-blob';
 
 export const DoctorsMiddleware = {
@@ -376,12 +376,14 @@ export const DoctorsMiddleware = {
       return new Promise(async (resolve, reject) => {
         try {
           dispatch(showLoading());
-          const rawData = { doctor_id: params?.id }
+          const rawData = { doctor_id: params?.id , info: params?.docInfo }
           const data = await Axios.post(Apis.addAndRemoveFavDoctors, rawData, await headers.config());
           if (data?.status == 200) {
-            console.log('++++++++++++++++++');
-            console.log(JSON.stringify(params.check, null ,8));
-            console.log('++++++++++++++++++');
+            if (params.check) {
+              dispatch(removeDocFromFavorites(params?.id));
+            } else {
+              dispatch(addDocToFavorites(params?.docInfo));
+            }
             dispatch(showAlert({ title: 'action to favorite', message: data?.data?.message, type: 'Success', }));
             resolve(true);
           }
