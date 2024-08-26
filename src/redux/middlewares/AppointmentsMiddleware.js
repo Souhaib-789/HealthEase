@@ -22,9 +22,6 @@ export const AppointmentsMiddleware = {
             contact: params?.contactNo
           }
 
-          console.log('====================================');
-          console.log('rawData', JSON.stringify(rawData, null, 8));
-          console.log('====================================');
           const data = await Axios.post(Apis.bookAppointment, rawData, await headers.config());
           if (data?.status == 200) {
             resolve(true)
@@ -120,6 +117,46 @@ export const AppointmentsMiddleware = {
           dispatch(
             showAlert({
               title: 'Complete Appointment',
+              message: error?.response?.data?.message ? error?.response?.data?.message : error?.message,
+              type: 'Error',
+              status: error?.response?.status,
+            }),
+          );
+        } finally {
+          dispatch(hideLoading());
+        }
+      });
+    };
+  },
+
+  //add prescription by doctor
+  onAddPrescription : params => {
+    return dispatch => {
+      dispatch(showLoading());
+      return new Promise(async (resolve, reject) => {
+        try {
+          const rawData = {
+            appintment_id: params?.id,
+            prescription: params?.prescription,
+          }
+          
+          const data = await Axios.post(Apis.writePrescription, rawData, await headers.config());
+          if (data?.status == 200) {
+            resolve(true)
+            dispatch(
+              showAlert({
+                title: 'Add Prescription',
+                message: 'Prescription added successfully',
+                type: 'Success',
+                status: data?.status,
+              }),
+            );
+          }
+        } catch (error) {
+          reject(error);
+          dispatch(
+            showAlert({
+              title: 'Add Prescription',
               message: error?.response?.data?.message ? error?.response?.data?.message : error?.message,
               type: 'Error',
               status: error?.response?.status,

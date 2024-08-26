@@ -24,7 +24,7 @@ const DoctorHome = () => {
     const [loading, setLoading] = useState(true);
     const USER_DATA = useSelector(state => state.AuthReducer.user)
     const APPOINTMENTS = useSelector(state => state.AppointmentsReducer?.doctorAppointmentList)
-    // console.log('USER_DATA ------->>>>', JSON.stringify(SD, null, 8));
+    // console.log('USER_DATA ------->>>>', JSON.stringify(APPOINTMENTS, null, 8));
 
 
     useEffect(() => {

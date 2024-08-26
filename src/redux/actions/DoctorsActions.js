@@ -42,7 +42,7 @@ const addHospitalDoctors = (payload) => {
     };
 }
 
-const updateHospitalDoctors = (payload) => {
+const updateHospitalDoctors = (payload) => {    
     return {
         type: ActionTypes.UPDATE_HOSPITAL_DOCTORS,
         payload,

@@ -13,7 +13,7 @@ import { DoctorsMiddleware } from "../../redux/middlewares/DoctorsMiddleware";
 
 const Doctors = () => {
 
-    const [currCategory, setcurrCategory] = useState();
+    const [currCategory, setcurrCategory] = useState({id:0});
     const Doctors = useSelector(state => state.DoctorsReducer?.allDoctors)
     const ref = useRef(null);
     const dispatch = useDispatch();

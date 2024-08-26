@@ -42,9 +42,9 @@ const DoctorsReducer = (state = initialState, action) => {
 
     case ActionTypes.UPDATE_HOSPITAL_DOCTORS:
       let arr = [...state.hospitalDoctors];
-      let index = arr.findIndex((item) => item._id == action.payload._id);
+      let index = arr.findIndex((item) => item.id == action.payload.id);
       arr.splice(index, 1, action.payload);
-      state = { ...state, hospitalDoctors: arr , INDE: index };
+      state = { ...state, hospitalDoctors: arr  };
       break;
 
     default:

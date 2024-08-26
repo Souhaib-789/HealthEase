@@ -195,6 +195,9 @@ const CreateDoctor = (props) => {
         else if (!TimeSlots) {
             dispatch(showAlert({ message: 'Please set availability' }))
         }
+        else if(duration < 10) {
+            dispatch(showAlert({ message: 'Duration cannot be less than 10 minutes' }))
+        }
         else {
             const data = {
                 name: docName,
@@ -215,6 +218,10 @@ const CreateDoctor = (props) => {
     }
 
     const onPressUpdateDoctor = () => {
+        if(duration < 10) {
+            dispatch(showAlert({ message: 'Duration cannot be less than 10 minutes' }))
+            return
+        }
         const data = {
             id: DETAILS?._id,
             name: docName ? docName : undefined,

@@ -1,7 +1,7 @@
 
 
-// const BASE_URL = `http://192.168.2.106:3000`;
-const BASE_URL = `http://192.168.0.178:3000`;
+const BASE_URL = `http://192.168.2.106:3000`;
+// const BASE_URL = `http://192.168.0.178:3000`;
 
 
 
@@ -16,6 +16,9 @@ const Apis = {
     get_my_appointments: `${BASE_URL}/user/api/getAppointment`,
     getDocterAppointment: `${BASE_URL}/user/api/getDocterAppointment`,
     completeAppointment: `${BASE_URL}/user/api/completeAppointment`,
+
+    //Prescription
+    writePrescription: `${BASE_URL}/user/api/writePrescription`,
 
     //Slots
     getDocterSlots: `${BASE_URL}/user/api/getDocterSlots`,

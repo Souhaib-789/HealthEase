@@ -25,9 +25,6 @@ import { isUrduLanguage } from "../../utilities/Utilities";
 const DoctorDetails = (props) => {
 
     const isUrdu = isUrduLanguage();
-    console.log('====================================');
-    console.log('isUrdu', isUrdu);
-    console.log('====================================');
 
     useEffect(() => {
         return () => {
@@ -35,12 +32,14 @@ const DoctorDetails = (props) => {
         }
     }, [])
 
+    
+
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const { t } = useTranslation();
     const USER = useSelector(state => state.AuthReducer.user)
     const DETAILS = useSelector(state => state.DoctorsReducer?.doctorDetails)
-    console.log('----------', JSON.stringify(DETAILS, null, 8));
+    console.log(JSON.stringify(DETAILS, null, 8));
 
     const [activeCompo, setactiveCompo] = useState({ name: 'Info' })
     const [confirmedSlot, setconfirmedSlot] = useState();
@@ -85,15 +84,11 @@ const DoctorDetails = (props) => {
         },
     ]
 
-console.log('====================================');
-console.log('timeSlots', JSON.stringify(DETAILS, null ,8));
-console.log('====================================');
-
     const getSlotsForDay = (date) => {
         setLoading(true)
         setshowCalendar(false)
         setSelectedDate(date)
-  
+
         let findDay = DETAILS?.slots?.find(item => item?.day == moment(date).format('ddd'))
         // console.log('findDay', findDay.shift_start_Time, findDay.shift_end_Time);
         const data = {
@@ -150,11 +145,28 @@ console.log('====================================');
         )
     }
 
+    const onPressDelDoctor = () => {
+        Alert.alert(t('Delete Doctor'), t('Are you sure you want to delete this doctor?'), [
+            {
+                text: t('Cancel'),
+                onPress: () => console.log('Cancel Pressed'),
+                style: "cancel"
+            },
+            {
+                text: t('Delete'),
+                onPress: null
+            }
+        ])
+    }
+
+
     const onProceed = () => {
         if (!selectedDate) return dispatch(showAlert({ message: 'Please select a day' }));
         else if (!confirmedSlot) return dispatch(showAlert({ message: 'Please select any timeslot for ' + moment(selectedDate).format('dddd') }));
         navigation.navigate('Appointment', { timeSlot: confirmedSlot, date: selectedDate, duration: DETAILS?.duration })
     }
+
+
 
     return (
         <View style={styles.mainContainer}>
@@ -163,11 +175,19 @@ console.log('====================================');
                 <Image source={DETAILS?.image_url ? { uri: DETAILS?.image_url } : AVATAR} style={styles.card_image} />
 
                 <View style={styles.details_card}>
+
                     {
                         USER?.user_role == 'hospital' ?
-                            <TouchableOpacity style={styles.heart} onPress={() => navigation.navigate('CreateDoctor', { screenType: 'edit' })}>
-                                <Icon type={IconTypes.AntDesign} name={'edit'} color={Colors?.DGREY} size={22} />
-                            </TouchableOpacity>
+                            <>
+                                <TouchableOpacity style={styles.trash} onPress={onPressDelDoctor}>
+                                    <Icon type={IconTypes.Ionicons} name={'trash'} color={Colors?.PRIMARY} size={18} />
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={styles.heart} onPress={() => navigation.navigate('CreateDoctor', { screenType: 'edit' })}>
+                                    <Icon type={IconTypes.AntDesign} name={'edit'} color={Colors?.DGREY} size={18} />
+                                </TouchableOpacity>
+                            </>
+
                             :
                             <TouchableOpacity style={styles.heart}>
                                 <Icon type={IconTypes.Ionicons} name={'heart-sharp'} color={Colors?.GREY} size={22} />
@@ -282,7 +302,7 @@ console.log('====================================');
                             </>
                             :
 
-                            <DoctorCurrAppointments docID={DETAILS?.user_id?.id} />
+                            <DoctorCurrAppointments docID={DETAILS?.id} />
                     }
 
                 </View>
@@ -397,6 +417,11 @@ const styles = StyleSheet.create({
     heart: {
         position: "absolute",
         right: 20,
+        top: 20
+    },
+    trash: {
+        position: "absolute",
+        right: 55,
         top: 20
     },
     details_card: {

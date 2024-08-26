@@ -7,11 +7,14 @@ import TextComponent from './TextComponent';
 import Icon, { IconTypes } from './Icon';
 import { Colors } from '../utilities/Colors';
 import { Fonts } from '../utilities/Fonts';
-import PROFILE from '../assets/images/profile.png'
+import AVATAR from '../assets/images/avatar.png'
+import { useSelector } from 'react-redux';
 
 
 const Header = props => {
   const navigation = useNavigation();
+  const USER_DATA = useSelector(state => state.AuthReducer.user)
+
   return (
     <View style={[styles.container, { ...props?.style, justifyContent: props?.chat ? 'flex-start' : 'space-between' }]}>
       <View style={{ width: props?.chat ? '12%' : '20%', }}>
@@ -40,7 +43,7 @@ const Header = props => {
         {
           props?.profile &&
           <TouchableOpacity onPress={() => navigation.navigate('Profile')} >
-            <Image source={PROFILE} style={styles.profile_image} resizeMode='cover'  />
+            <Image source={USER_DATA?.image_url ? { uri: USER_DATA?.image_url } : AVATAR} style={styles.profile_image} resizeMode='cover'  />
           </TouchableOpacity>
         }
       </View>
@@ -101,8 +104,8 @@ const styles = StyleSheet.create({
     color: Colors.PRIMARY
   },
   profile_image: {
-    width: 30,
-    height: 30,
+    width: 35,
+    height: 35,
     borderRadius: 50,
   },
 });

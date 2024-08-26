@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { View, StyleSheet, TouchableOpacity, ScrollView, FlatList, RefreshControl } from "react-native";
 import { Colors } from "../../utilities/Colors";
 import { useNavigation } from "@react-navigation/native";
@@ -14,71 +14,69 @@ import AVATAR from '../../assets/images/avatar.png';
 import Skeleton from "../../components/Skeleton";
 import { getDoctorDetails } from "../../redux/actions/DoctorsActions";
 import { DoctorsMiddleware } from "../../redux/middlewares/DoctorsMiddleware";
+import Input from "../../components/Input";
+import { doctorCategories } from "../../utilities/Utilities";
 
 
 const HospitalDoctors = () => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const DoctorsList = useSelector(state => state.DoctorsReducer?.hospitalDoctors);
-    const SD = useSelector(state => state.DoctorsReducer?.INDE);
+    // console.log(JSON.stringify(DoctorsList, null, 8));
 
-    const [currCategory, setcurrCategory] = useState({ id: 1 });
+    const [currCategory, setcurrCategory] = useState({ id: 0 });
     const [loading, setLoading] = useState(true)
+    const [search, setSearch] = useState('')
+    const ref = useRef(null);
+
 
     useEffect(() => {
         fetchDoctorsData()
-        console.log('====================================');
-        console.log('DoctorsList', JSON.stringify(SD, null, 8));
-        console.log('====================================');
     }, [])
 
-  
 
-    const fetchDoctorsData = () => {
+
+    const fetchDoctorsData = (param) => {
         let data = {
             search: '',
             category: '',
         }
-        dispatch(DoctorsMiddleware.getHospitalDoctorsData(data))
+        dispatch(DoctorsMiddleware.getHospitalDoctorsData(param ? param : data))
             .then(() => setLoading(false))
             .catch(() => setLoading(false))
     }
 
-    const Categories = [
-        {
-            id: 1,
-            name: 'All',
-        },
-        {
-            id: 2,
-            name: 'Dentist'
-        },
-        {
-            id: 3,
-            name: 'Cardiologist'
-        },
-        {
-            id: 4,
-            name: 'Physio Therapist'
-        },
-        {
-            id: 5,
-            name: 'Neurologist'
-        },
-        {
-            id: 6,
-            name: 'Dermatologist'
-        },
-        {
-            id: 7,
-            name: 'Gastroenterologist'
-        },
-    ]
+    const onSearchByCategory = (item) => {
+        setLoading(true);
+        setcurrCategory(item)
+        let data = {
+            search: search ? search : '',
+            category: item?.name ? item?.name : ''
+        }
+        fetchDoctorsData(data);
+    }
+
+
+    const onSearchDoctor = useCallback((val) => {
+        setLoading(true);
+        setSearch(val);
+        clearTimeout(ref.current);
+
+        ref.current = setTimeout(() => {
+            setcurrCategory({ id: 0 });
+            let data = {
+                search: val,
+                category: ''
+            }
+            fetchDoctorsData(data);
+        }, 1000);
+    }, []);
+
 
     const renderCategoryItem = ({ item }) => {
         return (
             <TouchableOpacity style={[styles.category_box, { backgroundColor: item?.id == currCategory?.id ? Colors.BLACK : Colors?.WHITE }]}
-                onPress={() => setcurrCategory(item)}>
+                onPress={() => onSearchByCategory(item)}>
                 <CustomCategoryIcon category={item?.name.toLowerCase()} size={15} color={item?.id == currCategory?.id ? Colors?.WHITE : Colors.PRIMARY} />
                 <TextComponent style={[styles.category_text, { color: item?.id == currCategory?.id ? Colors?.WHITE : Colors.PRIMARY }]} text={item?.name} />
             </TouchableOpacity>
@@ -89,7 +87,7 @@ const HospitalDoctors = () => {
         dispatch(getDoctorDetails(item))
         navigation.navigate('DoctorDetails')
     }
-    
+
     const renderItem = ({ item }) => {
         // console.log(JSON.stringify(item, null ,8));
         return (
@@ -129,11 +127,17 @@ const HospitalDoctors = () => {
                 <FlatList
                     key={"CategoriesList"}
                     showsHorizontalScrollIndicator={false}
-                    data={Categories}
+                    data={[{ id: 0, name: 'All' }, ...doctorCategories]}
                     horizontal
                     renderItem={renderCategoryItem}
                     keyExtractor={item => item?.id}
-                    style={{ width: '100%', marginTop: 10, alignSelf: 'center' }}
+                    style={{ width: '100%', marginTop: 10,  }}
+                />
+
+                <Input
+                    value={search}
+                    search placeholder={'Search'} mainStyle={{ marginVertical: 8, width: '100%', backgroundColor: Colors.WHITE, elevation: 3, borderWidth:0 }}
+                    onChangeText={(e) => onSearchDoctor(e)}
                 />
             </View>
 
@@ -148,7 +152,12 @@ const HospitalDoctors = () => {
                 refreshControl={
                     <RefreshControl
                         refreshing={false}
-                        onRefresh={() => { setLoading(true), fetchDoctorsData() }}
+                        onRefresh={() => {
+                            setLoading(true);
+                            setSearch('');
+                            setcurrCategory({ id: 0 });
+                            fetchDoctorsData();
+                        }}
                     />
                 }
             />
@@ -257,15 +266,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         gap: 10
     },
-    category_box: {
-        width: 50,
-        height: 50,
-        marginHorizontal: 5,
-        backgroundColor: Colors.BG_BLUE,
-        alignItems: "center",
-        justifyContent: "center",
-        borderRadius: 15
-    },
+   
     category_image: {
         width: 25,
         height: 25,
@@ -362,7 +363,7 @@ const styles = StyleSheet.create({
     category_box: {
         paddingVertical: 8,
         paddingHorizontal: 15,
-        marginHorizontal: 10,
+        marginRight: 10,
         marginVertical: 8,
         alignItems: "center",
         justifyContent: "center",

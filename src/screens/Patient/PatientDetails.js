@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, ScrollView, Image } from "react-native";
+import { View, StyleSheet, ScrollView, Image, Alert } from "react-native";
 import Header from "../../components/Header";
 import moment, { duration } from "moment";
 import { Colors } from "../../utilities/Colors";
@@ -21,6 +21,7 @@ const PatientDetails = (props) => {
     const item = props?.route?.params?.item;
     const [openModal, setopenModal] = useState(false)
     const [prescription, setprescription] = useState(null)
+    const [presSubmitted, setPresSubmitted] = useState(false)
     const navigation = useNavigation()
     const dispatch = useDispatch()
     const startTime = moment(item?.startTime).utc().format('hh:mm A')
@@ -37,9 +38,16 @@ const PatientDetails = (props) => {
 
     }
 
-    // console.log('====================================');
-    // console.log('item', JSON.stringify(item, null, 8));
-    // console.log('====================================');
+
+    const onPressSubmitPres = () => {
+        if(!prescription) return Alert.alert('Error', 'Please enter prescription')
+        const data = { id: item?._id, prescription: prescription }
+        dispatch(AppointmentsMiddleware.onAddPrescription(data))
+            .then((res) => {  setopenModal(false) ,  setPresSubmitted(true)})
+            .catch((err) => { console.log('err', err) })
+    }
+
+
     return (
         <View style={styles.mainContainer}>
             <ScrollView>
@@ -71,7 +79,7 @@ const PatientDetails = (props) => {
                                 <Icon name='timer-outline' type={IconTypes.Ionicons} size={18} color={Colors?.BLACK} />
                                 <TextComponent text={'Duration :  '} style={styles.short_heading} />
                             </View>
-                            <TextComponent text={'15 Minutes'} style={styles.texty} />
+                            <TextComponent text={(item?.duration ? item?.duration : 15) + ' Minutes'} style={styles.texty} />
                         </View>
 
                         <View style={styles.hr} />
@@ -104,7 +112,10 @@ const PatientDetails = (props) => {
                         screenType == 'doctor' ?
                             (
                                 <>
-                                    <Button onPress={() => setopenModal(true)} icon={<Icon name='clipboard' type={IconTypes.Feather} size={20} color={Colors?.PRIMARY} />} title={'Write a prescription'} light style={{ marginTop: 15 }} />
+                                {
+                                    presSubmitted ? null :
+                                
+                                    <Button onPress={() => setopenModal(true)} icon={<Icon name='clipboard' type={IconTypes.Feather} size={20} color={Colors?.PRIMARY} />} title={'Write a prescription'} light style={{ marginTop: 15 }} />}
                                     <Button onPress={onMakeCompleted} icon={<Icon name='checkmark-done-circle-outline' type={IconTypes.Ionicons} size={20} color={Colors?.WHITE} />} title={'Make it completed'} style={styles.button} />
                                 </>
                             )
@@ -126,12 +137,13 @@ const PatientDetails = (props) => {
                     multiline
                     numberOfLines={8}
                     onChangeText={(e) => setprescription(e)}
+                    style={{textAlignVertical: 'top'}}
                     mainStyle={{
                         width: '90%',
                         marginTop: 10
                     }} />
 
-                <Button title={'Submit'} onPress={() => setopenModal(false)} style={{ marginTop: 20 }} />
+                <Button title={'Submit'} onPress={onPressSubmitPres} style={{ marginTop: 20 }} />
 
             </FormModal>
         </View>
