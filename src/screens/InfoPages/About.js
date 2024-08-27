@@ -21,7 +21,7 @@ const About = () => {
 
     const getData = () => {
         dispatch(AuthMiddleware.getAboutData())
-            .then((res) => {
+            .then((res) => {               
                 setContent(res)
                 setLoading(false)
             })

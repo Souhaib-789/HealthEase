@@ -37,7 +37,7 @@ const DoctorDetails = (props) => {
         checkIsFavorite()
     }, [favDoctorsList])
 
-    
+
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const { t } = useTranslation();
@@ -122,7 +122,7 @@ const DoctorDetails = (props) => {
 
     const renderDetailsItem = (item, index) => {
         return (
-            <TouchableOpacity style={styles.flex} disabled={!item?.navigate} onPress={() => navigation.navigate(item?.navigate , {item: DETAILS?.Reviews})} >
+            <TouchableOpacity style={styles.flex} disabled={!item?.navigate} onPress={() => navigation.navigate(item?.navigate, { item: DETAILS?.Reviews })} >
                 <View style={{ backgroundColor: Colors?.LIGHT, padding: 8, borderRadius: 50, marginRight: 6 }}>
                     <Icon type={IconTypes?.MaterialIcons} name={item?.icon_name} size={16} color={Colors?.PRIMARY} />
                 </View>
@@ -163,7 +163,16 @@ const DoctorDetails = (props) => {
             },
             {
                 text: t('Delete'),
-                onPress: null
+                onPress: () => {
+                    const data = { id: DETAILS?.id }
+                    dispatch(DoctorsMiddleware.onDelDoctor(data))
+                        .then(() => {
+                            navigation.goBack()
+                        }
+                        )
+                        .catch(err => console.log('err', err))
+
+                }
             }
         ])
     }
@@ -175,9 +184,10 @@ const DoctorDetails = (props) => {
     }
 
     const onActionToFavorite = () => {
-        const data = { id: DETAILS?.id , check: liked, docInfo: DETAILS }
+        const data = { id: DETAILS?.id, check: liked, docInfo: DETAILS }
         dispatch(DoctorsMiddleware.onFavoritePress(data))
     }
+
 
     return (
         <View style={styles.mainContainer}>

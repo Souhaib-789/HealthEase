@@ -49,6 +49,13 @@ const updateHospitalDoctors = (payload) => {
     };
 }
 
+const delHospitalDoctors = (payload) => {
+    return {
+        type: ActionTypes.DEL_HOSPITAL_DOCTORS,
+        payload,
+    };
+}
+
 const getFavDoctors = (payload) => {
     return {
         type: ActionTypes.GET_FAV_DOCTORS,
@@ -80,5 +87,6 @@ export {
     updateHospitalDoctors,
     getFavDoctors,
     removeDocFromFavorites,
-    addDocToFavorites
+    addDocToFavorites,
+    delHospitalDoctors
 };

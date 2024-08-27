@@ -2,7 +2,7 @@ import Axios from 'axios';
 import Apis from '../../apis/apis';
 import { hideLoading, showAlert, showLoading } from '../actions/GeneralAction';
 import { headers } from '../../utilities/Utilities';
-import { addDocToFavorites, addHospitalDoctors, clearAllDoctors, getAllDoctors, getFavDoctors, getHospitalDoctors, removeDocFromFavorites, updateHospitalDoctors, } from '../actions/DoctorsActions';
+import { addDocToFavorites, addHospitalDoctors, clearAllDoctors, delHospitalDoctors, getAllDoctors, getFavDoctors, getHospitalDoctors, removeDocFromFavorites, updateHospitalDoctors, } from '../actions/DoctorsActions';
 import RNFetchBlob from 'rn-fetch-blob';
 
 export const DoctorsMiddleware = {
@@ -376,7 +376,7 @@ export const DoctorsMiddleware = {
       return new Promise(async (resolve, reject) => {
         try {
           dispatch(showLoading());
-          const rawData = { doctor_id: params?.id , info: params?.docInfo }
+          const rawData = { doctor_id: params?.id, info: params?.docInfo }
           const data = await Axios.post(Apis.addAndRemoveFavDoctors, rawData, await headers.config());
           if (data?.status == 200) {
             if (params.check) {
@@ -392,6 +392,36 @@ export const DoctorsMiddleware = {
           dispatch(
             showAlert({
               title: 'action to favorite',
+              message: error?.response?.data?.message ? error?.response?.data?.message : error?.message,
+              type: 'Error',
+              status: error?.response?.status,
+            }),
+          );
+        } finally {
+          dispatch(hideLoading());
+        }
+      });
+    };
+  },
+
+  onDelDoctor: params => {
+    return dispatch => {
+      return new Promise(async (resolve, reject) => {
+        try {
+          dispatch(showLoading());
+          const rawData = { doctor_id: params?.id }
+          const data = await Axios.post(Apis.deleteDocters, rawData, await headers.config());
+          if (data?.status == 200) {
+            console.log('data', JSON.stringify(data?.data, null, 8));
+            dispatch(delHospitalDoctors(params?.id));
+            dispatch(showAlert({ title: 'delete doctor', message: data?.data?.message, type: 'Success', }));
+            resolve(true);
+          }
+        } catch (error) {
+          reject(error);
+          dispatch(
+            showAlert({
+              title: 'delete doctor',
               message: error?.response?.data?.message ? error?.response?.data?.message : error?.message,
               type: 'Error',
               status: error?.response?.status,

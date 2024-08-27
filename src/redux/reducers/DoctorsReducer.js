@@ -62,6 +62,12 @@ const DoctorsReducer = (state = initialState, action) => {
       state = { ...state, hospitalDoctors: arr };
       break;
 
+    case ActionTypes.DEL_HOSPITAL_DOCTORS:
+      let existing_list = [...state.hospitalDoctors];
+      let index_to_del = existing_list.findIndex((item) => item.id == action.payload);
+      existing_list.splice(index_to_del, 1);
+      state = { ...state, hospitalDoctors: existing_list };
+
     default:
       break;
   }
