@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+import { View, StyleSheet, ScrollView, TouchableOpacity, Platform } from "react-native";
 import { Colors } from "../../utilities/Colors";
 import Header from "../../components/Header";
 import perfil from '../../assets/images/profile.png'
@@ -9,26 +9,79 @@ import Button from "../../components/Button";
 import Input from "../../components/Input";
 import Avatar from '../../assets/images/avatar.png'
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import ImageCropPicker from "react-native-image-crop-picker";
+import { AuthMiddleware } from "../../redux/middlewares/AuthMiddleware";
 
 const EditProfile = () => {
-const navigation = useNavigation()
-     const [formData , setFormData] = useState({
-        name: '',
-        contact: '',
-        address: '',
-        weight: '',
-        height: '',
-        bloodGroup: ''
+    const navigation = useNavigation()
+    const USER = useSelector(state => state.AuthReducer?.user);
+    const dispatch = useDispatch()
+
+    const [formData, setFormData] = useState({
+        name: USER?.user_name ? USER?.user_name : null,
+        contact: USER?.phone_number ? USER?.phone_number : null,
+        address: USER?.address ? USER?.address : null,
+        image: undefined
     })
 
+    console.log('====================================');
+    console.log('USER', JSON.stringify(USER, null, 8));
+    console.log('====================================');
+
+    const onUploadPicture = () => {
+        try {
+            ImageCropPicker.openPicker({
+                width: 300,
+                height: 400,
+                cropping: true,
+            }).then(image => {
+                let splitPath = image?.path?.split("/")
+                let filename = splitPath[splitPath?.length - 1]
+                setFormData({
+                    ...formData,
+                    image: {
+                        uri: Platform.OS == 'ios' ? image?.path.replace("file://", "/") : image?.path,
+                        name: filename,
+                        size: image?.size,
+                        type: image?.mime,
+                    }
+                });
+            }).catch(e => {
+                console.log('===>', e);
+            });
+        } catch (e) {
+            console.log('===>', e)
+        }
+    }
+
+
+    const onPressUpdateProfile = () => {
+        const data = {
+            name: formData.name,
+            contact: formData.contact,
+            address: formData.address,
+            image: formData.image,
+            lat: USER?.lat ? USER?.lat : null,
+            lng: USER?.lng ? USER?.lng : null
+        }
+        dispatch(AuthMiddleware.onUpdateProfile(data))
+        .then(() => {
+            navigation.goBack()
+        })
+        .catch(e => {
+            console.log('===>', e)
+            
+        })
+    }
 
     return (
         <View style={styles.Container}>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <Header title={'Edit Profile'} back />
 
-                <Image source={perfil ? perfil : Avatar} style={styles.profile_image} resizeMode={'cover'} />
-                <TouchableOpacity style={styles.picker}>
+                <Image source={USER?.image_url ? { uri: USER?.image_url } : Avatar} style={styles.profile_image} resizeMode={'cover'} />
+                <TouchableOpacity style={styles.picker} onPress={onUploadPicture}>
                     <Icon name={'pencil'} type={IconTypes.Ionicons} size={18} color={Colors.PRIMARY} />
                 </TouchableOpacity>
 
@@ -37,7 +90,7 @@ const navigation = useNavigation()
                     value={
                         formData.name
                     }
-                    onChangeText={(e) => 
+                    onChangeText={(e) =>
                         setFormData({
                             ...formData,
                             name: e
@@ -53,7 +106,7 @@ const navigation = useNavigation()
                     value={
                         formData.contact
                     }
-                    onChangeText={(e) => 
+                    onChangeText={(e) =>
                         setFormData({
                             ...formData,
                             contact: e
@@ -67,7 +120,7 @@ const navigation = useNavigation()
                     value={
                         formData.address
                     }
-                    onChangeText={(e) => 
+                    onChangeText={(e) =>
                         setFormData({
                             ...formData,
                             address: e
@@ -76,54 +129,8 @@ const navigation = useNavigation()
                     parentStyle={styles.input}
                 />
 
-                <Input
-                    label={'Weight'}
-                    placeholder={'Enter your weight'}
-                    value={
-                        formData.weight
-                    }
-                    onChangeText={(e) => 
-                        setFormData({
-                            ...formData,
-                            weight: e
-                        })
-                    }
-                    parentStyle={styles.input}
-                />
-
-                <Input
-                    label={'Height'}
-                    placeholder={'Enter your height'}
-                    value={
-                        formData.height
-                    }
-                    onChangeText={(e) => 
-                        setFormData({
-                            ...formData,
-                            height: e
-                        })
-                    }
-                    parentStyle={styles.input}
-                />
-
-<Input
-                    label={'Blood Group'}
-                    placeholder={'Enter your blood group'}
-                    value={
-                        formData.bloodGroup
-                    }
-                    onChangeText={(e) => 
-                        setFormData({
-                            ...formData,
-                            bloodGroup: e
-                        })
-                    }
-                    parentStyle={styles.input}
-                />
-
-
             </ScrollView>
-            <Button title={'Save'} onPress={() => navigation.goBack()} style={{ marginBottom: 20 }} />
+            <Button title={'Save'} onPress={onPressUpdateProfile} style={{ marginBottom: 20 }} />
 
         </View>
     )

@@ -15,6 +15,9 @@ import { useNavigation } from "@react-navigation/native";
 import AVATAR from '../../assets/images/avatar.png';
 import { useTranslation } from "react-i18next";
 import { isUrduLanguage } from "../../utilities/Utilities";
+import { useDispatch } from "react-redux";
+import { ReviewMiddleware } from "../../redux/middlewares/ReviewMiddleware";
+import { showAlert } from "../../redux/actions/GeneralAction";
 
 const AppointmentDetails = (props) => {
 
@@ -23,7 +26,7 @@ const AppointmentDetails = (props) => {
     const startTime = moment(routeData?.startTime).utc().format('hh:mm A')
     const endTime = moment(routeData?.endTime).utc().format('hh:mm A')
     // console.log('--------', JSON.stringify(routeData, null, 8));
-    const {t} = useTranslation();
+    const { t } = useTranslation();
     const details = [
         {
             name: 'Reviews',
@@ -62,6 +65,7 @@ const AppointmentDetails = (props) => {
     const [review, setReview] = useState('');
     const [rating, setRating] = useState(0);
     const isUrdu = isUrduLanguage();
+    const dispatch = useDispatch();
 
     const goToLocation = () => {
         const scheme = Platform.select({ ios: 'maps://0,0?q=', android: 'geo:0,0?q=' });
@@ -74,6 +78,30 @@ const AppointmentDetails = (props) => {
 
 
         Linking.openURL(url);
+    }
+
+    const onPressSubmitReview = () => {
+        if (!rating) {
+            alert(t('Please give rating'))
+        }
+        else if (!review) {
+            alert(t('Please write review statement'))
+        }
+        else {
+            const data = {
+                rating: rating,
+                review: review,
+                id: routeData?.docter?.id
+            }
+            dispatch(ReviewMiddleware.onSubmitReview(data))
+                .then(() => {
+                    setShowReviewModal(false)
+                    dispatch(showAlert({ title: 'Review', message: 'Review submitted successfully', type: 'success' }))
+                    navigation.goBack()
+                }).catch((error) => {
+                    console.log('error', error);
+                })
+        }
     }
 
 
@@ -100,24 +128,24 @@ const AppointmentDetails = (props) => {
                         <TextComponent style={styles.heading} text={
                             screenType === 'upcoming' ? 'Scheduled Appointment'
                                 : 'Completed Appointment'} />
-                        <View style={[styles.wide_row , {flexDirection: isUrdu ? 'row-reverse' : 'row'}]}>
-                            <View style={[styles.row , {flexDirection: isUrdu ? 'row-reverse' : 'row'}]}>
+                        <View style={[styles.wide_row, { flexDirection: isUrdu ? 'row-reverse' : 'row' }]}>
+                            <View style={[styles.row, { flexDirection: isUrdu ? 'row-reverse' : 'row' }]}>
                                 <Icon name='calendar-clear-outline' type={IconTypes.Ionicons} size={18} color={Colors?.BLACK} />
                                 <TextComponent text={'Day : '} style={styles.short_heading} />
                             </View>
                             <TextComponent text={routeData?.date ? moment(routeData?.date).format('dddd , DD MMMM') : '--'} style={styles.texty} />
                         </View>
 
-                        <View style={[styles.wide_row , {flexDirection: isUrdu ? 'row-reverse' : 'row'}]}>
-                            <View style={[styles.row , {flexDirection: isUrdu ? 'row-reverse' : 'row'}]}>
+                        <View style={[styles.wide_row, { flexDirection: isUrdu ? 'row-reverse' : 'row' }]}>
+                            <View style={[styles.row, { flexDirection: isUrdu ? 'row-reverse' : 'row' }]}>
                                 <Icon name='clockcircleo' type={IconTypes.AntDesign} size={18} color={Colors?.BLACK} />
                                 <TextComponent text={'Time : '} style={styles.short_heading} />
                             </View>
                             <TextComponent text={startTime ? startTime + ' - ' + endTime : '--'} style={styles.texty} />
                         </View>
 
-                        <View style={[styles.wide_row , {flexDirection: isUrdu ? 'row-reverse' : 'row'}]}>
-                            <View style={[styles.row , {flexDirection: isUrdu ? 'row-reverse' : 'row'}]}>
+                        <View style={[styles.wide_row, { flexDirection: isUrdu ? 'row-reverse' : 'row' }]}>
+                            <View style={[styles.row, { flexDirection: isUrdu ? 'row-reverse' : 'row' }]}>
                                 <Icon name='timer-outline' type={IconTypes.Ionicons} size={18} color={Colors?.BLACK} />
                                 <TextComponent text={'Duration : '} style={styles.short_heading} />
                             </View>
@@ -129,17 +157,17 @@ const AppointmentDetails = (props) => {
 
                         <TextComponent style={styles.heading} text={'Patient Info'} />
 
-                        <View style={[styles.wide_row , {flexDirection: isUrdu ? 'row-reverse' : 'row'}]}>
+                        <View style={[styles.wide_row, { flexDirection: isUrdu ? 'row-reverse' : 'row' }]}>
                             <TextComponent text={'Name'} style={styles.short_heading} />
                             <TextComponent text={routeData?.name ? routeData?.name : '--'} style={styles.textx} />
                         </View>
 
-                        <View style={[styles.wide_row , {flexDirection: isUrdu ? 'row-reverse' : 'row'}]}>
+                        <View style={[styles.wide_row, { flexDirection: isUrdu ? 'row-reverse' : 'row' }]}>
                             <TextComponent text={'Relationship'} style={styles.short_heading} />
-                            <TextComponent text={routeData?.relation ? routeData?.relation : '--' } style={styles.textx} />
+                            <TextComponent text={routeData?.relation ? routeData?.relation : '--'} style={styles.textx} />
                         </View>
 
-                        <View style={[styles.wide_row , {flexDirection: isUrdu ? 'row-reverse' : 'row'}]}>
+                        <View style={[styles.wide_row, { flexDirection: isUrdu ? 'row-reverse' : 'row' }]}>
                             <TextComponent text={'Contact No.'} style={styles.short_heading} />
                             <TextComponent text={routeData?.contact ? routeData?.contact : '--'} style={styles.textx} />
                         </View>
@@ -188,18 +216,7 @@ const AppointmentDetails = (props) => {
                     />
 
                 </View>
-                <Button title={'Submit'} onPress={() => {
-                    if (!rating) {
-                        alert(t('Please give rating'))
-                    }
-                    else if (!review) {
-                        alert(t('Please write review statement'))
-                    }
-                    else {
-                        setShowReviewModal(false), navigation.goBack()
-                    }
-                }
-                }
+                <Button title={'Submit'} onPress={onPressSubmitReview}
                 />
             </FormModal>
         </View>

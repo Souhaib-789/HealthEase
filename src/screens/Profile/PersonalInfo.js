@@ -8,6 +8,8 @@ import TextComponent from '../../components/TextComponent'
 import { Fonts } from '../../utilities/Fonts'
 import { useSelector } from 'react-redux'
 import moment from 'moment'
+import STAR from '../../assets/images/star.png';
+import { Rating } from 'react-native-ratings'
 
 const PersonalInfo = () => {
     const navigation = useNavigation()
@@ -58,21 +60,27 @@ const PersonalInfo = () => {
         },
         {
             id: 8,
+            info: USER?.average_rating ? USER?.average_rating : 0,
+            icon: <Icon name={'account-star'} type={IconTypes.MaterialCommunityIcons} size={15} color={Colors.PRIMARY} />,
+            review: true
+        },
+        {
+            id: 9,
             info: USER?.about ? USER?.about + ' per slot' : '--',
             icon: <Icon name={'info'} type={IconTypes.MaterialIcons} size={15} color={Colors.PRIMARY} />,
         },
         {
-            id: 9,
+            id: 10,
             slots: true,
             icon: <Icon name={'clockcircle'} type={IconTypes.AntDesign} size={15} color={Colors.PRIMARY} />,
         }
 
     ]
-    
+
     console.log('====================================');
-    console.log('USER', JSON.stringify(USER , null ,8));
+    console.log('USER', JSON.stringify(USER, null, 8));
     console.log('====================================');
-    
+
     const renderItem = ({ item, index }) => {
         return (
             <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', gap: 15, marginVertical: 10, }}>
@@ -80,7 +88,7 @@ const PersonalInfo = () => {
                     {item?.icon}
                 </View>
                 {
-                    
+
                     item?.slots ?
                         <FlatList
                             data={USER?.slots}
@@ -95,8 +103,20 @@ const PersonalInfo = () => {
                             keyExtractor={(item, index) => index.toString()}
                             showsVerticalScrollIndicator={false}
                         />
-                        :
-                        <TextComponent text={item?.info} style={{ fontSize: 12, color: Colors.DGREY, width: '80%' }} />
+                        : item?.review ?
+                            <Rating
+                                type='custom'
+                                ratingImage={STAR}
+                                ratingColor={Colors.WHITE}
+                                ratingBackgroundColor={Colors.WHITE}
+                                ratingCount={USER?.average_rating}
+                                readonly={true}
+                                imageSize={18}
+                                onFinishRating={this.ratingCompleted}
+                                style={{ paddingVertical: 5, alignSelf: 'flex-start' }}
+                            />
+                            :
+                            <TextComponent text={item?.info} style={{ fontSize: 12, color: Colors.DGREY, width: '80%' }} />
                 }
             </TouchableOpacity>
         )

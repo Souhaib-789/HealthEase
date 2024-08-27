@@ -1,7 +1,7 @@
 
 
-const BASE_URL = `http://192.168.2.106:3000`;
-// const BASE_URL = `http://192.168.0.178:3000`;
+// const BASE_URL = `http://192.168.2.106:3000`;
+const BASE_URL = `http://192.168.0.178:3000`;
 
 
 
@@ -9,6 +9,7 @@ const Apis = {
 
     signup: `${BASE_URL}/user/api/user-register`,
     login: `${BASE_URL}/user/api/login`,
+    update_profile: `${BASE_URL}/user/api/update-profile`,
 
     getDoctors: `${BASE_URL}/user/api/getDocters`,
     getFavDocters: `${BASE_URL}/user/api/getFavDocters`,
@@ -32,6 +33,13 @@ const Apis = {
 
     //add remove favorite
     addAndRemoveFavDoctors: `${BASE_URL}/user/api/addAndRemoveFavDoctors`,
+
+    //Review
+    addReview: `${BASE_URL}/user/api/addReview`,
+
+    //Info Pages
+    about: `${BASE_URL}/user/api/about`,
+    privacy_policy: `${BASE_URL}/user/api/privacy-policy`,
 
 }
 

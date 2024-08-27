@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { AuthMiddleware } from "../../redux/middlewares/AuthMiddleware";
 import Skeleton from "../../components/Skeleton";
 
-const About = () => {
+const PrivacyPolicy = () => {
 
     const dispatch = useDispatch();
     const [content, setContent] = useState('');
@@ -20,7 +20,7 @@ const About = () => {
     }, [])
 
     const getData = () => {
-        dispatch(AuthMiddleware.getAboutData())
+        dispatch(AuthMiddleware.getPrivacyPolicyData())
             .then((res) => {
                 setContent(res)
                 setLoading(false)
@@ -34,9 +34,8 @@ const About = () => {
 
     return (
         <View style={styles.Container}>
-            <Header title={'About Us'} back profile />
+            <Header title={'Privacy Policy'} back profile />
             <ScrollView style={styles.scrollview}>
-                <TextComponent style={styles.heading} text={'Healthease App'} />
                 {
                     loading ?
                         <>
@@ -59,7 +58,7 @@ const About = () => {
     )
 }
 
-export default About;
+export default PrivacyPolicy;
 
 const styles = StyleSheet.create({
     Container: {

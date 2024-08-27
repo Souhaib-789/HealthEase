@@ -7,42 +7,46 @@ import TextComponent from "../../components/TextComponent";
 import { Fonts } from "../../utilities/Fonts";
 import { Rating, AirbnbRating } from 'react-native-ratings';
 import STAR from '../../assets/images/star.png';
+import { useSelector } from "react-redux";
 
 
-const Reviews = () => {
+const Reviews = (props) => {
 
-    const Reviews = [
-        {
-            id: 1,
-            name: 'Dr. Crick',
-            fees: '2500',
-            rating: 5,
-            hearted: false,
-            category: 'Doc is very cooperative and i trust him.',
-            hospital_name: 'Jhon Pablo',
-            experience: 5,
-        },
-        {
-            id: 2,
-            name: 'Dr. Strain',
-            fees: '2200',
-            rating: 3,
-            hearted: true,
-            category: 'Doc is very cooperative and i trust him.',
-            hospital_name: 'henry ford',
-            experience: 3,
-        },
-        {
-            id: 3,
-            name: 'Dr. Lachinet',
-            fees: '2900',
-            rating: 2,
-            hearted: false,
-            category: 'Physio Therapy Specialist',
-            hospital_name: 'City Hospital',
-            experience: 5,
-        }
-    ]
+    // const Reviews = [
+    //     {
+    //         id: 1,
+    //         name: 'Dr. Crick',
+    //         fees: '2500',
+    //         rating: 5,
+    //         hearted: false,
+    //         category: 'Doc is very cooperative and i trust him.',
+    //         hospital_name: 'Jhon Pablo',
+    //         experience: 5,
+    //     },
+    //     {
+    //         id: 2,
+    //         name: 'Dr. Strain',
+    //         fees: '2200',
+    //         rating: 3,
+    //         hearted: true,
+    //         category: 'Doc is very cooperative and i trust him.',
+    //         hospital_name: 'henry ford',
+    //         experience: 3,
+    //     },
+    //     {
+    //         id: 3,
+    //         name: 'Dr. Lachinet',
+    //         fees: '2900',
+    //         rating: 2,
+    //         hearted: false,
+    //         category: 'Physio Therapy Specialist',
+    //         hospital_name: 'City Hospital',
+    //         experience: 5,
+    //     }
+    // ]
+
+    const item = props.route?.params?.item;
+    const USER = useSelector(state => state.AuthReducer?.user);
 
     return (
         <View style={styles.mainContainer}>
@@ -52,7 +56,7 @@ const Reviews = () => {
                 <FlatList
                     key={"ReviewsList"}
                     showsVerticalScrollIndicator={false}
-                    data={Reviews}
+                    data={USER?.user_role == 'doctor' ? USER?.Reviews : item}
                     renderItem={({ item }) => (
                         <View style={styles.reviewCard}>
 
@@ -61,13 +65,13 @@ const Reviews = () => {
                                 ratingImage={STAR}
                                 ratingColor={Colors.WHITE}
                                 ratingBackgroundColor={Colors.WHITE}
-                                ratingCount={5}
+                                ratingCount={item?.rating}
                                 readonly={true}
                                 imageSize={18}
                                 onFinishRating={this.ratingCompleted}
-                                style={{ paddingVertical: 5 , alignSelf: 'flex-start' }}
+                                style={{ paddingVertical: 5, alignSelf: 'flex-start' }}
                             />
-                            <TextComponent style={styles.reviewText} text={item.category} />
+                            <TextComponent style={styles.reviewText} text={item?.review} />
                             <TextComponent style={styles.reviewAuthor} text={item.hospital_name} />
                         </View>
                     )}

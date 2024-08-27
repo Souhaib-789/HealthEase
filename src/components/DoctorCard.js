@@ -49,7 +49,7 @@ const DoctorCard = ({ item, book, heart, style, loading }) => {
                                 <Icon type={IconTypes.Ionicons} name={'heart-sharp'} color={Colors?.PRIMARY} size={20} />
                             }
                         </View>
-                        <TextComponent style={[styles.span, { color: Colors.BLACK, alignSelf:'flex-start'   }]} text={item?.specialization ? item?.specialization : '--'} />
+                        <TextComponent style={[styles.span, { color: Colors.BLACK, alignSelf: 'flex-start' }]} text={item?.specialization ? item?.specialization : '--'} />
 
                         <View style={[styles.flex, { gap: 5 }]}>
                             <Icon name={'location'} type={IconTypes?.EvilIcons} size={16} color={Colors?.DDGREY} />
@@ -63,7 +63,10 @@ const DoctorCard = ({ item, book, heart, style, loading }) => {
                             </View>
                             {
                                 book &&
-                                <Button title={'Book Now'} onPress={() => navigation.navigate('DoctorDetails', { item: item })} style={styles.button} light text_style={{ fontSize: 10 }} />
+                                <Button title={'Book Now'} onPress={() => {
+                                    dispatch(getDoctorDetails(item))
+                                    navigation.navigate('DoctorDetails')
+                                }} style={styles.button} light text_style={{ fontSize: 10 }} />
                             }
                         </View>
                     </View>

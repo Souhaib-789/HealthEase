@@ -43,7 +43,7 @@ const DoctorDetails = (props) => {
     const { t } = useTranslation();
     const USER = useSelector(state => state.AuthReducer.user)
     const DETAILS = useSelector(state => state.DoctorsReducer?.doctorDetails)
-    // console.log('----------', JSON.stringify(DETAILS, null, 8));
+    console.log('----DOCTOR DETAILS------', JSON.stringify(DETAILS, null, 8));
 
     const [activeCompo, setactiveCompo] = useState({ name: 'Info' })
     const [confirmedSlot, setconfirmedSlot] = useState();
@@ -71,8 +71,8 @@ const DoctorDetails = (props) => {
 
     const details = [
         {
-            name: 'Reviews',
-            no: `${DETAILS?.rating ? DETAILS?.rating : 0} `,
+            name: DETAILS?.Reviews?.length > 1 ? 'Reviews' : 'Review',
+            no: `${DETAILS?.Reviews?.length > 0 ? DETAILS?.Reviews?.length : 0} `,
             icon_name: 'star',
             navigate: 'Reviews'
         },
@@ -122,7 +122,7 @@ const DoctorDetails = (props) => {
 
     const renderDetailsItem = (item, index) => {
         return (
-            <TouchableOpacity style={styles.flex} disabled={!item?.navigate} onPress={() => navigation.navigate(item?.navigate)} >
+            <TouchableOpacity style={styles.flex} disabled={!item?.navigate} onPress={() => navigation.navigate(item?.navigate , {item: DETAILS?.Reviews})} >
                 <View style={{ backgroundColor: Colors?.LIGHT, padding: 8, borderRadius: 50, marginRight: 6 }}>
                     <Icon type={IconTypes?.MaterialIcons} name={item?.icon_name} size={16} color={Colors?.PRIMARY} />
                 </View>

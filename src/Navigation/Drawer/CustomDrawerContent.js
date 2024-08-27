@@ -43,7 +43,7 @@ function CustomDrawerContent(props) {
         {
             id: 6,
             screenName: 'Privacy Policy',
-            goto: 'About',
+            goto: 'PrivacyPolicy',
             icon: <Icon type={IconTypes.AntDesign} name={'infocirlceo'} size={18} />
         },
         {

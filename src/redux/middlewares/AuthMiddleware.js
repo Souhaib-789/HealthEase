@@ -5,6 +5,7 @@ import { hideLoading, showAlert, showLoading } from '../actions/GeneralAction';
 import { Storage } from '../../utilities/AsyncStorage';
 import { login, userData } from '../actions/AuthAction';
 import { getDoctorPersonalData } from '../actions/DoctorsActions';
+import { headers } from '../../utilities/Utilities';
 
 export const AuthMiddleware = {
 
@@ -22,10 +23,10 @@ export const AuthMiddleware = {
           // console.log(JSON.stringify(data, null, 8))
           if (data?.status == 200) {
             await Storage.setToken(data?.data?.token);
-            
+
             if (data?.data?.user?.user_role == 'doctor') {
-              await Storage.set('@user', JSON.stringify({...data?.data?.user , ...data?.data?.details}));
-              dispatch(userData({...data?.data?.user , ...data?.data?.details}));
+              await Storage.set('@user', JSON.stringify({ ...data?.data?.user, ...data?.data?.details }));
+              dispatch(userData({ ...data?.data?.user, ...data?.data?.details }));
               dispatch(login(true));
             } else {
               await Storage.set('@user', JSON.stringify(data?.data?.user));
@@ -145,26 +146,100 @@ export const AuthMiddleware = {
   },
 
 
+  onUpdateProfile: userdata => {
+    return dispatch => {
+      dispatch(showLoading());
+      return new Promise(async (resolve, reject) => {
+        try {
 
-  //   logout: () => {
-  //     return dispatch => {
-  //       dispatch(showLoading());
-  //       return new Promise(async (resolve, reject) => {
-  //         try {
-  //           const data = await Axios.get(Apis.logout, await headers.config());
-  //           if (data?.status == 200) {
-  //             resolve(true);
-  //           }
-  //         } catch (error) {
-  //           reject(error);
-  //         } finally {
-  //           dispatch(hideLoading());
-  //           await Storage.clearStorage();
-  //           dispatch(Logout());
-  //         }
-  //       });
-  //     };
-  //   },
+          let formData = new FormData();
+          if (userdata?.name) {
+            formData.append('user_name', userdata?.name);
+          }
+
+          formData.append('address', userdata?.address);
+          if (userdata?.lat) {
+            formData.append('lat', userdata?.lat);
+          }
+          if (userdata?.lng) {
+            formData.append('lng', userdata?.lng);
+          }
+
+          if (userdata?.contact) {
+            formData.append('phone_number', userdata?.contact);
+          }
+          if (userdata?.image) {
+            formData.append('image', userdata?.image);
+          }
+          console.log('====================================');
+          console.log('data', JSON.stringify(formData, null, 8));
+          console.log('====================================');
+
+          const data = await Axios.post(Apis.update_profile, formData, await headers.config());
+          // console.log(JSON.stringify(data, null, 8))
+          if (data?.status == 200) {
+            console.log('====================================');
+            console.log('data', JSON.stringify(data?.data, null, 8));
+            console.log('====================================');
+            resolve(true);
+            dispatch(
+              showAlert({
+                title: 'edit profile',
+                message: data?.data?.message,
+                type: 'Success',
+                status: data?.status,
+              }),
+            );
+          }
+        } catch (error) {
+          reject(error);
+          dispatch(
+            showAlert({
+              title: 'edit profile',
+              message: error?.response?.data?.message,
+              type: 'Error',
+              status: error?.response?.status,
+            }),
+          );
+        } finally {
+          dispatch(hideLoading());
+        }
+      });
+    };
+  },
+
+
+  getAboutData: () => {
+    return dispatch => {
+      return new Promise(async (resolve, reject) => {
+        try {
+          const data = await Axios.get(Apis.about, await headers.config());
+          if (data?.status == 200) {
+            resolve(data?.data?.data);
+          }
+        } catch (error) {
+          reject(error);
+          dispatch(showAlert({ message: 'Something went wrong while loading content', type: 'Error' }));
+        }
+      });
+    };
+  },
+
+  getPrivacyPolicyData: () => {
+    return dispatch => {
+      return new Promise(async (resolve, reject) => {
+        try {
+          const data = await Axios.get(Apis.privacy_policy, await headers.config());
+          if (data?.status == 200) {
+            resolve(data?.data?.data);
+          }
+        } catch (error) {
+          reject(error);
+          dispatch(showAlert({ message: 'Something went wrong while loading content', type: 'Error' }));
+        }
+      });
+    };
+  },
 
 
 
