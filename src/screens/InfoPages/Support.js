@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Alert, Linking,  StyleSheet, TouchableOpacity, View } from "react-native";
 import TextComponent from "../../components/TextComponent";
 import Header from "../../components/Header";
@@ -7,9 +7,35 @@ import Image from "../../components/Image";
 import { Colors } from "../../utilities/Colors";
 import CALL from '../../assets/images/call.png'
 import { Fonts } from "../../utilities/Fonts";
+import { useDispatch } from "react-redux";
+import { AuthMiddleware } from "../../redux/middlewares/AuthMiddleware";
 
 
 const Support = () => {
+
+    const dispatch = useDispatch();
+    const [List, setList] = useState('');
+    const [loading, setLoading] = useState(true);
+
+
+    useEffect(() => {
+        getData()
+    }, [])
+
+    const getData = () => {
+        dispatch(AuthMiddleware.getSupportData())
+            .then((res) => {               
+                // setList(res)
+                console.log('===============support=====================');
+                console.log(JSON.stringify(res, null, 8));
+                console.log('====================================');
+                setLoading(false)
+            })
+            .catch((error) => {
+                console.log('about error', error)
+                setLoading(false)
+            })
+    }
 
 
     const onPressCall = async (e) => {

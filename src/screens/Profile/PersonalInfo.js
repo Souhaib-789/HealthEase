@@ -28,7 +28,7 @@ const PersonalInfo = () => {
         {
             id: 4,
             icon: <Icon name={'location-pin'} type={IconTypes.Entypo} size={15} color={Colors.PRIMARY} />,
-            info: USER?.address
+            info:  USER?.address?.address ? USER?.address?.address : '--'
         }
     ]
 
@@ -60,7 +60,7 @@ const PersonalInfo = () => {
         },
         {
             id: 8,
-            info: USER?.average_rating ? USER?.average_rating : 0,
+            info: USER?.average_rating ? USER?.average_rating : 'no rating yet',
             icon: <Icon name={'account-star'} type={IconTypes.MaterialCommunityIcons} size={15} color={Colors.PRIMARY} />,
             review: true
         },
@@ -77,9 +77,7 @@ const PersonalInfo = () => {
 
     ]
 
-    console.log('====================================');
-    console.log('USER', JSON.stringify(USER, null, 8));
-    console.log('====================================');
+
 
     const renderItem = ({ item, index }) => {
         return (
@@ -103,7 +101,7 @@ const PersonalInfo = () => {
                             keyExtractor={(item, index) => index.toString()}
                             showsVerticalScrollIndicator={false}
                         />
-                        : item?.review ?
+                        : (item?.review && USER?.average_rating > 0) ?
                             <Rating
                                 type='custom'
                                 ratingImage={STAR}

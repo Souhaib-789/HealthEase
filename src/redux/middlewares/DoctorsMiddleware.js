@@ -298,6 +298,10 @@ export const DoctorsMiddleware = {
             dataToSend.push(...responseData)
           }
 
+          console.log('====================================');
+          console.log(JSON.stringify(dataToSend, null, 8));
+          console.log('====================================');
+
           await RNFetchBlob
             // .config({ timeout: 60 * 60 })
             .fetch("POST", Apis.updateDocter,

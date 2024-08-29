@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { View, StyleSheet, ScrollView, TouchableOpacity, Platform } from "react-native";
 import { Colors } from "../../utilities/Colors";
 import Header from "../../components/Header";
-import perfil from '../../assets/images/profile.png'
 import Image from "../../components/Image";
 import Icon, { IconTypes } from "../../components/Icon";
 import Button from "../../components/Button";
@@ -18,16 +17,11 @@ const EditProfile = () => {
     const USER = useSelector(state => state.AuthReducer?.user);
     const dispatch = useDispatch()
 
-    const [formData, setFormData] = useState({
-        name: USER?.user_name ? USER?.user_name : null,
-        contact: USER?.phone_number ? USER?.phone_number : null,
-        address: USER?.address ? USER?.address : null,
-        image: undefined
-    })
+    const [name, setName] = useState(USER?.user_name ? USER?.user_name : '')
+    const [contact, setContact] = useState(USER?.phone_number ? USER?.phone_number : '')
+    const [address, setAddress] = useState(USER?.address?.address ? USER?.address?.address : '')
+    const [image, setImage] = useState(null)
 
-    console.log('====================================');
-    console.log('USER', JSON.stringify(USER, null, 8));
-    console.log('====================================');
 
     const onUploadPicture = () => {
         try {
@@ -38,14 +32,11 @@ const EditProfile = () => {
             }).then(image => {
                 let splitPath = image?.path?.split("/")
                 let filename = splitPath[splitPath?.length - 1]
-                setFormData({
-                    ...formData,
-                    image: {
-                        uri: Platform.OS == 'ios' ? image?.path.replace("file://", "/") : image?.path,
-                        name: filename,
-                        size: image?.size,
-                        type: image?.mime,
-                    }
+                setImage({
+                    uri: Platform.OS == 'ios' ? image?.path.replace("file://", "/") : image?.path,
+                    name: filename,
+                    size: image?.size,
+                    type: image?.mime,
                 });
             }).catch(e => {
                 console.log('===>', e);
@@ -58,21 +49,21 @@ const EditProfile = () => {
 
     const onPressUpdateProfile = () => {
         const data = {
-            name: formData.name,
-            contact: formData.contact,
-            address: formData.address,
-            image: formData.image,
+            name: name ? name : null,
+            contact: contact ? contact : null,
+            address: address ,
+            image: image ? image : null,
             lat: USER?.lat ? USER?.lat : null,
             lng: USER?.lng ? USER?.lng : null
         }
         dispatch(AuthMiddleware.onUpdateProfile(data))
-        .then(() => {
-            navigation.goBack()
-        })
-        .catch(e => {
-            console.log('===>', e)
-            
-        })
+            .then(() => {
+                navigation.goBack()
+            })
+            .catch(e => {
+                console.log('===>', e)
+
+            })
     }
 
     return (
@@ -80,22 +71,15 @@ const EditProfile = () => {
             <ScrollView showsVerticalScrollIndicator={false}>
                 <Header title={'Edit Profile'} back />
 
-                <Image source={USER?.image_url ? { uri: USER?.image_url } : Avatar} style={styles.profile_image} resizeMode={'cover'} />
+                <Image source={image?.uri ? { uri: image?.uri } : USER?.image ? { uri: USER?.image } :  Avatar} style={styles.profile_image} resizeMode={'cover'} />
                 <TouchableOpacity style={styles.picker} onPress={onUploadPicture}>
                     <Icon name={'pencil'} type={IconTypes.Ionicons} size={18} color={Colors.PRIMARY} />
                 </TouchableOpacity>
 
                 <Input
                     label={'Name'}
-                    value={
-                        formData.name
-                    }
-                    onChangeText={(e) =>
-                        setFormData({
-                            ...formData,
-                            name: e
-                        })
-                    }
+                    value={name}
+                    onChangeText={(e) => setName(e)}
                     placeholder={'Enter your name'}
                     parentStyle={styles.input} />
 
@@ -103,29 +87,15 @@ const EditProfile = () => {
                     label={'Contact No.'}
                     keyboardType={'number-pad'}
                     placeholder={'Enter your contact number'}
-                    value={
-                        formData.contact
-                    }
-                    onChangeText={(e) =>
-                        setFormData({
-                            ...formData,
-                            contact: e
-                        })
-                    }
+                    value={contact}
+                    onChangeText={(e) => setContact(e)}
                     parentStyle={styles.input} />
 
                 <Input
                     label={'Address'}
                     placeholder={'Enter your address'}
-                    value={
-                        formData.address
-                    }
-                    onChangeText={(e) =>
-                        setFormData({
-                            ...formData,
-                            address: e
-                        })
-                    }
+                    value={address}
+                    onChangeText={(e) => setAddress(e)}
                     parentStyle={styles.input}
                 />
 

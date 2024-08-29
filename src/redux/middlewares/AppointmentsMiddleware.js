@@ -136,7 +136,7 @@ export const AppointmentsMiddleware = {
       return new Promise(async (resolve, reject) => {
         try {
           const rawData = {
-            appintment_id: params?.id,
+            appointment_id: params?.id,
             prescription: params?.prescription,
           }
           

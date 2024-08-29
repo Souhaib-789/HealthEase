@@ -26,7 +26,7 @@ const PatientDetails = (props) => {
     const dispatch = useDispatch()
     const startTime = moment(item?.startTime).utc().format('hh:mm A')
     const endTime = moment(item?.endTime).utc().format('hh:mm A')
-    // console.log('item', JSON.stringify(item, null, 8))
+    console.log('item', JSON.stringify(item, null, 8))
 
     const onMakeCompleted = () => {
         const data = { id: item?._id }
@@ -52,7 +52,7 @@ const PatientDetails = (props) => {
         <View style={styles.mainContainer}>
             <ScrollView>
                 <Header title={'Details'} back />
-                <Image source={item?.patient?.image_url ? { uri: item?.patient?.image_url } : AVATAR} style={styles.card_image} />
+                <Image source={item?.patient?.image ? { uri: item?.patient?.image } : AVATAR} style={styles.card_image} />
 
                 <View style={styles.details_card}>
 

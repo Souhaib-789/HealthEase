@@ -1,10 +1,8 @@
 import Axios from 'axios';
-// import { headers } from '../../Utils';
 import Apis from '../../apis/apis';
 import { hideLoading, showAlert, showLoading } from '../actions/GeneralAction';
 import { Storage } from '../../utilities/AsyncStorage';
 import { login, userData } from '../actions/AuthAction';
-import { getDoctorPersonalData } from '../actions/DoctorsActions';
 import { headers } from '../../utilities/Utilities';
 
 export const AuthMiddleware = {
@@ -51,41 +49,6 @@ export const AuthMiddleware = {
       });
     };
   },
-
-  //   Sociallogin: userdata => {
-  //     return dispatch => {
-  //       dispatch(showLoading());
-  //       return new Promise(async (resolve, reject) => {
-  //         try {
-  //           let formdata = new FormData();
-  //           formdata.append('email', userdata?.email);
-  //           formdata.append('first_name', userdata?.first_name);
-  //           formdata.append('last_name', userdata?.last_name);
-  //           formdata.append('device_id', userdata?.deviceID);
-  //           formdata.append('role', userdata?.role);
-  //           const data = await Axios.post(Apis.social_login, formdata);
-  //           if (data?.status == 200) {
-  //             await Storage.setToken(data?.data?.data?.token);
-  //             await Storage.set('@user', JSON.stringify(data?.data?.data));
-  //             dispatch(userData(data?.data?.data));
-  //             dispatch(login(true));
-  //           }
-  //         } catch (error) {
-  //           reject(error);
-  //           dispatch(
-  //             showAlert({
-  //               title: 'Sociallogin',
-  //               message: error?.response?.data?.message,
-  //               type: 'Error',
-  //               status: error?.response?.status,
-  //             }),
-  //           );
-  //         } finally {
-  //           dispatch(hideLoading());
-  //         }
-  //       });
-  //     };
-  //   },
 
   signUp: userdata => {
     return dispatch => {
@@ -156,8 +119,9 @@ export const AuthMiddleware = {
           if (userdata?.name) {
             formData.append('user_name', userdata?.name);
           }
-
-          formData.append('address', userdata?.address);
+          if (userdata?.address) {
+            formData.append('address', userdata?.address);
+          }
           if (userdata?.lat) {
             formData.append('lat', userdata?.lat);
           }
@@ -171,16 +135,11 @@ export const AuthMiddleware = {
           if (userdata?.image) {
             formData.append('image', userdata?.image);
           }
-          console.log('====================================');
-          console.log('data', JSON.stringify(formData, null, 8));
-          console.log('====================================');
 
-          const data = await Axios.post(Apis.update_profile, formData, await headers.config());
-          // console.log(JSON.stringify(data, null, 8))
+          const data = await Axios.post(Apis.update_profile, formData, await headers.multiPart());
           if (data?.status == 200) {
-            console.log('====================================');
-            console.log('data', JSON.stringify(data?.data, null, 8));
-            console.log('====================================');
+            dispatch(userData(data?.data?.data));
+            await Storage.set('@user', JSON.stringify(data?.data?.data));
             resolve(true);
             dispatch(
               showAlert({
@@ -240,6 +199,60 @@ export const AuthMiddleware = {
       });
     };
   },
+
+  getSupportData : () => {
+    return dispatch => {
+      return new Promise(async (resolve, reject) => {
+        try {
+          const data = await Axios.get(Apis.get_support, await headers.config());
+          if (data?.status == 200) {
+            console.log('====================================');
+            console.log(JSON.stringify(data?.data, null, 8));
+            console.log('====================================');
+            // resolve(data?.data?.data);
+          }
+        } catch (error) {
+          reject(error);
+          dispatch(showAlert({ message: 'Something went wrong while loading content', type: 'Error' }));
+        }
+      });
+    };
+  },
+
+  //   Sociallogin: userdata => {
+  //     return dispatch => {
+  //       dispatch(showLoading());
+  //       return new Promise(async (resolve, reject) => {
+  //         try {
+  //           let formdata = new FormData();
+  //           formdata.append('email', userdata?.email);
+  //           formdata.append('first_name', userdata?.first_name);
+  //           formdata.append('last_name', userdata?.last_name);
+  //           formdata.append('device_id', userdata?.deviceID);
+  //           formdata.append('role', userdata?.role);
+  //           const data = await Axios.post(Apis.social_login, formdata);
+  //           if (data?.status == 200) {
+  //             await Storage.setToken(data?.data?.data?.token);
+  //             await Storage.set('@user', JSON.stringify(data?.data?.data));
+  //             dispatch(userData(data?.data?.data));
+  //             dispatch(login(true));
+  //           }
+  //         } catch (error) {
+  //           reject(error);
+  //           dispatch(
+  //             showAlert({
+  //               title: 'Sociallogin',
+  //               message: error?.response?.data?.message,
+  //               type: 'Error',
+  //               status: error?.response?.status,
+  //             }),
+  //           );
+  //         } finally {
+  //           dispatch(hideLoading());
+  //         }
+  //       });
+  //     };
+  //   },
 
 
 

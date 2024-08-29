@@ -32,7 +32,7 @@ const Profile = () => {
                 titleStyle={{ color: Colors.WHITE }} iconColor={Colors.WHITE} logout={USER?.user_role == 'doctor'} />
 
             <View style={styles.flex}>
-                <Image source={USER?.image_url ? { uri: USER?.image_url } : Avatar} style={styles.profile_image} resizeMode={'cover'} />
+                <Image source={USER?.image_url ? { uri: USER?.image_url } : USER?.image ? { uri: USER?.image } :  Avatar} style={styles.profile_image} resizeMode={'cover'} />
                 <TextComponent text={USER?.user_name} style={styles.text} />
             </View>
 

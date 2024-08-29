@@ -1,7 +1,7 @@
 
 
-const BASE_URL = `http://192.168.2.106:3000`;
-// const BASE_URL = `http://192.168.0.178:3000`;
+// const BASE_URL = `http://192.168.2.106:3000`;
+const BASE_URL = `http://192.168.0.178:3000`;
 
 
 
@@ -42,6 +42,10 @@ const Apis = {
     //Info Pages
     about: `${BASE_URL}/user/api/about`,
     privacy_policy: `${BASE_URL}/user/api/privacy-policy`,
+    get_support: `${BASE_URL}/user/api/get-support`,
+
+    //Hospital
+    getDashboard: `${BASE_URL}/hospital/api/getDashboard`,
 
 }
 

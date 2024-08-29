@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, TouchableOpacity, ScrollView, FlatList } from "react-native";
 import docC from "../../assets/images/doc3.png";
 import docF from "../../assets/images/doc9.jpg";
@@ -13,12 +13,29 @@ import { Fonts } from "../../utilities/Fonts";
 import ListEmptyComponent from "../../components/ListEmptyComponent";
 import HOSPITAL from '../../assets/images/hospital.png'
 import NO_DOC from '../../assets/images/noDoc.png'
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { HospitalMiddleware } from "../../redux/middlewares/HospitalMiddleware";
 
 const HospitalHome = () => {
     const navigation = useNavigation();
+    const dispatch = useDispatch()
+    const [loading, setLoading] = useState(true)
+    const DashbaordData = useSelector(state => state.HospitalReducer.dashboardData)
     const USER = useSelector(state => state.AuthReducer.user)
 
+    useEffect(() => {
+        fetchData()
+    }, [])
+
+    console.log('====================================');
+    console.log('DashbaordData', JSON.stringify(DashbaordData));
+    console.log('====================================');
+
+    const fetchData = () => {
+        dispatch(HospitalMiddleware.onFetchDashboardData())
+            .then(() => setLoading(false))
+            .catch(() => setLoading(false))
+    }
 
     const Featured = [
         {
@@ -59,12 +76,12 @@ const HospitalHome = () => {
     const renderItem = ({ item }) => {
         return (
             <TouchableOpacity style={styles.Appointment_card} onPress={() => navigation.navigate('DoctorDetails', { item: item })} >
-                        <Image source={docF} style={styles.Appointment_image} />
-                        <View>
-                            <TextComponent style={[styles.appointment_card_text, { fontFamily: Fonts?.SEMIBOLD }]} text={'Mr. Fernendes'} />
-                            <TextComponent style={styles.appointment_card_span} text={'Cardiologist'} />
-                        </View>
-                    <Icon type={IconTypes.MaterialIcons} name={'keyboard-arrow-right'} size={25} color={Colors.PRIMARY} />
+                <Image source={docF} style={styles.Appointment_image} />
+                <View>
+                    <TextComponent style={[styles.appointment_card_text, { fontFamily: Fonts?.SEMIBOLD }]} text={'Mr. Fernendes'} />
+                    <TextComponent style={styles.appointment_card_span} text={'Cardiologist'} />
+                </View>
+                <Icon type={IconTypes.MaterialIcons} name={'keyboard-arrow-right'} size={25} color={Colors.PRIMARY} />
             </TouchableOpacity>
         )
     }
@@ -73,14 +90,14 @@ const HospitalHome = () => {
         {
             id: 1,
             name: 'Doctors',
-            info: '50',
+            info: DashbaordData?.no_of_doctors ? DashbaordData?.no_of_doctors : 0,
             icon: 'stethoscope'
 
         },
         {
             id: 2,
             name: 'Appointments',
-            info: '200',
+            info: DashbaordData?.total_appointments_completed ? DashbaordData?.total_appointments_completed : 0,
             icon: 'clipboard'
         },
         {
@@ -95,28 +112,28 @@ const HospitalHome = () => {
         <View style={styles.mainContainer}>
             <ScrollView showsVerticalScrollIndicator={false} >
                 <View style={styles.home_header}>
-                <TouchableOpacity onPress={() => navigation.openDrawer()}>
+                    <TouchableOpacity onPress={() => navigation.openDrawer()}>
                         <Icon type={IconTypes.Feather} name='menu' size={23} color={Colors.BLACK} />
                     </TouchableOpacity>
                     {/* <Icon name='hospital-o' type={IconTypes.FontAwesome} size={20} color={Colors.BLACK} /> */}
                     <TextComponent style={styles.sub_heading} text={USER?.user_name} />
                 </View>
 
-                <Image source={USER?.image ? {uri: USER?.image } : HOSPITAL} resizeMode={USER?.image ? 'cover' : 'contain'} style={{width: '100%', marginTop: 20 , alignSelf: 'center', height: 130 , borderRadius: 10}} />
+                <Image source={USER?.image ? { uri: USER?.image } : HOSPITAL} resizeMode={USER?.image ? 'cover' : 'contain'} style={{ width: '100%', marginTop: 20, alignSelf: 'center', height: 130, borderRadius: 10 }} />
 
 
                 <View style={styles.wrap_row}>
                     {
                         info.map((item, index) => {
                             return (
-                                <View style={[styles.card , { backgroundColor: index == 1 ? Colors.PRIMARY : Colors.WHITE}]} key={index}>
+                                <View style={[styles.card, { backgroundColor: index == 1 ? Colors.PRIMARY : Colors.WHITE }]} key={index}>
                                     <View style={styles.wide_row}>
                                         <View style={styles.card_icon}>
                                             <Icon name={item.icon} type={IconTypes.FontAwesome} size={18} color={index == 1 ? Colors.WHITE : Colors.PRIMARY} />
                                         </View>
-                                        <TextComponent style={[styles.card_headingx , { color: index == 1 ? Colors.WHITE : Colors.PRIMARY}]} text={item.info} />
+                                        <TextComponent style={[styles.card_headingx, { color: index == 1 ? Colors.WHITE : Colors.PRIMARY }]} text={item.info} />
                                     </View>
-                                    <TextComponent style={[styles.card_heading , { color: index == 1 ? Colors.WHITE : Colors.BLACK}]} text={item.name} />
+                                    <TextComponent style={[styles.card_heading, { color: index == 1 ? Colors.WHITE : Colors.BLACK }]} text={item.name} />
                                 </View>
                             )
                         }
@@ -128,11 +145,11 @@ const HospitalHome = () => {
                 <FlatList
                     key={'Featured Doctors'}
                     showsHorizontalScrollIndicator={false}
-                    data={Featured}
+                    data={DashbaordData?.top_doctors}
                     horizontal
                     decelerationRate={'fast'}
                     renderItem={renderItem}
-                    ListEmptyComponent={<ListEmptyComponent image={NO_DOC} text={'no doctors found'} />}
+                    ListEmptyComponent={<ListEmptyComponent image={NO_DOC} short text={'no doctors found'} />}
                     keyExtractor={(item, index) => index.toString()}
                 />
             </ScrollView>
@@ -158,7 +175,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         gap: 10
     },
-    wrap_row: {flexDirection: "row" , flexWrap: 'wrap' , marginVertical: 15 , justifyContent: 'space-between' , alignItems: 'center' },
+    wrap_row: { flexDirection: "row", flexWrap: 'wrap', marginVertical: 15, justifyContent: 'space-between', alignItems: 'center' },
     card: { gap: 5, width: '45%', backgroundColor: Colors.WHITE, elevation: 5, borderRadius: 10, padding: 13, marginVertical: 10, marginHorizontal: 5 },
     card_icon: { width: 30, backgroundColor: Colors.LIGHT, height: 30, borderRadius: 100, alignItems: 'center', justifyContent: 'center' },
     card_heading: {
