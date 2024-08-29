@@ -200,9 +200,9 @@ const DoctorDetails = (props) => {
                     {
                         USER?.user_role == 'hospital' ?
                             <>
-                                <TouchableOpacity style={styles.trash} onPress={onPressDelDoctor}>
+                                {/* <TouchableOpacity style={styles.trash} onPress={onPressDelDoctor}>
                                     <Icon type={IconTypes.Ionicons} name={'trash'} color={Colors?.PRIMARY} size={18} />
-                                </TouchableOpacity>
+                                </TouchableOpacity> */}
 
                                 <TouchableOpacity style={styles.heart} onPress={() => navigation.navigate('CreateDoctor', { screenType: 'edit' })}>
                                     <Icon type={IconTypes.AntDesign} name={'edit'} color={Colors?.DGREY} size={18} />

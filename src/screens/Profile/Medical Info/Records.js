@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView, TouchableOpacity, FlatList, Modal as RNModal } from "react-native";
 import { Colors } from "../../../utilities/Colors";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
@@ -19,20 +19,31 @@ import Button from "../../../components/Button";
 import { useDispatch } from "react-redux";
 import { showAlert } from "../../../redux/actions/GeneralAction";
 import { useTranslation } from "react-i18next";
+import { RecordsMiddleware } from "../../../redux/middlewares/RecordsMiddleware";
 
 
 const Records = () => {
     const navigation = useNavigation()
     const dispatch = useDispatch()
-    const {t} = useTranslation();
+    const { t } = useTranslation();
     const [currDate, setcurrDate] = useState(new Date())
     const [dateModalopen, setdateModalOpen] = useState(false)
     const [openModal, setopenModal] = useState(false)
     const [name, setname] = useState()
-    const [type, settype] = useState({ id: 1 })
+    const [type, settype] = useState()
     const [date, setdate] = useState(null)
     const [doc, setdoc] = useState()
+    const [loading, setLoading] = useState(true)
 
+    useEffect(() => {
+        fetchRecordsData()
+    }, [])
+
+    const fetchRecordsData = () => {
+        dispatch(RecordsMiddleware.getAllRecords())
+            .then(() => setLoading(false))
+            .catch(() => setLoading(false))
+    }
 
     const SampleDocs = [
         {
@@ -91,17 +102,29 @@ const Records = () => {
         )
     }
 
+    const onDelDoctor = (id) => {
+        dispatch(RecordsMiddleware.onDeleteRecord(data))
+        .then(() => {
+            navigation.goBack()
+        }
+        )
+        .catch(err => console.log('err', err))
+
+}
     const uploadDocument = async () => {
         try {
             const res = await DocumentPicker.pick({
-                type: [DocumentPicker.types.allFiles],
+                type: [DocumentPicker.types.pdf , DocumentPicker.types.docx, DocumentPicker.types.doc],
             });
-            console.log('res : ' + JSON.stringify(res));
-            console.log('URI : ' + res[0].uri);
-            //   console.log('Type : ' + res.type);
-            console.log('File Name : ' + res[0].name);
-            //   console.log('File Size : ' + res.size);
-            setdoc(res);
+            
+            setdoc({
+                uri: res[0]?.uri,
+                name: res[0]?.name,
+                size: res[0]?.size,
+                type: res[0]?.type,
+            });
+
+         
         } catch (err) {
             if (DocumentPicker.isCancel(err)) {
                 alert(t('Selection Canceled'));
@@ -112,11 +135,37 @@ const Records = () => {
         }
     };
 
+    const onPressSubmitDoc = () => {
+        if (!name) {
+            alert('Please enter record name')
+        } else if (!doc) {
+            alert('Please upload document')
+        } else if (!type) {
+            alert('Please select type of record')
+        }
+        else {
+            const data = {
+                file: doc,
+                name: name,
+                type: type?.name
+            }
+            console.log('data : ' + JSON.stringify(data, null ,8));
+
+            dispatch(RecordsMiddleware.onAddRecord(data))
+                .then(res => {
+                    setopenModal(false)
+
+                })
+                .catch(err => {
+                    console.log('Error : ' + err);
+                })
+        }
+    }
 
     return (
         <View style={styles.Container}>
             <ScrollView>
-                <Header title={'Records'} back profile/>
+                <Header title={'Records'} back profile />
                 <FlatList
                     showsVerticalScrollIndicator={false}
                     data={SampleDocs}
@@ -140,7 +189,7 @@ const Records = () => {
                             <Entypo name={'cross'} color={Colors.DGREY} size={20} />
                         </TouchableOpacity>
 
-                       
+
 
                         <TextComponent style={styles.text_w} text={'Type of record'} />
                         <View style={styles.row}>
@@ -166,7 +215,7 @@ const Records = () => {
                             mainStyle={styles.input}
                         />
 
-                        <TextComponent style={styles.text_w} text={'Record created on'} />
+                        {/* <TextComponent style={styles.text_w} text={'Record created on'} />
                         <Input
                             value={date ? moment(date).format('D MMM, yy') : null}
                             placeholder={'Select Date'}
@@ -174,7 +223,7 @@ const Records = () => {
                             onPressRightIcon={() => setdateModalOpen(true)}
                             rightIcon={<Icon name={'date-range'} type={IconTypes.MaterialIcons} color={Colors.GREY} />}
                             mainStyle={styles.input}
-                        />
+                        /> */}
 
                         <TouchableOpacity style={styles.button} onPress={uploadDocument} >
                             {
@@ -184,13 +233,10 @@ const Records = () => {
                                     <Icon name={'cloud-upload'} type={IconTypes.MaterialCommunityIcons} color={Colors.PRIMARY} size={40} />
 
                             }
-                            <TextComponent style={styles.button_text} text={doc ? doc[0].name : 'Upload Document'} numberOfLines={1} />
+                            <TextComponent style={styles.button_text} text={doc ? doc?.name : 'Upload Document'} numberOfLines={1} />
                         </TouchableOpacity>
 
-                        <Button title={'Save Record'} onPress={()=> {
-                            setopenModal(false)
-                            navigation.goBack()
-                        }} />
+                        <Button title={'Save Record'} onPress={onPressSubmitDoc} />
                     </View>
                 </View>
             </RNModal>
@@ -224,7 +270,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: Colors.WHITE,
     },
-    row: { flexDirection: "row", alignItems: "center" }, 
+    row: { flexDirection: "row", alignItems: "center" },
     button: {
         gap: 5,
         borderRadius: 20,
@@ -242,7 +288,7 @@ const styles = StyleSheet.create({
     button_text: {
         color: Colors.PRIMARY,
         fontSize: 13,
-        
+
     },
     doc_card: {
         backgroundColor: Colors.WHITE,

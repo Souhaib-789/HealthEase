@@ -28,22 +28,25 @@ const Header = props => {
       </View>
 
 
-      <TextComponent text={props?.title} numberOfLines={2} style={[styles.heading , {...props?.titleStyle}]} />
+      <TextComponent text={props?.title} numberOfLines={2} style={[styles.heading, { ...props?.titleStyle }]} />
 
 
 
       <View style={styles.view_b}>
         {
           props?.bell &&
-          <TouchableOpacity onPress={() => navigation.navigate('Notifications')} >
-            <Image source={bellIcon} style={styles.icon_image} tintColor={Colors.PRIMARY} />
+          <TouchableOpacity onPress={() => navigation.navigate('Profile')} >
+            <Image source={USER_DATA?.image_url ? { uri: USER_DATA?.image_url } : USER_DATA?.image ? { uri: USER_DATA?.image } : AVATAR} style={styles.profile_image} resizeMode='cover' />
           </TouchableOpacity>
+          // <TouchableOpacity onPress={() => navigation.navigate('Notifications')} >
+          //   <Image source={bellIcon} style={styles.icon_image} tintColor={Colors.PRIMARY} />
+          // </TouchableOpacity>
         }
 
         {
           props?.profile &&
           <TouchableOpacity onPress={() => navigation.navigate('Profile')} >
-            <Image source={USER_DATA?.image_url ? { uri: USER_DATA?.image_url } : AVATAR} style={styles.profile_image} resizeMode='cover'  />
+            <Image source={USER_DATA?.image_url ? { uri: USER_DATA?.image_url } : USER_DATA?.image ? { uri: USER_DATA?.image } : AVATAR} style={styles.profile_image} resizeMode='cover' />
           </TouchableOpacity>
         }
       </View>

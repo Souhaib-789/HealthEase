@@ -76,7 +76,7 @@ const Login = () => {
                 <Button title={'Login'} onPress={onPressLogin} style={styles.button} />
                 {/* <TextComponent style={styles.link_text} text={'Forgot Passsword?'} /> */}
 
-                <View style={styles.flex_ultra}>
+                {/* <View style={styles.flex_ultra}>
                     <TouchableOpacity style={styles.social_button} >
                         <Image source={google} style={styles.social_image} />
                     </TouchableOpacity>
@@ -85,7 +85,7 @@ const Login = () => {
                         <Image source={fb} style={styles.social_image} />
                     </TouchableOpacity>
 
-                </View>
+                </View> */}
 
                 <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
                     <TextComponent style={styles.link_textx} text={'Don’t have an account?'} />

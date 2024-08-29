@@ -204,7 +204,10 @@ export const AuthMiddleware = {
     return dispatch => {
       return new Promise(async (resolve, reject) => {
         try {
+          console.log('====================================', await headers.config());
+
           const data = await Axios.get(Apis.get_support, await headers.config());
+          
           if (data?.status == 200) {
             console.log('====================================');
             console.log(JSON.stringify(data?.data, null, 8));

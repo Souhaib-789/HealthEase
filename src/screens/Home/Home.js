@@ -22,6 +22,7 @@ import { AppointmentsMiddleware } from "../../redux/middlewares/AppointmentsMidd
 import moment from "moment";
 import { useTranslation } from "react-i18next";
 import { isUrduLanguage } from "../../utilities/Utilities";
+import AVATAR from '../../assets/images/avatar.png'
 
 const Home = () => {
     
@@ -85,9 +86,13 @@ const Home = () => {
                         <Feather name='menu' size={23} color={Colors.BLACK} />
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => navigation.navigate('Notifications')} >
+                    {/* <TouchableOpacity onPress={() => navigation.navigate('Notifications')} >
                         <Image source={bellIcon} style={{ width: 20, height: 20 }} tintColor={Colors.PRIMARY} />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
+
+                      <TouchableOpacity onPress={() => navigation.navigate('Profile')} >
+                      <Image source={USER?.image_url ? { uri: USER?.image_url } : USER?.image ? { uri: USER?.image } :AVATAR} style={styles.profile_image} resizeMode='cover'  />
+                      </TouchableOpacity>
                 </View>
 
                 <View style={styles.mV}>
@@ -126,9 +131,9 @@ const Home = () => {
                             <View style={styles.Appointment_card} >
                                 <View style={styles.appointment_card_subview1}>
                                     <View style={styles.appointment_card_subview2}>
-                                        <Image source={UPAppointment?.docter?.image ?
-                                            { uri: UPAppointment?.docter?.image } : require('../../assets/images/avatar.png')
-                                        } style={styles.Appointment_image} />
+                                        <Image source={UPAppointment?.docter?.image_url ?
+                                            { uri: UPAppointment?.docter?.image_url } : require('../../assets/images/avatar.png')
+                                        } style={styles.Appointment_image} resizeMode='cover' />
                                         <View>
                                             <TextComponent style={[styles.appointment_card_text, { fontFamily: Fonts?.SEMIBOLD }]}
                                                 text={UPAppointment?.docter?.name ? UPAppointment?.docter?.name : '--'} />
@@ -298,8 +303,8 @@ const styles = StyleSheet.create({
     },
     profile_image: {
         borderRadius: 50,
-        width: 45,
-        height: 45,
+        width: 35,
+        height: 35,
     },
     home_header: {
         alignItems: "center",

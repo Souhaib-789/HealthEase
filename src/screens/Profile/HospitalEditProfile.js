@@ -33,7 +33,7 @@ const HospitalEditProfile = () => {
             ImageCropPicker.openPicker({
                 width: 300,
                 height: 400,
-                cropping: true,
+                // cropping: true,
             }).then(image => {
                 let splitPath = image?.path?.split("/")
                 let filename = splitPath[splitPath?.length - 1]
