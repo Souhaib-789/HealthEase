@@ -37,8 +37,6 @@ const ActionTypes = {
 
     //Medical Records
     GET_MEDICAL_RECORDS: 'GET_MEDICAL_RECORDS',
-    ADD_MEDICAL_RECORD: 'ADD_MEDICAL_RECORD',
-    DEL_MEDICAL_RECORD: 'DEL_MEDICAL_RECORD',
   
   }
   

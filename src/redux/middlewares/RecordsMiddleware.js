@@ -1,25 +1,25 @@
 import Axios from 'axios';
-import Apis from '../../apis/apis';
 import { hideLoading, showAlert, showLoading } from '../actions/GeneralAction';
 import { headers } from '../../utilities/Utilities';
+import Apis from '../../apis/apis';
+import { getMedicalRecords } from '../actions/RecordActions';
 
 export const RecordsMiddleware = {
 
-  onAddRecord : params => {
+  onAddRecord: params => {
     return dispatch => {
       dispatch(showLoading());
       return new Promise(async (resolve, reject) => {
         try {
-         const formData = new FormData();
-            formData.append('file', params?.file);
-            formData.append('file_name', params?.name);
-            formData.append('type', params.type);
+          const formData = new FormData();
+          formData.append('file', params?.file);
+          formData.append('file_name', params?.name);
+          formData.append('type', params.type);
 
-            
-          const data = await Axios.post(Apis.uploadMedicalRecords, formData, await headers.multiPart());
+
+          const data = await Axios.post(Apis.uploadMedicalRecord, formData, await headers.multiPart());
           if (data?.status == 200) {
-            console.log(data.data);
-            
+            dispatch(getMedicalRecords(data?.data?.data?.medical_record));
             resolve(true)
           }
         } catch (error) {
@@ -39,14 +39,13 @@ export const RecordsMiddleware = {
     };
   },
 
-  getAllRecords : () => {
+  getAllRecords: () => {
     return dispatch => {
       return new Promise(async (resolve, reject) => {
         try {
-          const data = await Axios.post(Apis.getMedicalRecords , await headers.config());
+          const data = await Axios.get(Apis.getMedicalRecord, await headers.config());
           if (data?.status == 200) {
-            console.log(data.data);
-            
+            dispatch(getMedicalRecords(data?.data?.data?.medical_record));
             resolve(true)
           }
         } catch (error) {
@@ -64,28 +63,39 @@ export const RecordsMiddleware = {
     };
   },
 
-  onDeleteRecord : (params) => {
+  onDeleteRecord: (id) => {
     return dispatch => {
       return new Promise(async (resolve, reject) => {
         try {
-            const rawData = {
-              doc_id: params?.id
-            }
-          const data = await Axios.post(Apis.deleteMedicalRecords , rawData ,await headers.config());
+          dispatch(showLoading());
+          const rawData = {
+            doc_id: id
+          }
+          const data = await Axios.post(Apis.deleteMedicalRecord, rawData, await headers.config());
           if (data?.status == 200) {
-            console.log(data.data);
+            dispatch(getMedicalRecords(data?.data?.data?.medical_record));
             resolve(true)
+            dispatch(
+              showAlert({
+                title: 'Record Deleted',
+                message: data?.data?.message,
+                type: 'success',
+                status: data?.status,
+              }),
+            );
           }
         } catch (error) {
           reject(error);
           dispatch(
             showAlert({
-              title: 'onDeleteRecord',
+              title: 'on Delete Record',
               message: error?.response?.data?.message ? error?.response?.data?.message : error?.message,
               type: 'Error',
               status: error?.response?.status,
             }),
           );
+        } finally {
+          dispatch(hideLoading());
         }
       });
     };

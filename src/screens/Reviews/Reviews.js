@@ -41,7 +41,7 @@ const Reviews = (props) => {
                                 style={{ paddingVertical: 5, alignSelf: 'flex-start' }}
                             />
                             <TextComponent style={styles.reviewText} text={item?.review} />
-                            <TextComponent style={styles.reviewAuthor} text={item.hospital_name} />
+                            <TextComponent style={styles.reviewAuthor} text={item?.reviewer?.user_name} />
                         </View>
                     )}
                     keyExtractor={item => item?.id}

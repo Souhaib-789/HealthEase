@@ -25,7 +25,7 @@ const AppointmentDetails = (props) => {
     const screenType = props?.route?.params?.screenType;
     const startTime = moment(routeData?.startTime).utc().format('hh:mm A')
     const endTime = moment(routeData?.endTime).utc().format('hh:mm A')
-    // console.log('--------', JSON.stringify(routeData, null, 8));
+    console.log('--------', JSON.stringify(routeData, null, 8));
     const { t } = useTranslation();
     const details = [
         {
@@ -172,6 +172,12 @@ const AppointmentDetails = (props) => {
                             <TextComponent text={routeData?.contact ? routeData?.contact : '--'} style={styles.textx} />
                         </View>
                     </View>
+
+                    {screenType != 'upcoming' &&
+                        <View style={styles.details_card}>
+                            <TextComponent style={styles.heading} text={'Prescription :'} />
+                            <TextComponent text={routeData?.prescription ? routeData?.prescription : '--'} style={styles.short_heading} />
+                        </View>}
 
                     {
                         screenType === 'upcoming' ?

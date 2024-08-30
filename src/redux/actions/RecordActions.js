@@ -7,19 +7,4 @@ const getMedicalRecords = payload => {
     };
 };
 
-const addMedicalRecord = payload => {
-    return {
-        type: ActionTypes.ADD_MEDICAL_RECORD,
-        payload,
-    };
-};
-
-const delMedicalRecord = payload => {
-    return {
-        type: ActionTypes.DEL_MEDICAL_RECORD,
-        payload,
-    };
-};
-
-
-export { getMedicalRecords, delMedicalRecord, addMedicalRecord };
+export { getMedicalRecords };

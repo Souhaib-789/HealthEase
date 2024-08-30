@@ -212,9 +212,13 @@ const Signup = () => {
 
                 <Button title={'Signup'} onPress={onPressSignup} style={styles.button} />
 
-                <TouchableOpacity onPress={() => navigation.navigate('Login')} style={{ marginBottom: 20 }}>
-                    <TextComponent style={styles.link_textx} text={'Already have an account?'} />
+                <View style={styles.flex_ultra}>
+                <TextComponent style={styles.link_text} text={'Already have an account?'} />
+
+                <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                    <TextComponent style={styles.link_textx} text={'Login'} />
                 </TouchableOpacity>
+                </View>
             </ScrollView>
             <LocLoader visible={loading} />
         </View>
@@ -235,11 +239,14 @@ const styles = StyleSheet.create({
         marginTop: 20,
         marginBottom: 15,
     },
+   link_text: {
+        fontSize: 11,
+        color: Colors.DGREY,
+    },
     link_textx: {
         fontSize: 11,
-        marginTop: 30,
-        color: Colors.DGREY,
-        alignSelf: "center"
+        color: Colors.DARK_BLUE,
+        textDecorationLine: "underline",
     },
     logo: {
         width: 70,
@@ -262,6 +269,13 @@ const styles = StyleSheet.create({
     button: {
         marginTop: 40,
         marginVertical: 10
+    },
+    flex_ultra: {
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 5,
+        alignSelf: "center",
+        marginVertical: 15
     },
 
 })

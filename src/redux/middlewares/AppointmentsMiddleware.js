@@ -15,6 +15,7 @@ export const AppointmentsMiddleware = {
           const rawData = {
             docter_id: params?.doctorId,
             date: params?.appointmentDate,
+            duration: params?.duration,
             startTime: params?.startTime,
             endTime: params?.endTime,
             name: params?.patientName,

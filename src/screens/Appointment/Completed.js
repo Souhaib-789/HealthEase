@@ -20,9 +20,9 @@ const Completed = () => {
     const navigation = useNavigation();
     const appointmentsData = useSelector(state => state.AppointmentsReducer?.myAppointmentList)
 
-console.log('====================================');
-console.log(JSON.stringify(appointmentsData, null ,8));
-console.log('====================================');
+// console.log('====================================');
+// console.log(JSON.stringify(appointmentsData, null ,8));
+// console.log('====================================');
 
     useFocusEffect(
         useCallback(() => {

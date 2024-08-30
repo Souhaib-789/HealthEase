@@ -200,19 +200,13 @@ export const AuthMiddleware = {
     };
   },
 
-  getSupportData : () => {
+  getSupportData: () => {
     return dispatch => {
       return new Promise(async (resolve, reject) => {
         try {
-          console.log('====================================', await headers.config());
-
           const data = await Axios.get(Apis.get_support, await headers.config());
-          
           if (data?.status == 200) {
-            console.log('====================================');
-            console.log(JSON.stringify(data?.data, null, 8));
-            console.log('====================================');
-            // resolve(data?.data?.data);
+            resolve(data?.data?.data);
           }
         } catch (error) {
           reject(error);
@@ -222,40 +216,7 @@ export const AuthMiddleware = {
     };
   },
 
-  //   Sociallogin: userdata => {
-  //     return dispatch => {
-  //       dispatch(showLoading());
-  //       return new Promise(async (resolve, reject) => {
-  //         try {
-  //           let formdata = new FormData();
-  //           formdata.append('email', userdata?.email);
-  //           formdata.append('first_name', userdata?.first_name);
-  //           formdata.append('last_name', userdata?.last_name);
-  //           formdata.append('device_id', userdata?.deviceID);
-  //           formdata.append('role', userdata?.role);
-  //           const data = await Axios.post(Apis.social_login, formdata);
-  //           if (data?.status == 200) {
-  //             await Storage.setToken(data?.data?.data?.token);
-  //             await Storage.set('@user', JSON.stringify(data?.data?.data));
-  //             dispatch(userData(data?.data?.data));
-  //             dispatch(login(true));
-  //           }
-  //         } catch (error) {
-  //           reject(error);
-  //           dispatch(
-  //             showAlert({
-  //               title: 'Sociallogin',
-  //               message: error?.response?.data?.message,
-  //               type: 'Error',
-  //               status: error?.response?.status,
-  //             }),
-  //           );
-  //         } finally {
-  //           dispatch(hideLoading());
-  //         }
-  //       });
-  //     };
-  //   },
+  
 
 
 

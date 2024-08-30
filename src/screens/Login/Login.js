@@ -87,9 +87,13 @@ const Login = () => {
 
                 </View> */}
 
+                <View style={styles.flex_ultra}>
+                <TextComponent style={styles.link_text} text={'Don’t have an account?'} />
+
                 <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
-                    <TextComponent style={styles.link_textx} text={'Don’t have an account?'} />
+                    <TextComponent style={styles.link_textx} text={'Signup'} />
                 </TouchableOpacity>
+                </View>
             </ScrollView>
         </View>
     )
@@ -114,13 +118,11 @@ const styles = StyleSheet.create({
     link_text: {
         fontSize: 11,
         color: Colors.DGREY,
-        alignSelf: "flex-end"
     },
     link_textx: {
         fontSize: 11,
-        marginTop: 30,
-        color: Colors.DGREY,
-        alignSelf: "center"
+        color: Colors.DARK_BLUE,
+        textDecorationLine: "underline",
     },
     logo: {
         width: 70,
@@ -136,9 +138,9 @@ const styles = StyleSheet.create({
     flex_ultra: {
         flexDirection: "row",
         alignItems: "center",
-        gap: 20,
+        gap: 5,
         alignSelf: "center",
-        marginTop: 35
+        marginTop: 15
     },
     scrollview: {
         width: '90%',

@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, ScrollView, TouchableOpacity, FlatList, Modal as RNModal } from "react-native";
+import { View, StyleSheet, ScrollView, TouchableOpacity, FlatList, Modal as RNModal, RefreshControl, Alert, Linking } from "react-native";
 import { Colors } from "../../../utilities/Colors";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Input from "../../../components/Input";
-import DatePicker from 'react-native-date-picker'
-import moment from "moment";
 import Entypo from 'react-native-vector-icons/Entypo'
 import DocumentPicker from 'react-native-document-picker';
-import { useNavigation } from "@react-navigation/native";
 import Image from "../../../components/Image";
 import PDF from '../../../assets/images/pdf.png'
 import TextComponent from "../../../components/TextComponent";
@@ -16,55 +13,21 @@ import ListEmptyComponent from "../../../components/ListEmptyComponent";
 import Header from "../../../components/Header";
 import { Fonts } from "../../../utilities/Fonts";
 import Button from "../../../components/Button";
-import { useDispatch } from "react-redux";
-import { showAlert } from "../../../redux/actions/GeneralAction";
+import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { RecordsMiddleware } from "../../../redux/middlewares/RecordsMiddleware";
+import Skeleton from "../../../components/Skeleton";
 
 
 const Records = () => {
-    const navigation = useNavigation()
     const dispatch = useDispatch()
     const { t } = useTranslation();
-    const [currDate, setcurrDate] = useState(new Date())
-    const [dateModalopen, setdateModalOpen] = useState(false)
     const [openModal, setopenModal] = useState(false)
     const [name, setname] = useState()
     const [type, settype] = useState()
-    const [date, setdate] = useState(null)
     const [doc, setdoc] = useState()
     const [loading, setLoading] = useState(true)
-
-    useEffect(() => {
-        fetchRecordsData()
-    }, [])
-
-    const fetchRecordsData = () => {
-        dispatch(RecordsMiddleware.getAllRecords())
-            .then(() => setLoading(false))
-            .catch(() => setLoading(false))
-    }
-
-    const SampleDocs = [
-        {
-            id: 1,
-            date: '24',
-            doc_name: 'Abdullah Maman',
-            type: 'Prescription'
-        },
-        {
-            id: 2,
-            date: '01',
-            doc_name: 'Sarah Gill',
-            type: 'Image'
-        },
-        {
-            id: 3,
-            date: '22',
-            doc_name: 'Will Harry',
-            type: 'Pdf'
-        },
-    ]
+    const LIST = useSelector(state => state?.RecordsReducer?.recordsList)
 
     const Doctypes = [
         {
@@ -84,39 +47,26 @@ const Records = () => {
         },
     ]
 
-    const renderDocsItem = ({ item }) => {
-        return (
-            <TouchableOpacity style={styles.doc_card}>
-                <Image source={PDF} style={{ width: 30, height: 30 }} />
+    useEffect(() => {
+        fetchRecordsData()
+    }, [])
 
-                <View style={styles.sub_doc_card}>
-                    <TextComponent style={styles.text_x} text={'diabetes_precription.pdf'} />
-                    <TextComponent style={styles.text_y} text={`Record for ${item?.doc_name}`} />
-                    <TextComponent style={styles.text_y} text={'28 Mar 2023'} />
-                </View>
-
-                <TouchableOpacity style={{ position: 'absolute', right: 10, top: 10 }}>
-                    <Icon type={IconTypes.FontAwesome5} name={'trash'} size={15} color={Colors?.PRIMARY} />
-                </TouchableOpacity>
-            </TouchableOpacity>
-        )
+    const fetchRecordsData = () => {
+        dispatch(RecordsMiddleware.getAllRecords())
+            .then(() => setLoading(false))
+            .catch(() => setLoading(false))
     }
 
-    const onDelDoctor = (id) => {
-        dispatch(RecordsMiddleware.onDeleteRecord(data))
-        .then(() => {
-            navigation.goBack()
-        }
-        )
-        .catch(err => console.log('err', err))
+    const openRecord = (url) => {
+        return Linking.openURL(url);
+    }
 
-}
     const uploadDocument = async () => {
         try {
             const res = await DocumentPicker.pick({
-                type: [DocumentPicker.types.pdf , DocumentPicker.types.docx, DocumentPicker.types.doc],
+                type: [DocumentPicker.types.pdf, DocumentPicker.types.docx, DocumentPicker.types.doc],
             });
-            
+
             setdoc({
                 uri: res[0]?.uri,
                 name: res[0]?.name,
@@ -124,7 +74,7 @@ const Records = () => {
                 type: res[0]?.type,
             });
 
-         
+
         } catch (err) {
             if (DocumentPicker.isCancel(err)) {
                 alert(t('Selection Canceled'));
@@ -134,6 +84,42 @@ const Records = () => {
             }
         }
     };
+
+    const renderDocsItem = ({ item }) => {
+        let name = item?.file?.split('/')
+        return (
+            loading ?
+                <Skeleton style={{ width: '90%', height: 70, alignSelf: 'center', borderRadius: 10 }} />
+                :
+                <TouchableOpacity onPress={() => openRecord(item?.file)} style={styles.doc_card}>
+                    <Image source={PDF} style={{ width: 30, height: 30 }} />
+
+                    <View style={styles.sub_doc_card}>
+                        <TextComponent style={styles.text_x} numberOfLines={1} text={name} />
+                        <TextComponent style={styles.text_y} text={`Record for ${item?.name}`} />
+                        <TextComponent style={styles.text_y} text={item?.type} />
+                    </View>
+
+                    <TouchableOpacity onPress={() => onDelDoctor(item?._id)} style={{ position: 'absolute', right: 10, top: 10 }}>
+                        <Icon type={IconTypes.FontAwesome5} name={'trash'} size={15} color={Colors?.PRIMARY} />
+                    </TouchableOpacity>
+                </TouchableOpacity>
+        )
+    }
+
+    const onDelDoctor = (id) => {
+        Alert.alert(t('Delete record'), t('Are you sure you want to delete this record?'), [
+            {
+                text: t('Cancel'),
+                onPress: () => console.log('Cancel Pressed'),
+                style: "cancel"
+            },
+            {
+                text: t('Delete'),
+                onPress: () => { dispatch(RecordsMiddleware.onDeleteRecord(id)) }
+            }
+        ])
+    }
 
     const onPressSubmitDoc = () => {
         if (!name) {
@@ -149,11 +135,13 @@ const Records = () => {
                 name: name,
                 type: type?.name
             }
-            console.log('data : ' + JSON.stringify(data, null ,8));
 
             dispatch(RecordsMiddleware.onAddRecord(data))
                 .then(res => {
                     setopenModal(false)
+                    setname('')
+                    settype('')
+                    setdoc('')
 
                 })
                 .catch(err => {
@@ -168,10 +156,16 @@ const Records = () => {
                 <Header title={'Records'} back profile />
                 <FlatList
                     showsVerticalScrollIndicator={false}
-                    data={SampleDocs}
+                    data={loading ? [1, 2, 3, 4, 5, 6] : LIST}
                     renderItem={renderDocsItem}
                     keyExtractor={item => item?.id}
                     ListEmptyComponent={<ListEmptyComponent text={'no records found'} />}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={false}
+                            onRefresh={() => { setLoading(true), fetchRecordsData() }}
+                        />
+                    }
                 />
 
             </ScrollView>
@@ -215,16 +209,6 @@ const Records = () => {
                             mainStyle={styles.input}
                         />
 
-                        {/* <TextComponent style={styles.text_w} text={'Record created on'} />
-                        <Input
-                            value={date ? moment(date).format('D MMM, yy') : null}
-                            placeholder={'Select Date'}
-                            editable={false}
-                            onPressRightIcon={() => setdateModalOpen(true)}
-                            rightIcon={<Icon name={'date-range'} type={IconTypes.MaterialIcons} color={Colors.GREY} />}
-                            mainStyle={styles.input}
-                        /> */}
-
                         <TouchableOpacity style={styles.button} onPress={uploadDocument} >
                             {
                                 doc ?
@@ -246,19 +230,7 @@ const Records = () => {
                 <Icon name={'addfile'} type={IconTypes.AntDesign} color={Colors.WHITE} size={20} />
             </TouchableOpacity>
 
-            <DatePicker
-                modal
-                mode="date"
-                open={dateModalopen}
-                date={currDate}
-                onConfirm={(date) => {
-                    setdateModalOpen(false)
-                    setdate(date)
-                }}
-                onCancel={() => {
-                    setdateModalOpen(false)
-                }}
-            />
+
         </View>
     )
 }
@@ -312,6 +284,7 @@ const styles = StyleSheet.create({
         color: Colors.BLACK,
     },
     text_x: {
+        width: 200,
         fontSize: 14,
         color: Colors.BLACK,
     },

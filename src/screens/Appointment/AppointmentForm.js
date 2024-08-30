@@ -10,7 +10,7 @@ import Button from "../../components/Button";
 import Icon, { IconTypes } from "../../components/Icon";
 import { Fonts } from "../../utilities/Fonts";
 import DoctorCard from "../../components/DoctorCard";
-import moment from "moment";
+import moment, { duration } from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { showAlert } from "../../redux/actions/GeneralAction";
 import { AppointmentsMiddleware } from "../../redux/middlewares/AppointmentsMiddleware";
@@ -29,7 +29,9 @@ const AppointmentForm = (props) => {
     const DETAILS = useSelector(state => state.DoctorsReducer?.doctorDetails)
 
     const formattedDate = moment(routeData?.date).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
-  
+  console.log('====================================');
+  console.log(JSON.stringify(DETAILS?.duration, null, 8));
+  console.log('====================================');
 
     const onBookAppointment = () => {
         if (!patient) {
@@ -49,7 +51,8 @@ const AppointmentForm = (props) => {
                 endTime: moment(routeData?.timeSlot).utc().add(routeData?.duration, 'minutes'),
                 patientName: patient,
                 relationship: detail,
-                contactNo: contactNo
+                contactNo: contactNo,
+                duration: DETAILS?.duration
             }
 
             dispatch(AppointmentsMiddleware.onBookAppointment(data))
