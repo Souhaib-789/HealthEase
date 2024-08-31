@@ -1,7 +1,7 @@
 
 
-// const BASE_URL = `http://192.168.2.106:3000`;
-const BASE_URL = `http://192.168.0.178:3000`;
+const BASE_URL = `http://192.168.2.106:3000`;
+// const BASE_URL = `http://192.168.0.178:3000`;
 
 
 

@@ -16,6 +16,7 @@ import { validateEmail } from "../../utilities/Validators";
 import Icon, { IconTypes } from "../../components/Icon";
 import Geolocation from 'react-native-geolocation-service';
 import { LocLoader } from "../../components/LocLoader";
+import SuccessModal from "../../components/SuccessModal";
 
 const Signup = () => {
 
@@ -30,6 +31,7 @@ const Signup = () => {
     const [confirmPassword, setconfirmPassword] = useState(null)
     const [location, setLocation] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [successModal , setSuccessModal ] = useState(false)
 
 
     const onPressSignup = () => {
@@ -76,7 +78,11 @@ const Signup = () => {
             }
             dispatch(AuthMiddleware.signUp(data))
                 .then(() => {
-                    navigation.navigate('Login')
+                    if(userRole?.name == 'hospital'){
+                       setSuccessModal(true)
+                    }else{
+                        navigation.navigate('Login')
+                    }
                 })
                 .catch((err) => {
                     console.log(err)
@@ -85,8 +91,6 @@ const Signup = () => {
 
 
     }
-
-
 
     const requestLocationPermission = async () => {
         try {
@@ -173,6 +177,7 @@ const Signup = () => {
                     value={contact}
                     onChangeText={(e) => setcontact(e)}
                     keyboardType={'number-pad'}
+                    maxLength={12}
                     mainStyle={styles.mainInput} />
 
                 <Input
@@ -221,6 +226,21 @@ const Signup = () => {
                 </View>
             </ScrollView>
             <LocLoader visible={loading} />
+
+            <SuccessModal
+                children={
+                    <View style={{ alignItems: "center" }}>
+                        <View style={styles.thumb_bg}>
+                            <Icon type={IconTypes.FontAwesome} name={'check'} color={Colors.PRIMARY} size={50} />
+                        </View>
+                        <TextComponent text={'Signup Successful !'} style={styles.text} />
+                        <TextComponent style={styles.modal_message} text={'Your account is under review by the healthease admin. You can login once it will approve by admin.'} />
+                    </View>
+                }
+                OnClose={() => navigation.navigate('Login')}
+                close={true}
+                text={'Okay'}
+                visible={successModal} />
         </View>
     )
 }
@@ -277,5 +297,27 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         marginVertical: 15
     },
-
+    thumb_bg: {
+        backgroundColor: Colors?.LIGHT,
+        width: 120,
+        height: 120,
+        borderRadius: 100,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 20,
+        marginBottom: 15
+    },
+    modal_message: {
+        marginTop: 10,
+        lineHeight: 20,
+        fontSize: 13,
+        textAlign: "center",
+        margin: 26
+    },
+    text: {
+        fontSize: 20,
+        color: Colors?.PRIMARY,
+        marginVertical: 2,
+        fontFamily: Fonts?.SEMIBOLD
+    },
 })

@@ -82,6 +82,7 @@ export const AuthMiddleware = {
           // console.log(JSON.stringify(data, null, 8))
           if (data?.status == 200) {
             resolve(true);
+            if(data?.data?.user?.user_role == 'patient'){
             dispatch(
               showAlert({
                 title: 'signup',
@@ -90,6 +91,7 @@ export const AuthMiddleware = {
                 status: data?.status,
               }),
             );
+          }
           }
         } catch (error) {
           reject(error);
