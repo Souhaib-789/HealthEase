@@ -98,7 +98,7 @@ export const AuthMiddleware = {
           dispatch(
             showAlert({
               title: 'signup',
-              message: error?.response?.data?.message,
+              message: error?.response?.data?.message ? error?.response?.data?.message : error?.message,
               type: 'Error',
               status: error?.response?.status,
             }),
