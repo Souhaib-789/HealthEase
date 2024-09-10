@@ -76,7 +76,9 @@ function CustomDrawerContent(props) {
         }
     ]
 
-
+console.log('====================================');
+console.log('USER', JSON.stringify(USER, null, 2));
+console.log('====================================');
 
     const openModal = () => {
         setModalVisible(true)
@@ -118,7 +120,7 @@ function CustomDrawerContent(props) {
             <Image source={bg} style={styles.bg_icon} tintColor={Colors.PRIMARY} />
 
             <View style={styles.profile_view}>
-                <Image source={USER?.image ? {uri: USER?.image} : AVATAR} style={styles.image} />
+                <Image source={USER?.image_url ? {uri: USER?.image_url} : USER?.image ? {uri: USER?.image} : AVATAR} style={styles.image} />
                 <TextComponent style={styles.heading} text={USER?.user_name} />
             </View>
             <DrawerContentScrollView  {...props} showsVerticalScrollIndicator={false}>

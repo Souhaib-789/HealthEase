@@ -77,7 +77,7 @@ const Home = () => {
             <ScrollView showsVerticalScrollIndicator={false} refreshControl={
                 <RefreshControl
                     refreshing={false}
-                    onRefresh={() => { setloading(true), fetchDoctorsData() }}
+                    onRefresh={() => { setloading(true), fetchDoctorsData() , fetchAppointmentsData()}}
                 />
             } >
 
@@ -146,11 +146,11 @@ const Home = () => {
                                 <View style={styles.appointment_card_subview3}>
                                     <View style={styles.appointment_card_subview4}>
                                         <Icon type={IconTypes.Feather} name={'calendar'} size={15} color={Colors.WHITE} />
-                                        <TextComponent style={styles.appointment_card_span} text={UPAppointment?.date ? moment(UPAppointment?.date).utc().format('DD MMM YYYY') : '--'} />
+                                        <TextComponent style={styles.appointment_card_span} text={UPAppointment?.date ? moment(UPAppointment?.date).format('DD MMM YYYY') : '--'} />
                                     </View>
                                     <View style={styles.appointment_card_subview4}>
                                         <Icon type={IconTypes.Ionicons} name={'time-outline'} size={15} color={Colors.WHITE} />
-                                        <TextComponent style={styles.appointment_card_span} text={UPAppointment?.startTime ? moment(UPAppointment?.startTime).utc().format('hh : mm A') : '--'} />
+                                        <TextComponent style={styles.appointment_card_span} text={UPAppointment?.startTime ? moment(UPAppointment?.startTime).format('hh : mm A') : '--'} />
                                     </View>
                                 </View>
                             </View>
@@ -195,7 +195,7 @@ const Home = () => {
                         <TouchableOpacity onPress={() => setIntroModal(false)} style={{ position: 'absolute', height: 20, zIndex: 1, top: 12, right: 15, bottom: 0 }}>
                             <Icon name='close' type={IconTypes.AntDesign} size={15} color={Colors.DGREY} />
                         </TouchableOpacity>
-                        <Image source={require('../../assets/images/BG2.png')} style={{ position: 'absolute', bottom: 150, width: '100%', height: '80%' }} />
+                        <Image source={require('../../assets/images/BG3.png')} style={{ position: 'absolute', bottom: 150, width: '100%', height: '80%' }} />
                         <View style={styles.heading_container}>
                             <TextComponent style={styles.heading} text={t("Hello ! I'm ")} />
                             <TextComponent style={styles.headingx} text={t("Healthbot")} />

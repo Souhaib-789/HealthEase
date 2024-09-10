@@ -9,7 +9,7 @@ export const askHealthbot = async (prompt) => {
     try {
         const response = await axios.post(GOOGLE_API + API_KEY, {
             "contents": [{
-                "parts": [{ "text": `You have to give healthy diet or food advice only of the following question . The question is: ${prompt}` }
+                "parts": [{ "text": `You have to give healthy diet or food advice only of the following question . The question is: ${prompt}.` }
                 ]
             }]
         }

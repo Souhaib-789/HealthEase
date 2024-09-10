@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, ScrollView, Image, Platform, Linking } from "react-native";
+import { View, StyleSheet, ScrollView, Image, Platform, Linking, Share, Alert, TouchableOpacity } from "react-native";
 import Header from "../../components/Header";
 import moment, { duration } from "moment";
 import { Colors } from "../../utilities/Colors";
@@ -23,8 +23,8 @@ const AppointmentDetails = (props) => {
 
     const routeData = props?.route?.params?.item;
     const screenType = props?.route?.params?.screenType;
-    const startTime = moment(routeData?.startTime).utc().format('hh:mm A')
-    const endTime = moment(routeData?.endTime).utc().format('hh:mm A')
+    const startTime = moment(routeData?.startTime).format('hh:mm A')
+    const endTime = moment(routeData?.endTime).format('hh:mm A')
     console.log('--------', JSON.stringify(routeData, null, 8));
     const { t } = useTranslation();
     const details = [
@@ -104,6 +104,15 @@ const AppointmentDetails = (props) => {
         }
     }
 
+    const onShare = async () => {
+        try {
+           Share.share({
+            message: routeData?.prescription
+          });
+        } catch (error) {
+          Alert.alert(error.message);
+        }
+      };
 
     return (
         <View style={styles.mainContainer}>
@@ -133,7 +142,7 @@ const AppointmentDetails = (props) => {
                                 <Icon name='calendar-clear-outline' type={IconTypes.Ionicons} size={18} color={Colors?.BLACK} />
                                 <TextComponent text={'Day : '} style={styles.short_heading} />
                             </View>
-                            <TextComponent text={routeData?.date ? moment(routeData?.date).format('dddd , DD MMMM') : '--'} style={styles.texty} />
+                            <TextComponent text={routeData?.date ? moment(routeData?.date).utc().format('ddd , DD MMMM') : '--'} style={styles.texty} />
                         </View>
 
                         <View style={[styles.wide_row, { flexDirection: isUrdu ? 'row-reverse' : 'row' }]}>
@@ -175,7 +184,12 @@ const AppointmentDetails = (props) => {
 
                     {screenType != 'upcoming' &&
                         <View style={styles.details_card}>
+                        <View style={styles.wide_row}>
                             <TextComponent style={styles.heading} text={'Prescription :'} />
+                            <TouchableOpacity disabled={!routeData?.prescription} onPress={onShare} >
+                                <Icon name={'share-social-outline'} type={IconTypes.Ionicons} size={20} color={Colors.PRIMARY} />
+                            </TouchableOpacity>
+                            </View>
                             <TextComponent text={routeData?.prescription ? routeData?.prescription : '--'} style={styles.short_heading} />
                         </View>}
 

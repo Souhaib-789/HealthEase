@@ -94,7 +94,7 @@ const PersonalInfo = () => {
                                 return (
                                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginVertical: 10, width: '75%' }}>
                                         <TextComponent text={item?.day} style={{ fontSize: 12, }} />
-                                        <TextComponent text={(item?.shift_start_Time ? moment(item?.shift_start_Time).utc().format('hh:mm A') : '--') + ' - ' + (item?.shift_end_Time ? moment(item?.shift_end_Time).utc().format('hh:mm A') : '--')} style={{ fontSize: 12 }} />
+                                        <TextComponent text={(item?.shift_start_Time ? moment(item?.shift_start_Time).format('hh:mm A') : '--') + ' - ' + (item?.shift_end_Time ? moment(item?.shift_end_Time).format('hh:mm A') : '--')} style={{ fontSize: 12 }} />
                                     </View>
                                 )
                             }}

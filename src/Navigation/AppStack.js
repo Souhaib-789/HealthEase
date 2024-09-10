@@ -3,12 +3,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import DrawerBar from './Drawer/DrawerBar';
 import Doctors from '../screens/Doctors/Doctors';
 import DoctorDetails from '../screens/Doctors/DoctorDetails';
-import EReports from '../screens/DiagnosticsTests/EReports';
-import BookTest from '../screens/DiagnosticsTests/BookTest';
-import MyTestsDetails from '../screens/DiagnosticsTests/MyTestsDetails';
+
 import EditProfile from '../screens/Profile/EditProfile';
 import AppointmentForm from '../screens/Appointment/AppointmentForm';
-import IntroSlider from '../screens/IntroSlider/IntroSlider';
 import HealthbotChat from '../screens/Healthbot/HealthbotChat';
 import Records from '../screens/Profile/Medical Info/Records';
 import Notifications from '../screens/Notifications/Notifications';

@@ -15,10 +15,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { showAlert } from "../../redux/actions/GeneralAction";
 import { AppointmentsMiddleware } from "../../redux/middlewares/AppointmentsMiddleware";
 import { isUrduLanguage } from "../../utilities/Utilities";
+import { useTranslation } from "react-i18next";
 
 const AppointmentForm = (props) => {
 
     const isUrdu = isUrduLanguage();
+    const { t } = useTranslation();
     const routeData = props?.route?.params;
     const navigation = useNavigation();
     const dispatch = useDispatch();
@@ -29,9 +31,7 @@ const AppointmentForm = (props) => {
     const DETAILS = useSelector(state => state.DoctorsReducer?.doctorDetails)
 
     const formattedDate = moment(routeData?.date).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
-  console.log('====================================');
-  console.log(JSON.stringify(DETAILS?.duration, null, 8));
-  console.log('====================================');
+ 
 
     const onBookAppointment = () => {
         if (!patient) {
@@ -47,8 +47,8 @@ const AppointmentForm = (props) => {
             const data = {
                 doctorId: DETAILS?._id,
                 appointmentDate: formattedDate,
-                startTime: moment(routeData?.timeSlot).utc(),
-                endTime: moment(routeData?.timeSlot).utc().add(routeData?.duration, 'minutes'),
+                startTime: moment(routeData?.timeSlot),
+                endTime: moment(routeData?.timeSlot).add(routeData?.duration, 'minutes'),
                 patientName: patient,
                 relationship: detail,
                 contactNo: contactNo,
@@ -80,7 +80,7 @@ const AppointmentForm = (props) => {
 
                     <View style={[styles.flexA, { flexDirection: isUrdu ? 'row-reverse' : 'row' }]}>
                         <TextComponent text={'Time : '} style={styles.textx} />
-                        <TextComponent text={routeData?.timeSlot ? moment(routeData?.timeSlot).utc().format('h:mm A') + ' to ' + moment(routeData?.timeSlot).add(routeData?.duration, 'minutes').utc().format('h:mm A') : '--'} style={[styles.textx, { color: Colors?.BLACK }]} />
+                        <TextComponent text={routeData?.timeSlot ? moment(routeData?.timeSlot).format('h:mm A') + ' to ' + moment(routeData?.timeSlot).add(routeData?.duration, 'minutes').format('h:mm A') : '--'} style={[styles.textx, { color: Colors?.BLACK }]} />
                     </View>
 
                 </View>
@@ -98,13 +98,15 @@ const AppointmentForm = (props) => {
                     onChangeText={(e) => setcontactNo(e)}
                     keyboardType={'phone-pad'}
                     placeholder={'Enter Contact Number'}
+                    style={{textAlign: isUrdu ? 'right' : null}}
                     mainStyle={styles.mainInput} parentStyle={styles.input_parent_style} />
 
                 <Input
                     label={'Relationship with Patient'}
-                    placeholder={'e.g: My Self , my Child , my Mother'}
+                    placeholder={isUrdu ? null : t('e.g: My Self , my Child , my Mother')}
                     value={detail}
                     onChangeText={(e) => setdetail(e)}
+                    // style={{textAlign: 'right'}}
                     mainStyle={styles.mainInput} parentStyle={styles.input_parent_style} />
 
 
