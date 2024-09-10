@@ -195,7 +195,7 @@ const CreateDoctor = (props) => {
         else if (!TimeSlots) {
             dispatch(showAlert({ message: 'Please set availability' }))
         }
-        else if(duration < 10) {
+        else if(duration && duration < 10) {
             dispatch(showAlert({ message: 'Duration cannot be less than 10 minutes' }))
         }
         else {
@@ -209,7 +209,7 @@ const CreateDoctor = (props) => {
                 experience: experience,
                 about: about,
                 availability: TimeSlots,
-                duration: duration ? duration : undefined
+                duration: duration 
             }
             dispatch(DoctorsMiddleware.onCreateDoctor(data))
                 .then(() => { setopenModal(true) })
@@ -218,7 +218,7 @@ const CreateDoctor = (props) => {
     }
 
     const onPressUpdateDoctor = () => {
-        if(duration < 10) {
+        if(duration && duration < 10) {
             dispatch(showAlert({ message: 'Duration cannot be less than 10 minutes' }))
             return
         }
@@ -302,7 +302,7 @@ const CreateDoctor = (props) => {
                     array={doctorCategories}
                     state={specialization}
                     setState={(e) => setspecialization(e)}
-                    style={{ width: '90%', marginBottom: 10 }} />
+                    style={{ width: '90%', marginBottom: 10, }} />
 
                 <Input
                     label={'Fee (per slot)'}
@@ -357,7 +357,7 @@ const CreateDoctor = (props) => {
                                 <TextComponent text={item?.day ? item?.day : '--'} style={styles.text} />
                             </View>
                             <View key={index} style={[styles.slot_box, { width: 130 }]} >
-                                <TextComponent style={styles.textx} text={(routeData?.screenType == 'edit' ? moment(item?.shift_start_Time).utc().format('hh:mm A') : moment(item?.shift_start_Time).format('hh:mm A')) + ' - ' + (routeData?.screenType == 'edit' ? moment(item?.shift_end_Time).utc().format('hh:mm A') : moment(item?.shift_end_Time).format('hh:mm A'))} />
+                                <TextComponent style={styles.textx} text={(routeData?.screenType == 'edit' ? moment(item?.shift_start_Time).format('hh:mm A') : moment(item?.shift_start_Time).format('hh:mm A')) + ' - ' + (routeData?.screenType == 'edit' ? moment(item?.shift_end_Time).format('hh:mm A') : moment(item?.shift_end_Time).format('hh:mm A'))} />
                             </View>
                             <TouchableOpacity onPress={() => {
                                 let temp = TimeSlots;

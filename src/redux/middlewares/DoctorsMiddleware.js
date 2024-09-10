@@ -146,7 +146,10 @@ export const DoctorsMiddleware = {
               data: params?.password,
             },
 
-
+            {
+              name: "duration",
+              data: params?.duration ? params?.duration.toString() : '15',
+            },
 
             {
               name: 'image',
@@ -159,9 +162,7 @@ export const DoctorsMiddleware = {
             ...responseData,
           ]
 
-          if (duration) {
-            dataToSend.push(duration)
-          }
+          
 
           // console.log('====================================');
           // console.log(JSON.stringify(dataToSend, null, 8));

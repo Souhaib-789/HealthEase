@@ -67,7 +67,7 @@ const DoctorHome = () => {
                 <TouchableOpacity style={styles.Appointment_card} onPress={() => navigation.navigate('PatientDetails', { item: item, screenType: 'doctor' })} >
                     <View style={styles.appointment_card_subview1}>
                         <View style={styles.appointment_card_subview2}>
-                            <Image source={item?.patient?.image_url ? { uri: item?.patient?.image_url } : AVATAR} style={styles.Appointment_image} />
+                            <Image source={item?.patient?.image ? { uri: item?.patient?.image } : AVATAR} style={styles.Appointment_image} resizeMode='cover' />
                             <View>
                                 <TextComponent style={[styles.appointment_card_text, { fontFamily: Fonts?.SEMIBOLD }]} text={item?.patient?.user_name ? item?.patient?.user_name : '--'} />
                                 <TextComponent style={styles.appointment_card_span} text={'for ' + (item?.name ? item?.name : '--')} />

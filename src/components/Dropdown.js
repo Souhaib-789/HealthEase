@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FlatList, LayoutAnimation, StyleSheet, TouchableOpacity, View } from "react-native";
+import { FlatList, LayoutAnimation, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import TextComponent from "./TextComponent";
 import Icon, { IconTypes } from "./Icon";
 import { Colors } from "../utilities/Colors";
@@ -53,7 +53,7 @@ const Dropdown = (props) => {
           style={[
             styles.openDropdownContainer,
             {
-              maxHeight: 150,
+              // maxHeight: 150,
               position: "absolute",
               top: "127%",
               right: props.isRelative ? null : -12,
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors?.WHITE,
     borderColor: Colors?.BORDER,
     elevation: 4,
-    width: 130,
+    width: 160,
     padding: 5,
     alignSelf: "flex-end",
     borderBottomRightRadius: 10,
@@ -117,7 +117,8 @@ const styles = StyleSheet.create({
   },
   optionContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    gap: 12,
+    // justifyContent: "space-between",
     alignItems: "center",
     padding: 6,
   },

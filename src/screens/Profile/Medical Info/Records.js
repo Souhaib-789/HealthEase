@@ -152,14 +152,13 @@ const Records = () => {
 
     return (
         <View style={styles.Container}>
-            <ScrollView>
-                <Header title={'Records'} back profile />
                 <FlatList
                     showsVerticalScrollIndicator={false}
                     data={loading ? [1, 2, 3, 4, 5, 6] : LIST}
                     renderItem={renderDocsItem}
                     keyExtractor={item => item?.id}
                     ListEmptyComponent={<ListEmptyComponent text={'no records found'} />}
+                    style={{marginTop: 20}}
                     refreshControl={
                         <RefreshControl
                             refreshing={false}
@@ -168,7 +167,6 @@ const Records = () => {
                     }
                 />
 
-            </ScrollView>
 
             <RNModal
                 animationType={'slide'}
@@ -310,7 +308,7 @@ const styles = StyleSheet.create({
         paddingVertical: 37,
         paddingHorizontal: 15,
         backgroundColor: Colors.WHITE,
-        marginTop: '60%',
+        marginTop: '80%',
         borderTopLeftRadius: 25,
         borderTopRightRadius: 25,
         width: '100%',
