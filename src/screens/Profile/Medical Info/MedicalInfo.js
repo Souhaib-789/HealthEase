@@ -23,7 +23,7 @@ const MedicalInfo = () => {
     return (
         <View style={styles.container}>
 
-            <TouchableOpacity style={styles.item}
+            {/* <TouchableOpacity style={styles.item}
                 onPress={() => {
                     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
                     setOnExpand(!onExpand)
@@ -52,7 +52,7 @@ const MedicalInfo = () => {
                     </>
                 }
 
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('Records')}>
                 <View style={styles.wide_row} >

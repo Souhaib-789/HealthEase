@@ -13,7 +13,7 @@ const Healthbot = () => {
 
     return (
         <View style={styles.Container}>
-                <Image source={require('../../assets/images/BG2.png')} style={{position: 'absolute', bottom: 15 , width: '100%', height: '100%' }} />
+                <Image source={require('../../assets/images/BG3.png')} style={{position: 'absolute', bottom: 15 , width: '100%', height: '100%' }} />
                 <View style={styles.heading_container}>
                     <TextComponent style={styles.heading} text={"Hello ! I'm "} />
                     <TextComponent style={styles.headingx} text={"Healthbot"} />

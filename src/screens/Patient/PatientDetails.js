@@ -24,8 +24,8 @@ const PatientDetails = (props) => {
     const [presSubmitted, setPresSubmitted] = useState(false)
     const navigation = useNavigation()
     const dispatch = useDispatch()
-    const startTime = moment(item?.startTime).utc().format('hh:mm A')
-    const endTime = moment(item?.endTime).utc().format('hh:mm A')
+    const startTime = moment(item?.startTime).format('hh:mm A')
+    const endTime = moment(item?.endTime).format('hh:mm A')
     console.log('item', JSON.stringify(item, null, 8))
 
     const onMakeCompleted = () => {
@@ -63,7 +63,7 @@ const PatientDetails = (props) => {
                                 <Icon name='calendar-clear-outline' type={IconTypes.Ionicons} size={18} color={Colors?.BLACK} />
                                 <TextComponent text={'Day :  '} style={styles.short_heading} />
                             </View>
-                            <TextComponent text={item?.date ? moment(item?.date).format("dddd MM ' YYYY") : '--'} style={styles.texty} />
+                            <TextComponent text={item?.date ? moment(item?.date).utc().format("ddd , DD MMMM") : '--'} style={styles.texty} />
                         </View>
 
                         <View style={styles.wide_row}>

@@ -127,7 +127,7 @@ const DoctorDetails = (props) => {
                     <Icon type={IconTypes?.MaterialIcons} name={item?.icon_name} size={16} color={Colors?.PRIMARY} />
                 </View>
                 <View>
-                    <TextComponent style={[styles.textx, { fontFamily: Fonts?.SEMIBOLD, fontSize: 12, color: Colors?.BLACK }]} text={item?.no + ' ' + (item?.name == 'Experience' ? t(' Years ') : '')} />
+                    <TextComponent style={[styles.textx, { fontFamily: Fonts?.SEMIBOLD, fontSize: 12, color: Colors?.BLACK }]} text={item?.no + ' ' + (item?.name == 'Experience' ? ( item?.no > 1 ?  t(' Years ') : t(' Year')): '')} />
                     <TextComponent style={[styles.textx, { color: Colors?.DGREY, fontSize: 10 }]} text={item?.name} />
                 </View>
             </TouchableOpacity>
@@ -135,8 +135,8 @@ const DoctorDetails = (props) => {
     }
 
     const renderSlotCard = ({ item, index }) => {
-        const formattedTime = moment(item).utc().format('h:mm A');
-        const toTime = moment(item).add(DETAILS?.duration, 'minutes').utc().format('h:mm A');
+        const formattedTime = moment(item).format('h:mm A');
+        const toTime = moment(item).add(DETAILS?.duration, 'minutes').format('h:mm A');
         const checkIsLastIndex = timeSlots.length - 1 == index;
         return (
             checkIsLastIndex ? null :
@@ -200,9 +200,9 @@ const DoctorDetails = (props) => {
                     {
                         USER?.user_role == 'hospital' ?
                             <>
-                                {/* <TouchableOpacity style={styles.trash} onPress={onPressDelDoctor}>
+                                <TouchableOpacity style={styles.trash} onPress={onPressDelDoctor}>
                                     <Icon type={IconTypes.Ionicons} name={'trash'} color={Colors?.PRIMARY} size={18} />
-                                </TouchableOpacity> */}
+                                </TouchableOpacity>
 
                                 <TouchableOpacity style={styles.heart} onPress={() => navigation.navigate('CreateDoctor', { screenType: 'edit' })}>
                                     <Icon type={IconTypes.AntDesign} name={'edit'} color={Colors?.DGREY} size={18} />
@@ -315,8 +315,9 @@ const DoctorDetails = (props) => {
                                     USER?.user_role == 'hospital' ?
                                         null
                                         :
-                                        <Button title={'Schedule appointment'}
+                                        <Button title={'Schedule Appointment'}
                                             style={{ marginVertical: 25 }}
+                                            icon={<Image tintColor={Colors.WHITE} source={require('../../assets/images/add.png')} style={{ width: 18, height: 18 }} />}
                                             onPress={onProceed} />
                                 }
 

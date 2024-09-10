@@ -7,7 +7,6 @@ import Header from "../../components/Header";
 import BotIcon from "../../assets/images/bot.png";
 import Image from "../../components/Image";
 import Avatar from "../../assets/images/avatar.png";
-import perfil from "../../assets/images/profile.png";
 import moment from "moment";
 import Input from "../../components/Input";
 import Icon, { IconTypes } from "../../components/Icon";
@@ -31,6 +30,7 @@ const HealthbotChat = () => {
     const {t} = useTranslation()
     const [isTextShown, setisTextShown] = useState(false);
     const [lengthMore, setLengthMore] = useState(false);
+    const USER = useSelector(state => state.AuthReducer?.user);
 
     const renderChatItem = ({ item }) => {
         if (item?.user?.id != user?.id) {
@@ -69,7 +69,7 @@ const HealthbotChat = () => {
                         </View>
                         <TextComponent text={moment(item?.createdAt).fromNow()} style={[styles.chat_time, { alignSelf: 'flex-start' }]} />
                     </View>
-                    <Image source={perfil ? perfil : Avatar} style={styles.bot_image} resizeMode={'cover'} />
+                    <Image source={USER?.image_url ? {uri: USER?.image_url} : USER?.image ? {uri: USER?.image } : Avatar} style={styles.bot_image} resizeMode={'cover'} />
                 </View>
             );
         }

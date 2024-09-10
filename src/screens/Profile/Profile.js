@@ -2,14 +2,13 @@ import React from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { Colors } from "../../utilities/Colors";
 import Header from "../../components/Header";
-import perfil from '../../assets/images/profile.png'
 import Image from "../../components/Image";
 import TextComponent from "../../components/TextComponent";
 import { Fonts } from "../../utilities/Fonts";
 import Avatar from '../../assets/images/avatar.png'
 import PersonalInfo from "./PersonalInfo";
-import MedicalRecords from "./Medical Info/MedicalInfo";
 import { useSelector } from "react-redux";
+import Records from "./Medical Info/Records";
 
 const Profile = () => {
     const USER = useSelector(state => state.AuthReducer?.user);
@@ -28,7 +27,7 @@ const Profile = () => {
 
     return (
         <View style={styles.Container}>
-            <Header title={'Profile'} back bell={USER?.user_role != 'doctor'} style={{ backgroundColor: Colors.PRIMARY }}
+            <Header title={'Profile'} back  style={{ backgroundColor: Colors.PRIMARY }}
                 titleStyle={{ color: Colors.WHITE }} iconColor={Colors.WHITE} logout={USER?.user_role == 'doctor'} />
 
             <View style={styles.flex}>
@@ -41,7 +40,7 @@ const Profile = () => {
                     null :
                     (
                         <View style={styles.tab_container}>
-                            {[{ id: 1, name: 'Personal Info' }, { id: 2, name: 'Medical Info' }].map(renderTopTab)}
+                            {[{ id: 1, name: 'Personal Info' }, { id: 2, name: 'Medical Records' }].map(renderTopTab)}
                         </View>
                     )
             }
@@ -50,7 +49,7 @@ const Profile = () => {
                 activeComponent.name == 'Personal Info' ?
                     <PersonalInfo />
                     :
-                    <MedicalRecords />
+                    <Records />
             }
         </View>
     )

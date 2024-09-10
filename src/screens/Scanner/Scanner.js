@@ -86,8 +86,8 @@ const Scanner = () => {
             <ScrollView>
                 <Header title={t("Scanner")} />
 
-                <Icon name={"scan"} type={IconTypes.Ionicons} color={Colors.PRIMARY} size={170} style={styles.scan_icon} />
-                <Icon name={"drug-pack"} type={IconTypes.Fontisto} color={Colors.PRIMARY} size={50} style={styles.med_icon} />
+                <Icon name={"scan"} type={IconTypes.Ionicons} color={Colors.PRIMARY} size={150} style={styles.scan_icon} />
+                <Icon name={"drug-pack"} type={IconTypes.Fontisto} color={Colors.PRIMARY} size={40} style={styles.med_icon} />
 
                 <TextComponent style={styles.headingy} text={t("Recognize your medicine by scanning its image")} />
                 <Button onPress={onUploadImage} title={t("SCAN")} style={styles.button} />
@@ -106,7 +106,7 @@ const Scanner = () => {
                             <Image source={{ uri: image?.uri }} style={styles.image} resizeMode='cover' />
                         </View>
                         <TouchableOpacity onPress={() => onScan(image.uri)}>
-                            <Icon name={'repeat'} type={IconTypes.FontAwesome} size={20} color={Colors.PRIMARY} style={{ alignSelf: 'center', marginTop: 15 }} />
+                            <Icon name={'sound'} type={IconTypes.AntDesign} size={22} color={Colors.PRIMARY} style={{ alignSelf: 'center', marginTop: 15 }} />
                         </TouchableOpacity>
 
                         <TextComponent text={text} style={styles.output_text} />
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     },
     image_container: { backgroundColor: Colors.WHITE, elevation: 5, borderRadius: 8, width: 220, height: 220, padding: 5, marginTop: 30, alignSelf: 'center', justifyContent: 'center', alignItems: 'center' },
     image: { width: '100%', height: '100%', borderRadius: 10 },
-    output_text: { alignSelf: 'center', width: '80%', textAlign: 'center', color: Colors.PRIMARY, fontSize: 16, fontFamily: Fonts.SEMIBOLD, marginTop: 18 },
+    output_text: { alignSelf: 'center', width: '80%', textAlign: 'center', color: Colors.PRIMARY, fontSize: 14, fontFamily: Fonts.SEMIBOLD, marginTop: 18 },
     share_button: { alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.LIGHT, borderWidth: 1, borderColor: Colors.PRIMARY, borderRadius: 8, width: 43, height: 47 },
     scan_icon: { position: 'absolute', top: 100, alignSelf: 'center', marginVertical: 100 },
     med_icon: { alignSelf: 'center', marginTop: 200 },
@@ -151,12 +151,14 @@ const styles = StyleSheet.create({
     },
     headingy: {
         marginTop: '60%',
-        fontSize: 14,
-        width: '70%',
+        fontSize: 12,
+        width: '60%',
+        fontFamily: Fonts.MEDIUM,
         alignSelf: "center",
         textAlign: "center",
     },
     button: {
+        paddingVertical: 10,
         marginVertical: 20,
         alignSelf: "center",
         width: '60%',

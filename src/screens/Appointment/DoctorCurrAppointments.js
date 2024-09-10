@@ -69,7 +69,7 @@ const DoctorCurrAppointments = (props) => {
                     </View>
                     <View style={styles.appointment_card_subview4}>
                         <Ionicons name='time-outline' color={Colors.PRIMARY} size={15} />
-                        <TextComponent style={styles.appointment_card_span} text={item?.startTime ? moment(item?.startTime).utc().format('hh:mm A') : '--'} />
+                        <TextComponent style={styles.appointment_card_span} text={item?.startTime ? moment(item?.startTime).format('hh:mm A') : '--'} />
                     </View>
                 </View>
             </TouchableOpacity>

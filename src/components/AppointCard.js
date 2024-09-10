@@ -44,11 +44,11 @@ const AppointCard = ({ item, screenType, loading }) => {
                 <View style={styles.flex}>
                     <View style={[styles.flex, { gap: 5 }]}>
                         <Icon type={IconTypes.Feather} name={'calendar'} size={12} color={Colors.GREY} />
-                        <TextComponent style={styles.span} text={item?.date ? moment(item?.date).format('DD MMM YYYY') + '  |  ' : '--'} />
+                        <TextComponent style={styles.span} text={item?.date ? moment(item?.date).utc().format('DD MMM YYYY') + '  |  ' : '--'} />
                     </View>
                     <View style={[styles.flex, { gap: 5 }]}>
                         <Icon type={IconTypes.SimpleLineIcons} name={'clock'} size={12} color={Colors.GREY} />
-                        <TextComponent style={styles.span} text={item?.startTime ? moment(item?.startTime).utc().format('hh : mm A') : '--'} />
+                        <TextComponent style={styles.span} text={item?.startTime ? moment(item?.startTime).format('hh : mm A') : '--'} />
                     </View>
                 </View>
 

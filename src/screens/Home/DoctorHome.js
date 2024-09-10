@@ -67,7 +67,7 @@ const DoctorHome = () => {
                 <TouchableOpacity style={styles.Appointment_card} onPress={() => navigation.navigate('PatientDetails', { item: item, screenType: 'doctor' })} >
                     <View style={styles.appointment_card_subview1}>
                         <View style={styles.appointment_card_subview2}>
-                            <Image source={item?.patient?.image_url ? { uri: item?.patient?.image_url } : AVATAR} style={styles.Appointment_image} />
+                            <Image source={item?.patient?.image ? { uri: item?.patient?.image } : AVATAR} style={styles.Appointment_image} resizeMode='cover' />
                             <View>
                                 <TextComponent style={[styles.appointment_card_text, { fontFamily: Fonts?.SEMIBOLD }]} text={item?.patient?.user_name ? item?.patient?.user_name : '--'} />
                                 <TextComponent style={styles.appointment_card_span} text={'for ' + (item?.name ? item?.name : '--')} />
@@ -79,11 +79,11 @@ const DoctorHome = () => {
                     <View style={styles.appointment_card_subview3}>
                         <View style={styles.appointment_card_subview4}>
                             <Icon type={IconTypes.Feather} name={'calendar'} size={15} color={Colors.PRIMARY} />
-                            <TextComponent style={styles.appointment_card_span} text={item?.date ? moment(item?.date).format('DD MMM YYYY') : '--'} />
+                            <TextComponent style={styles.appointment_card_span} text={item?.date ? moment(item?.date).utc().format('DD MMM YYYY') : '--'} />
                         </View>
                         <View style={styles.appointment_card_subview4}>
                             <Ionicons name='time-outline' color={Colors.PRIMARY} size={15} />
-                            <TextComponent style={styles.appointment_card_span} text={item?.startTime ? moment(item?.startTime).utc().format('hh:mm A') : '--'} />
+                            <TextComponent style={styles.appointment_card_span} text={item?.startTime ? moment(item?.startTime).format('hh:mm A') : '--'} />
                         </View>
                     </View>
                 </TouchableOpacity>
