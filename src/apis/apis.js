@@ -1,10 +1,13 @@
 
+// Home
+// const BASE_URL = `http://192.168.2.106:3000`;
+// Phone
+const BASE_URL = `http://192.168.87.165:3000`;
 
-const BASE_URL = `http://192.168.2.106:3000`;
 // const BASE_URL = `http://192.168.0.178:3000`;
 // const BASE_URL = `http://192.168.201.165:3000`;
 // export const IMAGE_URL = `http://192.168.201.165:3000/images/`;
-export const IMAGE_URL = `http://192.168.2.106:3000/images/`;
+// export const IMAGE_URL = `http://192.168.2.106:3000/images/`;
 
 
 const Apis = {

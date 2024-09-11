@@ -16,7 +16,7 @@ const BookTest = (props) => {
 
     const navigation = useNavigation();
     const routeData = props?.route?.params?.item
-    console.log('---------------', routeData);
+    // console.log('---------------', routeData);
 
     const [name, setname] = useState()
     const [age, setage] = useState()
@@ -49,7 +49,6 @@ const BookTest = (props) => {
             mobile_no: mobile,
             email: email
         }
-        console.log('----------------', TestData)
         setopenModal(true)
     }
 

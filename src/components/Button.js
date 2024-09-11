@@ -16,7 +16,7 @@ const Button = (props) => {
                     {
                         props?.icon && props?.icon
                     }
-            <TextComponent style={[styles.text, { color: props?.light ? Colors?.PRIMARY : Colors?.WHITE, fontFamily: Fonts?.SEMIBOLD }, { ...props?.text_style }]} text={props?.title} />
+            <TextComponent style={[styles.text, { color: props?.light ? Colors?.PRIMARY : Colors?.WHITE, fontFamily: Fonts?.SEMIBOLD }, { ...props?.text_style }]} numberOfLines={1} text={props?.title} />
         </TouchableOpacity>
     )
 }

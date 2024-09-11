@@ -25,7 +25,7 @@ const AppointmentDetails = (props) => {
     const screenType = props?.route?.params?.screenType;
     const startTime = moment(routeData?.startTime).format('hh:mm A')
     const endTime = moment(routeData?.endTime).format('hh:mm A')
-    console.log('--------', JSON.stringify(routeData, null, 8));
+    // console.log('--------', JSON.stringify(routeData, null, 8));
     const { t } = useTranslation();
     const details = [
         {
@@ -196,7 +196,11 @@ const AppointmentDetails = (props) => {
                     {
                         screenType === 'upcoming' ?
 
-                            <Button onPress={goToLocation} icon={<Icon name='map-location' type={IconTypes.FontAwesome6} size={20} color={Colors?.PRIMARY} />} title={t(`Get Directions to ${routeData?.docter?.hospital?.user_name ? routeData?.docter?.hospital?.user_name : 'hospital'}`)} light style={styles.button} />
+                            <Button onPress={goToLocation} 
+                            icon={<Icon name='map-location' type={IconTypes.FontAwesome6} size={20} color={Colors?.PRIMARY} />}
+                             title={isUrdu ?  'ہسپتال ' + t('Get Directions to') : 'Get Directions to ' + (  routeData?.docter?.hospital?.user_name ? routeData?.docter?.hospital?.user_name : 'hospital') } 
+                             light style={styles.button}
+                             text_style={{ width: '80%'}} />
                             :
                             <Button onPress={() => setShowReviewModal(true)} icon={<Icon name='star' type={IconTypes.AntDesign} size={20} color={Colors?.PRIMARY} />} title={'Add Review'} light style={styles.button} />
                     }

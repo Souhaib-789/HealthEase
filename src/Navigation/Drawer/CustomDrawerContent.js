@@ -76,9 +76,7 @@ function CustomDrawerContent(props) {
         }
     ]
 
-console.log('====================================');
-console.log('USER', JSON.stringify(USER, null, 2));
-console.log('====================================');
+
 
     const openModal = () => {
         setModalVisible(true)

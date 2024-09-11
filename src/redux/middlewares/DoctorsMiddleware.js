@@ -299,9 +299,9 @@ export const DoctorsMiddleware = {
             dataToSend.push(...responseData)
           }
 
-          console.log('====================================');
-          console.log(JSON.stringify(dataToSend, null, 8));
-          console.log('====================================');
+          // console.log('====================================');
+          // console.log(JSON.stringify(dataToSend, null, 8));
+          // console.log('====================================');
 
           await RNFetchBlob
             // .config({ timeout: 60 * 60 })
@@ -311,9 +311,6 @@ export const DoctorsMiddleware = {
             )
             .then((value) => {
               let data = JSON.parse(value?.data)
-              console.log('----------------------------');
-              console.log(JSON.stringify(data.data, null, 8));
-              console.log('----------------------------');
               if (data?.status == true) {
                 resolve(true)
                 dispatch(updateHospitalDoctors(data?.data));

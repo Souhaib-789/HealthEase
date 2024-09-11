@@ -92,7 +92,6 @@ const HospitalDoctorDetails = (props) => {
         },
     ]
 
-    console.log(routeData);
 
 
     const renderDetailsItem = (item, index) => {

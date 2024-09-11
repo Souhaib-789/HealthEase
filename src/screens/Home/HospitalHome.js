@@ -23,9 +23,9 @@ const HospitalHome = () => {
         fetchData()
     }, [])
 
-    console.log('====================================');
-    console.log('DashbaordData', JSON.stringify(DashbaordData));
-    console.log('====================================');
+    // console.log('====================================');
+    // console.log('DashbaordData', JSON.stringify(DashbaordData));
+    // console.log('====================================');
 
     const fetchData = () => {
         dispatch(HospitalMiddleware.onFetchDashboardData())

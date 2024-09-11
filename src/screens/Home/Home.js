@@ -39,7 +39,7 @@ const Home = () => {
     const UPAppointment = useSelector(state => state.AppointmentsReducer?.myAppointmentList[0])
     const isUrdu = isUrduLanguage();
 
-    // console.log('Data ->>>>', JSON.stringify(UPAppointment?.[0], null, 8));
+    // console.log('Data ->>>>', JSON.stringify(Doctors, null, 8));
 
     useEffect(() => {
         fetchDoctorsData();
@@ -197,7 +197,12 @@ const Home = () => {
                         </TouchableOpacity>
                         <Image source={require('../../assets/images/BG3.png')} style={{ position: 'absolute', bottom: 150, width: '100%', height: '80%' }} />
                         <View style={styles.heading_container}>
-                            <TextComponent style={styles.heading} text={t("Hello ! I'm ")} />
+                            {
+                                isUrdu ? 
+                                null :
+                                <TextComponent style={styles.heading} text={t("Hello ! I'm ")} />
+
+                            }
                             <TextComponent style={styles.headingx} text={t("Healthbot")} />
                         </View>
 
