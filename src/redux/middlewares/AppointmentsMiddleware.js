@@ -2,7 +2,7 @@ import Axios from 'axios';
 import Apis from '../../apis/apis';
 import { hideLoading, showAlert, showLoading } from '../actions/GeneralAction';
 import { headers } from '../../utilities/Utilities';
-import {  getDoctorAppointments, getMyAppointments, updateDoctorAppointments } from '../actions/AppointmentsActions';
+import { getDoctorAppointments, getMyAppointments, updateDoctorAppointments } from '../actions/AppointmentsActions';
 
 export const AppointmentsMiddleware = {
 
@@ -26,9 +26,7 @@ export const AppointmentsMiddleware = {
           const data = await Axios.post(Apis.bookAppointment, rawData, await headers.config());
           if (data?.status == 200) {
             resolve(true)
-            console.log('====================================');
-console.log('rawData', JSON.stringify(data?.data, null, 8));
-console.log('====================================');
+         
           }
         } catch (error) {
           reject(error);
@@ -53,7 +51,7 @@ console.log('====================================');
       return new Promise(async (resolve, reject) => {
         try {
           const rawData = { status: params?.status, search: params?.search }
-          const data = await Axios.post(Apis.get_my_appointments, params?.search ? rawData : {status: params?.status} , await headers.config());
+          const data = await Axios.post(Apis.get_my_appointments, params?.search ? rawData : { status: params?.status }, await headers.config());
           if (data?.status == 200) {
             resolve(true)
             dispatch(getMyAppointments(data?.data?.data))
@@ -80,8 +78,8 @@ console.log('====================================');
         try {
           const rawData = { doctor_id: params?.doctorId }
           const data = await Axios.post(Apis.getDocterAppointment,
-             params?.date ? { doctor_id: params?.doctorId , date: params?.date } : rawData,
-              await headers.config());
+            params?.date ? { doctor_id: params?.doctorId, date: params?.date } : rawData,
+            await headers.config());
 
           if (data?.status == 200) {
             resolve(true)
@@ -103,7 +101,7 @@ console.log('====================================');
   },
 
   //complete appointment by doctor
-  onCompleteAppointment : params => {
+  onCompleteAppointment: params => {
     return dispatch => {
       dispatch(showLoading());
       return new Promise(async (resolve, reject) => {
@@ -112,7 +110,7 @@ console.log('====================================');
             appointment_id: params?.id,
           }
           const data = await Axios.post(Apis.completeAppointment, rawData, await headers.config());
-          if (data?.status == 200) {           
+          if (data?.status == 200) {
             resolve(data?.data)
             dispatch(updateDoctorAppointments(data?.data?.data))
           }
@@ -134,7 +132,7 @@ console.log('====================================');
   },
 
   //add prescription by doctor
-  onAddPrescription : params => {
+  onAddPrescription: params => {
     return dispatch => {
       dispatch(showLoading());
       return new Promise(async (resolve, reject) => {
@@ -143,7 +141,7 @@ console.log('====================================');
             appointment_id: params?.id,
             prescription: params?.prescription,
           }
-          
+
           const data = await Axios.post(Apis.writePrescription, rawData, await headers.config());
           if (data?.status == 200) {
             resolve(true)

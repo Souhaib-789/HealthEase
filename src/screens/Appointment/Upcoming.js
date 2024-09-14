@@ -20,7 +20,6 @@ const Upcoming = () => {
     const ref = React.useRef();
     const navigation = useNavigation();
 
-// console.log(JSON.stringify(appointmentsData, null, 8));
 
       useFocusEffect(
         useCallback(() => {

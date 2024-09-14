@@ -1,8 +1,12 @@
 
 // Home
 // const BASE_URL = `http://192.168.2.106:3000`;
+
 // Phone
-const BASE_URL = `http://192.168.87.165:3000`;
+const BASE_URL = `http://192.168.181.165:3000`;
+
+// Fasih Phone
+// const BASE_URL = `http://192.168.62.165:3000`;
 
 // const BASE_URL = `http://192.168.0.178:3000`;
 // const BASE_URL = `http://192.168.201.165:3000`;
@@ -20,6 +24,7 @@ const Apis = {
     getDoctors: `${BASE_URL}/user/api/getDocters`,
     getFavDocters: `${BASE_URL}/user/api/getFavDocters`,
     deleteDocters: `${BASE_URL}/hospital/api/deleteDocters`,
+    getReviews: `${BASE_URL}/user/api/getReviews`,
 
     // Appointments
     bookAppointment: `${BASE_URL}/user/api/book-Appointment`,

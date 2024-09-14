@@ -41,6 +41,8 @@ const Header = props => {
           // <TouchableOpacity onPress={() => navigation.navigate('Notifications')} >
           //   <Image source={bellIcon} style={styles.icon_image} tintColor={Colors.PRIMARY} />
           // </TouchableOpacity>
+      // android:allowBackup="false"
+
         }
 
         {

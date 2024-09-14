@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { View, StyleSheet, TouchableOpacity, ScrollView, FlatList, RefreshControl, Modal } from "react-native";
 import { Colors } from "../../utilities/Colors";
 import Feather from 'react-native-vector-icons/Feather'
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import Input from "../../components/Input";
 import TextComponent from "../../components/TextComponent";
 import Icon, { IconTypes } from "../../components/Icon";
@@ -42,10 +42,16 @@ const Home = () => {
     // console.log('Data ->>>>', JSON.stringify(Doctors, null, 8));
 
     useEffect(() => {
-        fetchDoctorsData();
-        fetchAppointmentsData();
         checkIntroModalStatus();
     }, [])
+
+    useFocusEffect(
+        useCallback(() => {
+            fetchDoctorsData();
+            fetchAppointmentsData(); 
+         }, [navigation])
+      );
+
 
 
     const fetchDoctorsData = () => {

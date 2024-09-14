@@ -1,5 +1,5 @@
-import React from "react";
-import { View, StyleSheet, ScrollView, FlatList, } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, ScrollView, FlatList, RefreshControl, } from "react-native";
 import Header from "../../components/Header";
 import { Colors } from "../../utilities/Colors";
 import ListEmptyComponent from "../../components/ListEmptyComponent";
@@ -7,7 +7,9 @@ import TextComponent from "../../components/TextComponent";
 import { Fonts } from "../../utilities/Fonts";
 import { Rating, AirbnbRating } from 'react-native-ratings';
 import STAR from '../../assets/images/star.png';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { DoctorsMiddleware } from "../../redux/middlewares/DoctorsMiddleware";
+import Skeleton from "../../components/Skeleton";
 
 
 const Reviews = (props) => {
@@ -15,18 +17,53 @@ const Reviews = (props) => {
 
     const item = props.route?.params?.item;
     const USER = useSelector(state => state.AuthReducer?.user);
-    console.log(JSON.stringify(item));
+    const dispatch = useDispatch();
+    const [content, setContent] = useState('');
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (USER?.user_role == 'doctor') {
+            getData()
+        }else{
+            setLoading(false)
+        }
+    }, [])
+
+    console.log(JSON.stringify(content, null , 8));
+
+
+    const getData = () => {
+        dispatch(DoctorsMiddleware.getDoctorsReview())
+            .then((res) => {               
+                setContent(res)
+                setLoading(false)
+            })
+            .catch((error) => {
+                console.log('error', error)
+                setLoading(false)
+            })
+    }
 
     return (
         <View style={styles.mainContainer}>
             <Header back profile title={'Reviews'} />
-            <ScrollView>
+            <ScrollView
+             refreshControl={
+                <RefreshControl
+                    refreshing={false}
+                    onRefresh={getData}
+                />
+            }
+            >
 
                 <FlatList
                     key={"ReviewsList"}
                     showsVerticalScrollIndicator={false}
-                    data={USER?.user_role == 'doctor' ? USER?.Reviews : item}
+                    data={USER?.user_role == 'doctor' ? loading ? [1,2,3,4,5]  :content : item}
                     renderItem={({ item }) => (
+                        loading ?
+                        <Skeleton style={{ width: '90%', marginTop: 15, alignSelf: 'center', height: 75, borderRadius: 10 }} />
+                        :
                         <View style={styles.reviewCard}>
 
                             <Rating

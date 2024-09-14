@@ -31,6 +31,7 @@ const AppointmentForm = (props) => {
     const DETAILS = useSelector(state => state.DoctorsReducer?.doctorDetails)
 
     const formattedDate = moment(routeData?.date).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+ console.log(JSON.stringify(DETAILS, null, 8));
  
 
     const onBookAppointment = () => {
@@ -56,7 +57,9 @@ const AppointmentForm = (props) => {
             }
 
             dispatch(AppointmentsMiddleware.onBookAppointment(data))
-                .then((res) => { setopenModal(true) })
+                .then((res) => { setopenModal(true) , 
+                    dispatch(AppointmentsMiddleware.getAppointmentsData({ status: 'upcoming', search: undefined }))
+                 })
                 .catch((err) => { console.log('error', err) })
         }
     }
@@ -126,7 +129,7 @@ const AppointmentForm = (props) => {
                         <TextComponent style={styles.modal_message} text={'Your appointment has been booked. You can find this in upcoming appointments.'} />
                     </View>
                 }
-                OnClose={() => navigation.navigate('Home')}
+                OnClose={() => {navigation.navigate('Home'), setopenModal(false)}}
                 close={true}
                 visible={openModal} />
 

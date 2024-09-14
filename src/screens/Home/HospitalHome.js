@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, TouchableOpacity, ScrollView, FlatList } from "react-native";
+import { View, StyleSheet, TouchableOpacity, ScrollView, FlatList, RefreshControl } from "react-native";
 import { Colors } from "../../utilities/Colors";
 import { useNavigation } from "@react-navigation/native";
 import TextComponent from "../../components/TextComponent";
@@ -11,6 +11,7 @@ import HOSPITAL from '../../assets/images/hospital.png'
 import NO_DOC from '../../assets/images/noDoc.png'
 import { useDispatch, useSelector } from "react-redux";
 import { HospitalMiddleware } from "../../redux/middlewares/HospitalMiddleware";
+import Skeleton from "../../components/Skeleton";
 
 const HospitalHome = () => {
     const navigation = useNavigation();
@@ -18,22 +19,24 @@ const HospitalHome = () => {
     const [loading, setLoading] = useState(true)
     const DashbaordData = useSelector(state => state.HospitalReducer.dashboardData)
     const USER = useSelector(state => state.AuthReducer.user)
+    const DoctorsList = useSelector(state => state.DoctorsReducer?.hospitalDoctors);
 
     useEffect(() => {
         fetchData()
     }, [])
 
-    // console.log('====================================');
-    // console.log('DashbaordData', JSON.stringify(DashbaordData));
-    // console.log('====================================');
+    console.log('====================================');
+    console.log('DashbaordData', JSON.stringify(DoctorsList));
+    console.log('====================================');
 
     const fetchData = () => {
+        setLoading(true)
         dispatch(HospitalMiddleware.onFetchDashboardData())
             .then(() => setLoading(false))
             .catch(() => setLoading(false))
     }
 
-   
+
 
     const renderItem = ({ item }) => {
         return (
@@ -59,20 +62,27 @@ const HospitalHome = () => {
         {
             id: 2,
             name: 'Appointments',
-            info: DashbaordData?.total_appointments_completed ? DashbaordData?.total_appointments_completed : 0,
+            info: DoctorsList?.length > 0 ? (DashbaordData?.total_appointments_completed ? DashbaordData?.total_appointments_completed : 0) : 0,
             icon: 'clipboard'
         },
         {
             id: 4,
             name: 'Departments',
-            info: '10',
+            info: '12',
             icon: 'building-o'
         }
     ]
 
     return (
         <View style={styles.mainContainer}>
-            <ScrollView showsVerticalScrollIndicator={false} >
+            <ScrollView showsVerticalScrollIndicator={false}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={false}
+                        onRefresh={fetchData}
+                    />
+                }
+            >
                 <View style={styles.home_header}>
                     <TouchableOpacity onPress={() => navigation.openDrawer()}>
                         <Icon type={IconTypes.Feather} name='menu' size={23} color={Colors.BLACK} />
@@ -83,25 +93,38 @@ const HospitalHome = () => {
 
                 <Image source={USER?.image ? { uri: USER?.image } : HOSPITAL} resizeMode={USER?.image ? 'cover' : 'contain'} style={{ width: '100%', marginTop: 20, alignSelf: 'center', height: 130, borderRadius: 10 }} />
 
+                {
+                    loading ?
+                        <>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '95%', flexWrap: 'wrap' }}>
+                                <Skeleton styles={{ width: '50%' }} style={{ width: '100%', height: 90, borderRadius: 10 }} />
+                                <Skeleton styles={{ width: '50%' }} style={{ width: '100%', height: 90, borderRadius: 10 }} />
+                            </View>
+                            <Skeleton styles={{ width: '45%' }} style={{ width: '100%', marginTop: 10, height: 90, borderRadius: 10 }} />
+                        </>
 
-                <View style={styles.wrap_row}>
-                    {
-                        info.map((item, index) => {
-                            return (
-                                <View style={[styles.card, { backgroundColor: index == 1 ? Colors.PRIMARY : Colors.WHITE }]} key={index}>
-                                    <View style={styles.wide_row}>
-                                        <View style={styles.card_icon}>
-                                            <Icon name={item.icon} type={IconTypes.FontAwesome} size={18} color={index == 1 ? Colors.WHITE : Colors.PRIMARY} />
+                        :
+                        <View style={styles.wrap_row}>
+                            {
+                                info.map((item, index) => {
+                                    return (
+
+                                        <View style={[styles.card, { backgroundColor: index == 1 ? Colors.PRIMARY : Colors.WHITE }]} key={index}>
+                                            <View style={styles.wide_row}>
+                                                <View style={styles.card_icon}>
+                                                    <Icon name={item.icon} type={IconTypes.FontAwesome} size={18} color={index == 1 ? Colors.WHITE : Colors.PRIMARY} />
+                                                </View>
+                                                <TextComponent style={[styles.card_headingx, { color: index == 1 ? Colors.WHITE : Colors.PRIMARY }]} text={item.info} />
+                                            </View>
+                                            <TextComponent style={[styles.card_heading, { color: index == 1 ? Colors.WHITE : Colors.BLACK }]} text={item.name} />
                                         </View>
-                                        <TextComponent style={[styles.card_headingx, { color: index == 1 ? Colors.WHITE : Colors.PRIMARY }]} text={item.info} />
-                                    </View>
-                                    <TextComponent style={[styles.card_heading, { color: index == 1 ? Colors.WHITE : Colors.BLACK }]} text={item.name} />
-                                </View>
-                            )
-                        }
-                        )
-                    }
-                </View>
+                                    )
+                                }
+                                )
+                            }
+                        </View>}
+
+
 
                 <TextComponent style={styles.heading} text={'Your Top Doctors'} />
                 <FlatList

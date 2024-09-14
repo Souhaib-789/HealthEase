@@ -9,8 +9,8 @@ export const askHealthbot = async (prompt) => {
     try {
         const response = await axios.post(GOOGLE_API + API_KEY, {
             "contents": [{
-                "parts": [{ "text": `You have to give healthy diet or food advice only of the following question . The question is: ${prompt}.` }
-                ]
+                // "parts": [{ "text": `You have to give healthy diet or food advice only of the following question . The question is: ${prompt}.` }
+                "parts": [{ "text": `You are tasked with suggesting a healthy meal plan based on the user's query or question, which will be provided as ${prompt}. Your responses should focus strictly on offering nutritious meal suggestions aligned with the query. If the user asks a question that is not related to health or meals, politely respond with: 'I am only here to suggest meal plans.` }]
             }]
         }
         )

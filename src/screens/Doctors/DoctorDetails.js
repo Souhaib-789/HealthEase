@@ -286,7 +286,7 @@ const DoctorDetails = (props) => {
 
                                         :
 
-                                        <TextComponent style={styles.heading} text={'Available Slots' + (selectedDate ? 'for' + moment(selectedDate).format('dddd') : ' ')} />
+                                        <TextComponent style={styles.heading} text={'Available Slots' + (selectedDate ? ' for ' + moment(selectedDate).format('dddd') : ' ')} />
                                 }
 
                                 {

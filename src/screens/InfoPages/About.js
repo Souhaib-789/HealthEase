@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView, RefreshControl } from "react-native";
 import { Colors } from "../../utilities/Colors";
 import Header from "../../components/Header";
 import TextComponent from "../../components/TextComponent";
@@ -35,7 +35,14 @@ const About = () => {
     return (
         <View style={styles.Container}>
             <Header title={'About Us'} back profile />
-            <ScrollView style={styles.scrollview}>
+            <ScrollView style={styles.scrollview}
+            refreshControl={
+                <RefreshControl
+                    refreshing={false}
+                    onRefresh={getData}
+                />
+            }
+            >
                 <TextComponent style={styles.heading} text={'Healthease App'} />
                 {
                     loading ?
