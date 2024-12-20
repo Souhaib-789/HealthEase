@@ -8,10 +8,10 @@
     <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1726855658086/251c530f-f815-4d82-b705-d3983cccbba3.png?w=1600&h=840&fit=crop&crop=entropy&auto=compress,format&format=webp" alt="Logo" width="1000" height="500">
   </a>
 
-  <h3 align="center">Healthease - Revolutionizing Healthcare at Your Fingertips 🩺  </h3>
+  <h1 align="center">Healthease </h1>
 
   <p align="center">
-    Healthease is an AI-powered mobile healthcare app designed to simplify the patient experience, streamline hospital operations, and assist doctors in managing appointments.  
+   Revolutionizing Healthcare at Your Fingertips 🩺   
     <br />
     <a href="https://souhaib.hashnode.dev/healthease"><strong>Explore the docs »</strong></a>
     <br />
@@ -46,7 +46,10 @@
   </ol>
 </details>
 
-
+## 💡 About The Project  
+<p align="center">
+    Healthease is an AI-powered mobile healthcare app designed to simplify the patient experience, streamline hospital operations, and assist doctors in managing appointments.  
+ </p>
 
 ## 🚀 Features  
 
@@ -69,7 +72,7 @@
 
 
 
-### 🛠️ Built With
+## 🛠️  Built With
 
 ### Frontend  
 ![React Native](https://img.shields.io/badge/-React%20Native-61DAFB?logo=react&logoColor=white&style=for-the-badge)  
@@ -96,7 +99,7 @@
 ![GitHub](https://img.shields.io/badge/-GitHub-181717?logo=github&logoColor=white&style=for-the-badge)  
 
 
-###  🧰 Installation  
+##  🧰 Installation  
 
 
 1. Get a free API Key at [https://aistudio.google.com/apikey](https://aistudio.google.com/apikey)
@@ -126,7 +129,7 @@
 
 
 <!-- CONTRIBUTING -->
-## Contributing
+## 🤝 Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
