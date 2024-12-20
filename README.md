@@ -107,7 +107,7 @@
    git clone https://github.com/Souhaib-789/HealthEase
 
 
-3. Enter your API in `config.js`
+3. Enter your API in `src/apis/Gemini.js`
    ```js
    const API_KEY = 'ENTER YOUR API';
    ```
